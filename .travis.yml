@@ -9,7 +9,7 @@ script:
 deploy:
   provider: gae
   skip_cleanup: true
-  keyfile: client-secrets.json
+  keyfile: client-secret.json
   project: eng-flux-176109
   default: true
   on: master
