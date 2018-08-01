@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Speakers{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block content %}
+    <h1>Speakers</h1>
+    <p class="important">
+        <ul>
+            {% for item in speakers %}
+                <li>{{ item.title }} {{ item.name }} {% if item.alternate_names %} ({{ item.alternate_names }}) {% endif %}</li>
+            {% endfor %}
+        </ul>
+    </p>
+{% endblock %}
