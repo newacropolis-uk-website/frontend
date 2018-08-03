@@ -14,6 +14,9 @@ from app import create_app, get_env
 # Don't import app.settings to avoid importing google.appengine.ext
 sys.modules['app.settings'] = Mock()
 
+AUTH_USERNAME = 'user'
+AUTH_PASSWORD = 'pass'
+
 
 @pytest.yield_fixture(scope='session')
 def app():
@@ -24,6 +27,8 @@ def app():
         'ADMIN_CLIENT_SECRET': 'secret',
         'API_BASE_URL': 'http://na_api_base',
         'SECRET_KEY': 'secret_key',
+        'AUTH_USERNAME': AUTH_USERNAME,
+        'AUTH_PASSWORD': AUTH_PASSWORD
     })
 
     ctx = _app.app_context()
@@ -62,3 +67,13 @@ def request(url, method, data=None, headers=None):
 def client(app):
     with app.test_request_context(), app.test_client() as client:
         yield client
+
+
+@pytest.fixture
+def logged_in(mocker):
+    class Request(object):
+        class Authorization(object):
+            username = AUTH_USERNAME
+            password = AUTH_PASSWORD
+        authorization = Authorization
+    mocker.patch("app.main.views.request", Request)
