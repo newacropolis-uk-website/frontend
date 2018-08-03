@@ -8,13 +8,19 @@ import os
 from app.settings import Settings
 
 
+def get_setting(name):
+    return Settings.get_or_set(name)
+
+
 class Config(object):
     DEBUG = False
-    API_BASE_URL = Settings.get_or_set('API_BASE_URL')
+    API_BASE_URL = get_setting('API_BASE_URL')
     FRONTEND_BASE_URL = os.environ.get('FRONTEND_BASE_URL')
-    ADMIN_CLIENT_ID = Settings.get_or_set('ADMIN_CLIENT_ID')
-    ADMIN_CLIENT_SECRET = Settings.get_or_set('ADMIN_CLIENT_SECRET')
-    SECRET_KEY = Settings.get_or_set('SECRET_KEY')
+    ADMIN_CLIENT_ID = get_setting('ADMIN_CLIENT_ID')
+    ADMIN_CLIENT_SECRET = get_setting('ADMIN_CLIENT_SECRET')
+    SECRET_KEY = get_setting('SECRET_KEY')
+    AUTH_USERNAME = get_setting('AUTH_USERNAME')
+    AUTH_PASSWORD = get_setting('AUTH_PASSWORD')
 
 
 class Development(Config):
