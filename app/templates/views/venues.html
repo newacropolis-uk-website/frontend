@@ -11,7 +11,7 @@
     <p class="important">
         <ul>
             {% for item in venues %}
-                <li>{{ item.name }} {{ item.address }} {% if item.directions|length > 34 %}{{ item.directions|safe }}{% endif %}</li>
+                <li>{{ item.name }}: {{ item.address }} {% if item.directions|length > 34 %}{{ item.directions|safe }}{% endif %}</li>
             {% endfor %}
         </ul>
     </p>

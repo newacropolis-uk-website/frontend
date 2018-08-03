@@ -1,9 +1,9 @@
 from functools import wraps
-from flask import request, Response
+from flask import current_app, request, Response
 
 
 def check_auth(username, password):
-    return username == 'na' and password == 'newacropolis'
+    return username == current_app.config['AUTH_USERNAME'] and password == current_app.config['AUTH_PASSWORD']
 
 
 def authenticate():

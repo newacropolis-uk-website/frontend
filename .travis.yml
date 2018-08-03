@@ -2,10 +2,11 @@ language: python
 before_install:
 - openssl aes-256-cbc -K $encrypted_096f46e6f614_key -iv $encrypted_096f46e6f614_iv
   -in client-secret.json.enc -out client-secret.json -d
-install:
-- pip install -r requirements.txt -t lib/
+# install:
+# - pip install -r requirements.txt -t lib/
 script:
-- echo "No Script to run"
+- ./scripts/bootstrap.sh
+- make test
 deploy:
   provider: gae
   skip_cleanup: true
