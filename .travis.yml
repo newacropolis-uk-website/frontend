@@ -5,7 +5,7 @@ before_install:
 install:
 - pip install -r requirements.txt -t lib/
 script:
-- echo "No Script to run"
+- make test
 deploy:
   provider: gae
   skip_cleanup: true
