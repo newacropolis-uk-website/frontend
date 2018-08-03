@@ -15,6 +15,28 @@ class WhenAccessingHomePage(object):
         assert page.find('h2').text == 'New Acropolis UK'
 
 
+class WhenAccessingPagesWithoutLoggingIn(object):
+
+    def it_returns_401(self, client, mocker):
+        response = client.get(url_for(
+            'main.speakers'
+        ))
+        assert response.status_code == 401
+        text = response.get_data(as_text=True)
+        assert text == "Could not verify your access level for that URL.\nYou have to login with proper credentials"
+
+
+class WhenAccessingPagesWithIncorrectLogIn(object):
+
+    def it_returns_401(self, client, mocker, invalid_log_in):
+        response = client.get(url_for(
+            'main.speakers'
+        ))
+        assert response.status_code == 401
+        text = response.get_data(as_text=True)
+        assert text == "Could not verify your access level for that URL.\nYou have to login with proper credentials"
+
+
 class WhenAccessingSpeakersPage(object):
 
     def it_shows_list_of_speakers(self, client, mocker, logged_in):

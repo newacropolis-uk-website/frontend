@@ -77,3 +77,13 @@ def logged_in(mocker):
             password = AUTH_PASSWORD
         authorization = Authorization
     mocker.patch("app.main.views.request", Request)
+
+
+@pytest.fixture
+def invalid_log_in(mocker):
+    class Request(object):
+        class Authorization(object):
+            username = "invalid"
+            password = "wrong"
+        authorization = Authorization
+    mocker.patch("app.main.views.request", Request)
