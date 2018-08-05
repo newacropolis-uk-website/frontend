@@ -38,13 +38,26 @@ class BaseAPIClient(object):
             "password": self.secret
         }
 
-        auth_url = urljoin(str(self.base_url), "auth/login")
-        auth_response = requests.request(
-            "POST",
-            auth_url,
-            data=json.dumps(auth_payload),
-            headers={'Content-Type': 'application/json'}
-        )
+        try:
+            auth_url = urljoin(str(self.base_url), "auth/login")
+            auth_response = requests.request(
+                "POST",
+                auth_url,
+                data=json.dumps(auth_payload),
+                headers={'Content-Type': 'application/json'},
+                allow_redirects=False
+            )
+            auth_response.raise_for_status()
+        except requests.RequestException as e:
+            api_error = HTTPError.create(e)
+            current_app.logger.error(
+                "Set access token: {} failed with {} '{}'".format(
+                    url,
+                    api_error.status_code,
+                    api_error.message
+                )
+            )
+            raise api_error
 
         session["access_token"] = auth_response.json()["access_token"]
 
