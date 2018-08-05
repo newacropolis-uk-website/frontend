@@ -5,6 +5,12 @@ from logging.handlers import RotatingFileHandler
 from flask import Blueprint, Flask, jsonify, session
 
 from app.clients.api_client import ApiClient
+import requests
+import requests_toolbelt.adapters.appengine
+
+# Use the App Engine Requests adapter. This makes sure that Requests uses
+# URLFetch.
+requests_toolbelt.adapters.appengine.monkeypatch()
 
 
 __version__ = '0.0.1'
@@ -14,7 +20,6 @@ api_client = ApiClient()
 
 def create_app(**kwargs):
     application = Flask(__name__)
-
     from app.config import configs
 
     environment_state = get_env(application)
@@ -53,7 +58,6 @@ def init_app(app):
         # error.code is set for our exception types.
         # return jsonify(result='error', message=error.message), error.code or 500
         # return jsonify(result='error'), error.code or 500
-        print(error)
 
     @app.errorhandler(404)
     def page_not_found(e):
