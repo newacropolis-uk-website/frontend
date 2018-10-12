@@ -15,7 +15,7 @@ def get_setting(name):
 class Config(object):
     DEBUG = False
     API_BASE_URL = get_setting('API_BASE_URL')
-    FRONTEND_BASE_URL = os.environ.get('FRONTEND_BASE_URL')
+    FRONTEND_BASE_URL = get_setting('FRONTEND_BASE_URL')
     ADMIN_CLIENT_ID = get_setting('ADMIN_CLIENT_ID')
     ADMIN_CLIENT_SECRET = get_setting('ADMIN_CLIENT_SECRET')
     SECRET_KEY = get_setting('SECRET_KEY')

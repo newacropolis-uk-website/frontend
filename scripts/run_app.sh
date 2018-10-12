@@ -1,10 +1,12 @@
 #!/bin/bash
 set +e
 
+echo "Deprecated -- use make dev-server instead"
+
 ENV=development
 www_dir="www-$ENV"
 
-port=5100
+port=5050
 
 if [ ! -z "$1" ]; then
     www_dir="www-$1"
