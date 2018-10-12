@@ -52,7 +52,7 @@ class BaseAPIClient(object):
             api_error = HTTPError.create(e)
             current_app.logger.error(
                 "Set access token: {} failed with {} '{}'".format(
-                    url,
+                    auth_url,
                     api_error.status_code,
                     api_error.message
                 )
