@@ -30,3 +30,12 @@ def venues():
         'views/venues.html',
         venues=venues
     )
+
+
+@main.route('/past_events')
+def past_events():
+    events = api_client.get_events_past_year()
+    return render_template(
+        'views/events_past_year.html',
+        events=events
+    )

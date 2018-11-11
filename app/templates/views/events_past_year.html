@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block content %}
+    <h1>Events</h1>
+    <p class="important">
+        {% for item in events %}
+            <p>
+                {{ item.title }}<br>{{ item.sub_title if item.sub_title else '' }} 
+                <div>
+                    {{ item.description }}
+                </div>
+                <div>
+                    {{ item.venue.address }}
+                </div>
+                {% for date in item.event_dates %}
+                    <div>
+                        {{ date.event_datetime }}
+                    </div>
+                {% endfor %}
+            </p>
+        {% endfor %}
+    </p>
+{% endblock %}

@@ -19,7 +19,7 @@ run: ## Run app - deprecated - use dev-server instead
 
 .PHONY: dev-server
 dev-server: ## Run dev server
-	dev_appserver.py app-dev.yaml
+	dev_appserver.py app-dev.yaml --admin_port 9000
 
 .PHONY: tail-logs
 tail-logs: ## Tail logs
