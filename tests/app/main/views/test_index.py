@@ -77,3 +77,91 @@ class WhenAccessingVenuesPage(object):
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         assert page.find('li').text == 'London: 19 Test Terrace, N1 Bus: 1, 5, 10 2 minutes walk'
+
+
+class WhenAccessingEventsPastYearPage(object):
+
+    def it_shows_list_of_events_past_year(self, client, mocker, logged_in):
+        mocker.patch(
+            "app.clients.api_client.ApiClient.get_events_past_year",
+            return_value=[
+                {
+                    "booking_code": "111222XXXYYY",
+                    "conc_fee": 3,
+                    "description": "Test event description 1",
+                    "event_dates": [
+                        {
+                            "event_datetime": "2018-08-17 19:00",
+                            "speakers": []
+                        }
+                    ],
+                    "fee": 5,
+                    "image_filename": "2018/test_image.jpg",
+                    "multi_day_conc_fee": 0,
+                    "multi_day_fee": 0,
+                    "old_id": 286,
+                    "sub_title": "",
+                    "title": "Test title 1",
+                    "venue": {
+                        "address": "19 Compton Terrace N1 2UN, next door to Union Chapel.",
+                        "default": True,
+                        "directions": "<div>Bus: Bus routes 4, 19, 30, 43 & 277 stop nearby</div>",
+                        "name": "Head Branch",
+                    }
+                },
+                {
+                    "booking_code": "222333444XXXZZZ",
+                    "conc_fee": 12,
+                    "description": "Test description event 2",
+                    "event_dates": [
+                        {
+                            "event_datetime": "2018-09-19 19:00",
+                            "speakers": [
+                                {
+                                    "name": "Various",
+                                    "title": None
+                                }
+                            ]
+                        },
+                        {
+                            "event_datetime": "2018-09-26 19:00",
+                            "speakers": [
+                                {
+                                    "name": "Various",
+                                    "title": None
+                                }
+                            ]
+                        },
+                        {
+                            "event_datetime": "2018-10-03 19:00",
+                            "speakers": [
+                                {
+                                    "name": "Various",
+                                    "title": None
+                                }
+                            ]
+                        }
+                    ],
+                    "fee": 15,
+                    "image_filename": "2018/IMG_2122.JPG",
+                    "multi_day_conc_fee": 30,
+                    "multi_day_fee": 40,
+                    "old_id": 288,
+                    "sub_title": "",
+                    "title": "The Language of Symbols",
+                    "venue": {
+                        "address": "19 Compton Terrace N1 2UN, next door to Union Chapel.",
+                        "default": True,
+                        "directions": "<div>Bus: Bus routes 4, 19, 30, 43 & 277 stop nearby</div>",
+                        "name": "Head Branch",
+                    }
+                }
+            ]
+        )
+
+        response = client.get(url_for(
+            'main.past_events'
+        ))
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        assert 'Test event description 1' in page.find('p').text
+        assert 'Test description event 2' in page.find('p').text
