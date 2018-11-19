@@ -37,5 +37,6 @@ def past_events():
     events = api_client.get_events_past_year()
     return render_template(
         'views/events_past_year.html',
-        events=events
+        events=events,
+        api_base_url=api_client.base_url
     )
