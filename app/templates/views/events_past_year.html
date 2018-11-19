@@ -12,18 +12,21 @@
         {% for item in events %}
             <p>
                 {{ item.title }}<br>{{ item.sub_title if item.sub_title else '' }} 
+                {% for date in item.event_dates %}
+                    <div>
+                        {{ date.event_datetime }}
+                    </div>
+                {% endfor %}
                 <div>
                     {{ item.description }}
                 </div>
                 <div>
                     {{ item.venue.address }}
                 </div>
-                {% for date in item.event_dates %}
-                    <div>
-                        {{ date.event_datetime }}
-                    </div>
-                {% endfor %}
-            </p>
+                <div>
+                    <img src="{{ api_base_url }}images/{{ item.image_filename }}" width=100>
+                </div>
+                </p>
         {% endfor %}
     </p>
 {% endblock %}
