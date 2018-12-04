@@ -40,3 +40,13 @@ def past_events():
         events=events,
         api_base_url=api_client.base_url
     )
+
+
+@main.route('/articles/summary')
+def articles_summary():
+    articles = api_client.get_articles_summary()
+    return render_template(
+        'views/articles_summary.html',
+        articles=articles,
+        api_base_url=api_client.base_url
+    )

@@ -13,3 +13,6 @@ class ApiClient(BaseAPIClient):
 
     def get_events_past_year(self):
         return self.get(url='events/past_year')
+
+    def get_articles_summary(self):
+        return self.get(url='articles/summary')

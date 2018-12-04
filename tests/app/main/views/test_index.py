@@ -165,3 +165,23 @@ class WhenAccessingEventsPastYearPage(object):
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         assert 'Test event description 1' in page.find('p').text
         assert 'Test description event 2' in page.find('p').text
+
+
+class WhenAccessingArticlesPage(object):
+
+    def it_shows_list_of_articles(self, client, mocker, logged_in):
+        mocker.patch(
+            "app.clients.api_client.ApiClient.get_articles_summary",
+            return_value=[
+                {
+                    "title": "Ancient Greece",
+                    "author": "Julian Scott"
+                }
+            ]
+        )
+
+        response = client.get(url_for(
+            'main.articles_summary'
+        ))
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        assert 'Ancient Greece' in page.find('div').text
