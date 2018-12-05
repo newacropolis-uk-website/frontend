@@ -1,4 +1,5 @@
 import pytest
+import uuid
 from bs4 import BeautifulSoup
 from flask import json, url_for, request
 
@@ -185,3 +186,22 @@ class WhenAccessingArticlesPage(object):
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         assert 'Ancient Greece' in page.find('div').text
+
+    def it_shows_an_article(self, client, mocker, logged_in):
+        article = {
+            "id": str(uuid.uuid4()),
+            "title": "Ancient Greece",
+            "author": "Julian Scott",
+            "content": "Something about how philosophy in Ancient Greece formed the bedrock of western philosophy"
+        }
+
+        mocker.patch(
+            "app.clients.api_client.ApiClient.get_article",
+            return_value=article
+        )
+
+        response = client.get(url_for(
+            'main.article', id=article['id']
+        ))
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        assert article['content'] in page.find('div').text

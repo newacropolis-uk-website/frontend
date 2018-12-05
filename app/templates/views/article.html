@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Articles{% endblock %}
+{% block title %}{{ article.title }}{% endblock %}
 {% block head %}
     {{ super() }}
     <style type="text/css">
@@ -7,13 +7,12 @@
     </style>
 {% endblock %}
 {% block content %}
-    <h1>Articles</h1>
+    <h2>{{ article.title }}</h2>
+    <h3>{{ article.author }}</h3>
     <p class="important">
         <div>
-            {% for item in articles %}
-                <a href='/article/{{ item.id }}'>{{ item.title }}</a>: {{ item.author }}</br>
-                {{ item.content }}
-            {% endfor %}
+            {{ article.content|safe }}
         </div>
     </p>
+    <div>Back to <a href='/articles/summary'>articles summary</a></div>
 {% endblock %}
