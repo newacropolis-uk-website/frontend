@@ -16,3 +16,6 @@ class ApiClient(BaseAPIClient):
 
     def get_articles_summary(self):
         return self.get(url='articles/summary')
+
+    def get_article(self, id):
+        return self.get(url='article/{}'.format(id))

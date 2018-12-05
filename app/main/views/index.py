@@ -47,6 +47,14 @@ def articles_summary():
     articles = api_client.get_articles_summary()
     return render_template(
         'views/articles_summary.html',
-        articles=articles,
-        api_base_url=api_client.base_url
+        articles=articles
+    )
+
+
+@main.route('/article/<uuid:id>')
+def article(id):
+    article = api_client.get_article(id)
+    return render_template(
+        'views/article.html',
+        article=article
     )
