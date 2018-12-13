@@ -1,51 +1,53 @@
-{% extends "base.html" %}
+{% extends "base1.html" %}
+{% block style %}
+<link rel="stylesheet" href="/static/css/style1.css" />
+{% endblock %}
 {% block title %}Home{% endblock %}
 {% block content %}
-
-<body>
-  {% include "components/header.html" %}
-
   <div class="mainbanner">
-    <div class="mask"></div>
-    <img class="a690291164" src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-690291164.png" anima-src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-690291164.png">
-  </div>
-  <div class="rectmainbanner"></div>
-  <div class="textmainbanner">
-    <div class="coursestartingsept">COURSE STARTING SEPTEMBER 2018</div>
-    <div class="banner_findoutmore">FIND OUT MORE</div>
+    <img src="/static/images/main_banner.png">
+    <div id="imagebanner">
+        <div class="rectmainbanner"></div>
+        <div class="textmainbanner">
+            <div class="coursestartingsept">COURSE STARTING SEPTEMBER 2018</div>
+            <div class="banner_findoutmore">FIND OUT MORE</div>
+        </div>
+    </div>
   </div>
 
   <div class="introtext">
-    <span class="span1"><br><br></span>
-    <span class="span2">New Acropolis is a non-profit International Philosophical and Educational Movement
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        working across the field of Philosophy, Culture and Volunteering.<br>
-                        Our aim is to re-vive the understanding of key philosophical ideas from Eastern &amp;
-                        Western traditions, in order to create the conditions for healthy and positive change within individuals,
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        communities and the global environment.<br>
-                        We beleive that the great philosophical and spiritual traditions of humanity
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        offer essential keys, relevant today, that will enable us to meet our modern challenges
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        and provide a wise foindation of our future civilisations.</span>
-      <span class="span3"><br></span>
+    <div>
+    New Acropolis is a non-profit International Philosophical and Educational Movement working across the field of Philosophy, Culture and Volunteering.<br><br>
+    Our aim is to re-vive the understanding of key philosophical ideas from Eastern &amp;Western traditions, in order to create the conditions for healthy and positive change within individuals, communities and the global environment.<br><br>
+    We beleive that the great philosophical and spiritual traditions of humanity offer essential keys, relevant today, that will enable us to meet our modern challenges
+    and provide a wise foindation of our future civilisations.
     </div>
-  <div class="header_yellowbartop"></div>
+  </div>
+
   <div class="philoculvol">
     <div class="phiculgreyrect"></div>
+    <div class="rectphiculvol">
+        <div class="rectangle8"></div>
+        <div class="philosophy">Philosophy</div>
+        <div class="comparativestudyan">Comparative study and integration <br>of wisdom from different traditions</div>
+    </div>
+  </div>
+
+
+  <div style="display:none">
+
+  <div class="philoculvol">
+    <div class="phiculgreyrect">
+    </div>
     <div class="rectphiculvol">
       <div class="rectangle8"></div>
       <div class="rectangle81"></div>
       <div class="rectangle82"></div>
     </div>
     <div class="iconsphiculvol">
-      <img class="oval" src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-oval@2x.png" anima-src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-oval@2x.png">
-      <img class="oval1" src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-oval@2x.png" anima-src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-oval@2x.png">
-      <img class="oval2" src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-oval@2x.png" anima-src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-oval@2x.png">
-      <img class="pyramide" src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-pyramide@2x.png" anima-src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-pyramide@2x.png">
-      <img class="tempel" src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-tempel@2x.png" anima-src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-tempel@2x.png">
-      <img class="mensch" src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-mensch@2x.png" anima-src="https://anima-uploads.s3.amazonaws.com/5be875abcec4df000d2fb40f/5be878becec4df000951c340/5be878c0cec4df000a409013/img/home-mensch@2x.png">
+      <img class="pyramide" src="/static/images/philosophy_icon.png">
+      <img class="tempel" src="/static/images/culture_icon.png">
+      <img class="mensch" src="/static/images/volunteering_icon.png">
     </div>
     <div class="philculvoltext">
       <div class="comparativestudyan">Comparative study and integration <br>of wisdom from different traditions</div>
@@ -265,8 +267,5 @@
     </div>
     <div class="contactus1">CONTACT US</div>
   </div>
-
-  {% include "components/footer.html" %}
-</body>
-
+  </div>
 {% endblock %}

@@ -10,3 +10,10 @@ def index():
     return render_template(
         'views/home.html'
     )
+
+
+@main.route('/new_home')
+def index1():
+    return render_template(
+        'views/home1.html'
+    )
