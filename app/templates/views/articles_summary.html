@@ -9,11 +9,11 @@
 {% block content %}
     <h1>Articles</h1>
     <p class="important">
-        <div>
-            {% for item in articles %}
-                <a href='/article/{{ item.id }}'>{{ item.title }}</a>: {{ item.author }}</br>
-                {{ item.content }}
-            {% endfor %}
-        </div>
+        {% for item in articles %}
+        <p>
+            <a href='/article/{{ item.id }}'>{{ item.title }}</a>: {{ item.author }}<br>
+            {{ item.short_content|safe }}
+        </p>
+        {% endfor %}
     </p>
 {% endblock %}

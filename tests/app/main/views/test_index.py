@@ -176,7 +176,8 @@ class WhenAccessingArticlesPage(object):
             return_value=[
                 {
                     "title": "Ancient Greece",
-                    "author": "Julian Scott"
+                    "author": "Julian Scott",
+                    "short_content": "Some short info about something"
                 }
             ]
         )
