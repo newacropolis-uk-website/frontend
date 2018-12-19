@@ -1,3 +1,4 @@
+from random import randint
 from flask import render_template
 
 from app.main import main
@@ -14,6 +15,9 @@ def index():
 
 @main.route('/new_home')
 def index1():
+    articles = api_client.get_articles_summary()
+    index = randint(0, len(articles) - 1)
     return render_template(
-        'views/home1.html'
+        'views/home1.html',
+        article=articles[index]
     )
