@@ -11,6 +11,9 @@ class ApiClient(BaseAPIClient):
     def get_venues(self):
         return self.get(url='venues')
 
+    def get_events_in_future(self):
+        return self.get(url='events/future')
+
     def get_events_past_year(self):
         return self.get(url='events/past_year')
 

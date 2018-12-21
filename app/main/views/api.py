@@ -1,4 +1,5 @@
 from flask import render_template
+from six.moves.html_parser import HTMLParser
 
 from app.main import main
 from app.main.views import requires_auth
@@ -36,8 +37,19 @@ def venues():
 def past_events():
     events = api_client.get_events_past_year()
     return render_template(
-        'views/events_past_year.html',
+        'views/events.html',
         events=events,
+        api_base_url=api_client.base_url
+    )
+
+
+@main.route('/future_events')
+def future_events():
+    events = api_client.get_events_in_future()
+
+    return render_template(
+        'views/events.html',
+        events=_unescape_html(events, 'description'),
         api_base_url=api_client.base_url
     )
 
@@ -58,3 +70,11 @@ def article(id):
         'views/article.html',
         article=article
     )
+
+
+def _unescape_html(items, field_name):
+    h = HTMLParser()
+    for item in items:
+        item[field_name] = h.unescape(item[field_name])
+
+    return items
