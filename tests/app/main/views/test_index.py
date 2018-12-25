@@ -8,6 +8,7 @@ from tests.conftest import AUTH_USERNAME, AUTH_PASSWORD
 
 class WhenAccessingHomePage(object):
 
+    @pytest.mark.skip
     def it_shows_list_of_available_pages(self, client, mocker):
         response = client.get(url_for(
             'main.index'
