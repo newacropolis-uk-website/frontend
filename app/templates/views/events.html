@@ -18,7 +18,7 @@
                     </div>
                 {% endfor %}
                 <div>
-                    {{ item.description }}
+                    {{ item.description | safe }}
                 </div>
                 <div>
                     {{ item.venue.address }}

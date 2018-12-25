@@ -1,14 +1,14 @@
-beautifulsoup4
+beautifulsoup4==4.6.1
 click==5.1
-Flask
+Flask==1.0.2
 Flask-Script==2.0.5
 freezegun>=0.3.5
-gunicorn
+gunicorn==19.9.0
 iso8601==0.1.12
 jsonschema==2.6.0
-mock
+mock==2.0.0
 monotonic>=0.1
-pycodestyle==2.4.0
+pycodestyle==2.3.1
 pytest==3.5
 pytest-cov==2.5.1
 pytest-eradicate==0.0.3
@@ -18,4 +18,4 @@ pytest-mock==1.6.2
 PyJWT==1.5.3
 requests>=2.0.0
 requests_toolbelt==0.8.0
-virtualenv
+virtualenv==16.0.0
