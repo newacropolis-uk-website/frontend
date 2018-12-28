@@ -167,6 +167,7 @@ img {max-width:100%
   height: 290px;
   overflow: hidden;
   width: 100%;
+  object-fit: scale-down;
 }
 .whatson_heading{
   font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
