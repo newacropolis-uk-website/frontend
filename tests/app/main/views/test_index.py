@@ -3,8 +3,6 @@ import uuid
 from bs4 import BeautifulSoup
 from flask import json, url_for, request
 
-from tests.conftest import AUTH_USERNAME, AUTH_PASSWORD
-
 
 class WhenAccessingHomePage(object):
     def it_should__display_banner_text(self, client, mocker):
@@ -17,18 +15,24 @@ class WhenAccessingHomePage(object):
 
 
 class WhenAccessingHomePage(object):
-    def it_should_display_header_content(self, client, mocker):
+    def it_should_future_events(self, client, sample_future_events, sample_articles_summary):
         response = client.get(url_for(
             'main.index'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        content = page.find("div", {"class": "header_about"}).string
-        assert content == 'About'
+        content = page.find("div", {"class": "whatson_block_subheading"}).string
+        assert content == sample_future_events[0]['title']
 
-    def it_shows_list_of_available_pages(self, client, mocker):
+    @pytest.mark.parametrize('div_class', ['.header', '.footer'])
+    def it_shows_list_of_available_pages_on_header_and_footer(
+        self, client, sample_future_events, sample_articles_summary, div_class
+    ):
+        expected_link_text = ['E-shop', 'Resources', 'Whats on', 'What we offer', 'About']
         response = client.get(url_for(
             'main.index'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        content = page.find("div", {"class": "footer_whatweoffer"}).string
-        assert content == 'What we offer'
+
+        selected_div = page.select_one(div_class)
+        for i, li in enumerate(selected_div.select('li a')):
+            assert li.text == expected_link_text[i]
