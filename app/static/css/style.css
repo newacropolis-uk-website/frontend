@@ -228,6 +228,11 @@ img {max-width:100%
     padding: 3.9%;
     padding-left: 35%;
   }
+.featured_block_container a{
+  color: rgba(143,18,253,1.0);
+  text-decoration: none;
+}
+
 .featured_text {
   font-family: 'AvenirNext-Regular',Helvetica,Arial,serif;
   font-size: 15.0px;
@@ -249,7 +254,7 @@ img {max-width:100%
     width: 100%;
   }
 }
-.featured_quater {
+.featured_quarter {
   background-color: rgba(215,215,215,1.0);
   height: 471px;
   width: 320px;
@@ -257,7 +262,13 @@ img {max-width:100%
   border-width: 1px;
   border-color: rgba(150,150,150,1.0);
   font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
-  text-align: center;
+  text-align: left;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.featured_quarter a{
+  color: rgba(143,18,253,1.0);
+  text-decoration: none;
 }
 .featured_block_imgs{
   height: 252px;

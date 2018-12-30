@@ -83,34 +83,38 @@
       <img class="featured_img" src="/static/images/featuredblock.png">
       <div class="featured_block_container">
         <div class="featured_block_heading">{{ main_article.title }}</div><br>
-        <div>{{ main_article.short_content }}</div>
+        <div>{{ main_article.short_content }} <a href='/article/{{ main_article.id }}'>READ MORE</a></div>
       </div>
     </div>
   </div>
 
   <div class="row">
     <div class="featured_column">
-      <div class="featured_quater">
+      <div class="featured_quarter">
         <img class="featured_block_imgs" src="/static/images/featured1.png"><br><br>
         <div class="featured_mini_block_heading">{{ articles[0].title }}</div>
+        <div><a href='/article/{{ main_article.id }}'>READ MORE</a></div>
       </div>
     </div>
     <div class="featured_column">
-      <div class="featured_quater">
+      <div class="featured_quarter">
         <img class="featured_block_imgs" src="/static/images/featured2.png"><br><br>
         <div class="featured_mini_block_heading">{{ articles[1].title }}</div>
+        <div><a href='/article/{{ main_article.id }}'>READ MORE</a></div>
       </div>
     </div>
     <div class="featured_column">
-      <div class="featured_quater">
+      <div class="featured_quarter">
         <img class="featured_block_imgs" src="/static/images/featured3.png"><br><br>
         <div class="featured_mini_block_heading">{{ articles[2].title }}</div>
+        <div><a href='/article/{{ main_article.id }}'>READ MORE</a></div>
       </div>
     </div>
     <div class="featured_column">
-      <div class="featured_quater">
+      <div class="featured_quarter">
         <img class="featured_block_imgs" src="/static/images/featured4.png"><br><br>
         <div class="featured_mini_block_heading">{{ articles[3].title }}</div>
+        <div><a href='/article/{{ main_article.id }}'>READ MORE</a></div>
       </div>
     </div>
   </div>
