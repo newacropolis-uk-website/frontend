@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     {% block head %}
-    {% block style %}
-    <link rel="stylesheet" href="/static/css/style.css" />
-    {% endblock %}
+    <link rel="stylesheet" href="/static/css/style0.css" />
     <title>{% block title %}{% endblock %}</title>
     {% endblock %}
 </head>
 <body>
-    {% include "components/header.html" %}
     <div id="content">{% block content %}{% endblock %}</div>
-    {% include "components/footer.html" %}
+    <div id="footer">
+        Reg. Charity no. 1110140
+        {% block footer %}{% endblock %}
+    </div>
 </body>
 </html>

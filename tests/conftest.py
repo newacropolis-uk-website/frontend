@@ -87,3 +87,65 @@ def invalid_log_in(mocker):
             password = "wrong"
         authorization = Authorization
     mocker.patch("app.main.views.request", Request)
+
+
+@pytest.fixture
+def sample_future_events(mocker):
+    events = [
+        {
+            "title": "Test title 1",
+            "event_dates": [{
+                "event_datetime": "Sun 30th December"
+            }]
+        },
+        {
+            "title": "Test title 2",
+            "event_dates": [{
+                "event_datetime": "Mon 31st December"
+            }]
+        },
+        {
+            "title": "Test title 3",
+            "event_dates": [{
+                "event_datetime": "Tue 1st January"
+            }]
+        },
+    ]
+
+    mocker.patch(
+        "app.clients.api_client.ApiClient.get_events_in_future",
+        return_value=events
+    )
+    return events
+
+
+@pytest.fixture
+def sample_articles_summary(mocker):
+    articles = [
+        {
+            'title': 'Article title 1',
+            'short_content':
+                'some short content 1, some short content 1, some short content 1, some short content 1'
+        },
+        {
+            'title': 'Article title 2',
+            'short_content':
+                'some short content 2, some short content 2, some short content 2, some short content 2'
+        },
+        {
+            'title': 'Article title 3',
+            'short_content':
+                'some short content 3, some short content 3, some short content 3, some short content 3'
+        },
+        {
+            'title': 'Article title 4',
+            'short_content':
+                'some short content 4, some short content 4, some short content 4, some short content 4'
+        }
+    ]
+
+    mocker.patch(
+        "app.clients.api_client.ApiClient.get_articles_summary",
+        return_value=articles
+    )
+    return articles

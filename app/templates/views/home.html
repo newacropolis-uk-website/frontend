@@ -1,7 +1,199 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-    <p>
-        <a href="api">API calls</a>
-    </p>
+<body>
+  <div class="mainbanner">
+    <img src="/static/images/main_banner.png">
+  </div>
+
+  <div class="introtext">
+    <div>
+      New Acropolis is a non-profit International Philosophical and Educational Movement working across the field of Philosophy, Culture and Volunteering.<br><br>
+      Our aim is to re-vive the understanding of key philosophical ideas from Eastern &amp;Western traditions, in order to create the conditions for healthy and positive change within individuals, communities and the global environment.<br><br>
+      We beleive that the great philosophical and spiritual traditions of humanity offer essential keys, relevant today, that will enable us to meet our modern challenges
+      and provide a wise foindation of our future civilisations.
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="column">
+      <div class="block">
+        <div class="block_text">Philosophy</div>
+        <div class="inner_block_text">Comparative study and integration <br>of wisdom from different traditions</div>
+        <img src="/static/images/philosophy_icon.png">
+      </div>
+    </div>
+    <div class="column">
+      <div class="block">
+        <div class="block_text">Culture</div>
+        <div class="inner_block_text">Working with other people and <br>learning about ourselves</div>
+        <img src="/static/images/culture_icon.png">
+      </div>
+    </div>
+    <div class="column">
+      <div class="block">
+        <div class="block_text">Volunteering</div>
+        <div class="inner_block_text">Working with other people and <br>learning about ourselves</div>
+        <img src="/static/images/volunteering_icon.png">
+      </div>
+    </div>
+  </div>
+
+  <div class="violetrect">
+    <div>
+    <div class="schoolofphilosophy">School of Philosophy in the Classical Tradition<br></div>
+    <div class="schoolofphilosophy_sub">16 - week introductory course</div><br>
+    <div class="schoolofphilosophy_subtext">- COMPARATIVE STUDY PHILOSOPHY EAST AND WEST - <br> daughter; he always struggled to reconcile. </div><br>
+    <div class="schoolofphilosophy_subtext">- APPLIED PHILOSOPHICAL TRAINING<br> daughter; he always struggled to reconcile. </div><br>
+    <button class="findoutmore_button" type="button">find out more</button>
+  </div>
+  </div>
+
+  <div class="home_heading"> WHAT'S ON </div>
+  <div class="row">
+    <div class="findoutmore_column">
+      <div class="whatson_block">
+        <img class="cropimg" src="{{ images_url }}{{ events[0].image_filename }}"><br><br>
+        <div class="whatson_block_heading">{{ events[0].event_type }}</div>
+        <div>{{ events[0].event_dates[0].event_datetime }}</div><br>
+        <div class="whatson_block_subheading">{{ events[0].title }}</div>
+      </div>
+    </div>
+    <div class="findoutmore_column">
+      <div class="whatson_block">
+        <img class="cropimg" src="{{ images_url }}{{ events[1].image_filename }}"><br><br>
+        <div class="whatson_block_heading">{{ events[1].event_type }}</div>
+        <div>{{ events[1].event_dates[0].event_datetime }}</div><br>
+        <div class="whatson_block_subheading">{{ events[1].title }}</div>
+      </div>
+    </div>
+    <div class="findoutmore_column">
+      <div class="whatson_block">
+        <img class="cropimg" src="{{ images_url }}{{ events[2].image_filename }}"><br><br>
+        <div class="whatson_block_heading">{{ events[2].event_type }}</div>
+        <div>{{ events[2].event_dates[0].event_datetime }}</div><br>
+        <div class="whatson_block_subheading">{{ events[2].title }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="featured_heading"> FEATURED ARTICLES </div>
+  <div class="row">
+    <div class="featured_block">
+      <img class="featured_img" src="/static/images/featuredblock.png">
+      <div class="featured_block_container">
+        <div class="featured_block_heading">{{ main_article.title }}</div><br>
+        <div>{{ main_article.short_content }} <a href='/article/{{ main_article.id }}'>READ MORE</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="featured_column">
+      <div class="featured_quarter">
+        <img class="featured_block_imgs" src="/static/images/featured1.png"><br><br>
+        <div class="featured_mini_block_heading">{{ articles[0].title }}</div>
+        <div><a href='/article/{{ main_article.id }}'>READ MORE</a></div>
+      </div>
+    </div>
+    <div class="featured_column">
+      <div class="featured_quarter">
+        <img class="featured_block_imgs" src="/static/images/featured2.png"><br><br>
+        <div class="featured_mini_block_heading">{{ articles[1].title }}</div>
+        <div><a href='/article/{{ main_article.id }}'>READ MORE</a></div>
+      </div>
+    </div>
+    <div class="featured_column">
+      <div class="featured_quarter">
+        <img class="featured_block_imgs" src="/static/images/featured3.png"><br><br>
+        <div class="featured_mini_block_heading">{{ articles[2].title }}</div>
+        <div><a href='/article/{{ main_article.id }}'>READ MORE</a></div>
+      </div>
+    </div>
+    <div class="featured_column">
+      <div class="featured_quarter">
+        <img class="featured_block_imgs" src="/static/images/featured4.png"><br><br>
+        <div class="featured_mini_block_heading">{{ articles[3].title }}</div>
+        <div><a href='/article/{{ main_article.id }}'>READ MORE</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subscribe_rectangle">
+    <div>Subscribe to our free bi-monthly magazine !</div>
+    <div class="subscribe_text">Read articles covering esoterica, philosophy, art and more…</div>
+  </div><br><br>
+
+  <div class="row">
+    <div class="advert_column">
+      <div class="magazine_size">
+        <img src="/static/images/home-image-magazine.png">
+      </div>
+      <div class="advert_text">New Acropolis <br> Magazine</div><br>
+      <div class="advert_text">Download the <br>latest Issue</div>
+    </div>
+    <div class="advert_column">
+      <div class="email_heading">
+        <form>
+          <label for="fname">enter your email address below</label>
+          <input type="text" id="femail" name="femail">
+        </form>
+      </div>
+      <br><br><br>
+      <div class="advert_subscription">
+        <div class="advert_sub_text">Annual UK postal subscription<br>4 Issues&nbsp;&nbsp;£12</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="founding_heading"> FOUNDING CHARTER </div>
+  <div class="row">
+    <div class="founding_column">
+      <div class="founding_block">
+        <img class="founding_img" src="/static/images/founding-hands.png">
+        <div class="founding_block_text">FRATERNITY</div>
+        <div class="founding_inner_block_text">To promote an Ideal of international fraternity, based on respect for human dignity, beyond racial, sexual, cultural, religious, social or other differences.</div>
+      </div>
+    </div>
+
+    <div class="founding_column">
+      <div class="founding_block">
+        <img class="founding_img" src="/static/images/founding-book.png">
+        <div class="founding_block_text">KNOWLEDGE</div>
+        <div class="founding_inner_block_text">To encourage the love of wisdom through the comparative study of philosophies, religions, sciences and arts, in order to promote the knowledge of the human being, the laws of Nature and the Universe.</div>
+      </div>
+    </div>
+
+    <div class="founding_column">
+      <div class="founding_block">
+        <img class="founding_img" src="/static/images/founding-spiral.png">
+        <div class="founding_block_text">DEVELOPMENT</div>
+        <div class="founding_inner_block_text">To develop the best of the human potential, by promoting the realization of the human being as an individual and his or her integration as an active and conscious part of society and nature, in order to improve the world.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="home_heading"> CONTACT US </div>
+  <div class="row">
+    <div class="location_column">
+      <img src="/static/images/maps.png" style="width:100%">
+    </div>
+    <div class="location_column">
+      <div class="location_text">
+        Address: <br>
+        19 Compton Terrace, <br>Islington, <br>London, <br>N1 2UN <br>
+        Telephone: <br>
+        0207 359 0059 <br>
+        Nearest tube: <br>
+        Highbury &amp; Islington, Victoria Line<br>
+        Bus routes: <br>
+        4, 19, 30, 43, 271, 277
+      </div>
+    </div>
+    <div class="location_column">
+      <img src="/static/images/home-school-entrance.png" style="width:100%">
+    </div>
+  </div>
+
+</body>
 {% endblock %}

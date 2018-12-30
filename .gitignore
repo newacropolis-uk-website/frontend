@@ -78,9 +78,6 @@ target/
 # celery beat schedule file
 celerybeat-schedule
 
-# SageMath parsed files
-*.sage.py
-
 # Environments
 .env
 .venv
@@ -106,6 +103,10 @@ venv.bak/
 # logs
 
 logs
+
+# locals
+
+.DS_Store
 
 # local settings
 
