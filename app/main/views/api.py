@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import current_app, render_template
 from six.moves.html_parser import HTMLParser
 
 from app.main import main
@@ -38,6 +38,7 @@ def past_events():
     events = api_client.get_events_past_year()
     return render_template(
         'views/events.html',
+        images_url=current_app.config['IMAGES_URL'],
         events=events,
         api_base_url=api_client.base_url
     )
@@ -49,6 +50,7 @@ def future_events():
 
     return render_template(
         'views/events.html',
+        images_url=current_app.config['IMAGES_URL'],
         events=_unescape_html(events, 'description'),
         api_base_url=api_client.base_url
     )

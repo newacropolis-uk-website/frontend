@@ -56,8 +56,39 @@ li a {
   }
 
 /* Home */
-.mainbanner {
-  overflow: hidden;
+.carousel img {
+  object-fit: cover;
+  height: 400px;
+  width: 100%;
+}
+.carousel_info_rect {
+  background-color: rgba(49,47,47,1.0);
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(150,150,150,1.0);
+  opacity: .3;
+  position:absolute;
+  height:90px;
+  width:100%;
+  top:280px;
+}
+.carousel_info_text {
+  background-color: rgba(255,255,255,0.0);
+  position:absolute;
+  top:300px;
+  margin-left:20px;
+  text-align: center;
+  color:white;
+  width:auto;
+  font-family: 'AvenirNext-Bold',Helvetica,Arial,serif;
+  font-size: 30.0px;
+}
+.carousel_info_text a {
+  color:white;
+  text-decoration: none;
+}
+.carousel_info_text a:hover {
+  color:rgba(247,231,27,1.0);
 }
 img {max-width:100%
 }

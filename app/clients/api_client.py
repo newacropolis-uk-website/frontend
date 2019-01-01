@@ -14,7 +14,8 @@ class ApiClient(BaseAPIClient):
         return self.get(url='venues')
 
     def get_events_in_future(self):
-        return self.get_nice_event_dates(self.get(url='events/future'))
+        events = self.get_nice_event_dates(self.get(url='events/future'))
+        return self.get_events_intro_courses_prioritised(events)
 
     def get_events_past_year(self):
         return self.get(url='events/past_year')
@@ -33,6 +34,20 @@ class ApiClient(BaseAPIClient):
                     time = _datetime.strftime('%-I:%M %p')
                 else:
                     time = _datetime.strftime('%-I %p')
+                if event['event_type'] == 'Introductory Course':
+                    event['event_monthyear'] = _datetime.strftime('%B %Y')
                 event_date['event_datetime'] = _datetime.strftime('%a %-d %B at {}'.format(time))
 
         return events
+
+    def get_events_intro_courses_prioritised(self, events):
+        intro_courses_first = []
+        other_events = []
+        for event in events:
+            if event['event_type'] == 'Introductory Course':
+                intro_courses_first.append(event)
+            else:
+                other_events.append(event)
+
+        intro_courses_first.extend(other_events)
+        return intro_courses_first
