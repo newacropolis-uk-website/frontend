@@ -94,21 +94,25 @@ def sample_future_events(mocker):
     events = [
         {
             "title": "Test title 1",
+            "event_type": "Talk",
             "event_dates": [{
                 "event_datetime": "Sun 30th December"
             }]
         },
         {
             "title": "Test title 2",
+            "event_type": "Talk",
             "event_dates": [{
                 "event_datetime": "Mon 31st December"
             }]
         },
         {
             "title": "Test title 3",
+            "event_type": "Introductory Course",
             "event_dates": [{
                 "event_datetime": "Tue 1st January"
-            }]
+            }],
+            "event_monthyear": "January 2019"
         },
     ]
 
