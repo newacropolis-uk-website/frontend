@@ -1,15 +1,33 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+{% endblock %}
 {% block content %}
 <body>
-  <div class="mainbanner">
-    <img src="/static/images/main_banner.png">
+  <div class="carousel">
+    {% for event in events %}
+    <div>
+      <img src="{{ images_url }}{{ event.image_filename }}">
+      <div class='carousel_info_rect'></div>
+      <div class='carousel_info_text'>
+        <a href=''>
+        {% if event.carousel_text %}
+          {{ event.carousel_text }}
+        {% else %}
+          {{ event.title }}
+        {% endif %}
+        </a>
+      </div>
+    </div>
+    {% endfor %}
   </div>
 
   <div class="introtext">
     <div>
       New Acropolis is a non-profit International Philosophical and Educational Movement working across the field of Philosophy, Culture and Volunteering.<br><br>
-      Our aim is to re-vive the understanding of key philosophical ideas from Eastern &amp;Western traditions, in order to create the conditions for healthy and positive change within individuals, communities and the global environment.<br><br>
+      Our aim is to revive the understanding of key philosophical ideas from Eastern &amp; Western traditions, in order to create the conditions for healthy and positive change within individuals, communities and the global environment.<br><br>
       We beleive that the great philosophical and spiritual traditions of humanity offer essential keys, relevant today, that will enable us to meet our modern challenges
       and provide a wise foindation of our future civilisations.
     </div>
@@ -176,7 +194,9 @@
   <div class="home_heading"> CONTACT US </div>
   <div class="row">
     <div class="location_column">
-      <img src="/static/images/maps.png" style="width:100%">
+      <a href='https://www.google.com/maps/place/New+Acropolis+Cultural+Association/@51.5449256,-0.1048801,17z/data=!3m1!4b1!4m5!3m4!1s0x48761b64e1e074d7:0x32458fe303edf6e2!8m2!3d51.5449223!4d-0.1026914' target='newwin'>
+        <img src="/static/images/NAMap.png" style="width:100%">
+      </a>
     </div>
     <div class="location_column">
       <div class="location_text">
@@ -194,6 +214,17 @@
       <img src="/static/images/home-school-entrance.png" style="width:100%">
     </div>
   </div>
-
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.carousel').slick({
+        "autoplay": true,
+        "autoplaySpeed": 5000,
+        "dots": true,
+      });
+    });
+  </script>
 </body>
 {% endblock %}

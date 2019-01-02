@@ -94,26 +94,30 @@ def sample_future_events(mocker):
     events = [
         {
             "title": "Test title 1",
+            "event_type": "Talk",
             "event_dates": [{
-                "event_datetime": "Sun 30th December"
+                "event_datetime": "2018-12-30 19:00"
             }]
         },
         {
             "title": "Test title 2",
+            "event_type": "Talk",
             "event_dates": [{
-                "event_datetime": "Mon 31st December"
+                "event_datetime": "2018-12-31 19:00"
             }]
         },
         {
             "title": "Test title 3",
+            "event_type": "Introductory Course",
             "event_dates": [{
-                "event_datetime": "Tue 1st January"
-            }]
+                "event_datetime": "2019-01-01 19:00"
+            }],
+            "event_monthyear": "January 2019"
         },
     ]
 
     mocker.patch(
-        "app.clients.api_client.ApiClient.get_events_in_future",
+        "app.clients.api_client.ApiClient.get",
         return_value=events
     )
     return events
