@@ -42,8 +42,8 @@ class WhenAccessingHomePage(object):
             if event['event_type'] == 'Introductory Course':
                 # expect the first event in the carousel to be an intro course
                 assert carousel_items[0].text.strip() == "Courses starting January 2019"
-            else:
-                # expect the other events to be after an intro course
+            elif event['image_filename']:
+                # expect the other events to be after an intro course if they have an image
                 assert carousel_items[i + 1].text.strip() == other_events[i]['title']
 
     @pytest.mark.parametrize('div_class', ['.header', '.footer'])

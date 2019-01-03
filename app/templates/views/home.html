@@ -8,19 +8,21 @@
 <body>
   <div class="carousel">
     {% for event in events %}
-    <div>
-      <img src="{{ images_url }}{{ event.image_filename }}">
-      <div class='carousel_info_rect'></div>
-      <div class='carousel_info_text'>
-        <a href=''>
-        {% if event.carousel_text %}
-          {{ event.carousel_text }}
-        {% else %}
-          {{ event.title }}
-        {% endif %}
-        </a>
+      {% if event.image_filename %}
+      <div>
+        <img src="{{ images_url }}{{ event.image_filename }}">
+        <div class='carousel_info_rect'></div>
+        <div class='carousel_info_text'>
+          <a href=''>
+          {% if event.carousel_text %}
+            {{ event.carousel_text }}
+          {% else %}
+            {{ event.title }}
+          {% endif %}
+          </a>
+        </div>
       </div>
-    </div>
+      {% endif %}
     {% endfor %}
   </div>
 

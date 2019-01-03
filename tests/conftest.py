@@ -95,6 +95,7 @@ def sample_future_events(mocker):
         {
             "title": "Test title 1",
             "event_type": "Talk",
+            "image_filename": "event.png",
             "event_dates": [{
                 "event_datetime": "2018-12-30 19:00"
             }]
@@ -102,6 +103,7 @@ def sample_future_events(mocker):
         {
             "title": "Test title 2",
             "event_type": "Talk",
+            "image_filename": "event.png",
             "event_dates": [{
                 "event_datetime": "2018-12-31 19:00"
             }]
@@ -109,10 +111,19 @@ def sample_future_events(mocker):
         {
             "title": "Test title 3",
             "event_type": "Introductory Course",
+            "image_filename": "event.png",
             "event_dates": [{
                 "event_datetime": "2019-01-01 19:00"
             }],
             "event_monthyear": "January 2019"
+        },
+        {
+            "title": "Test title 4",
+            "event_type": "Workshop",
+            "image_filename": "",
+            "event_dates": [{
+                "event_datetime": "2019-01-02 19:00"
+            }],
         },
     ]
 
