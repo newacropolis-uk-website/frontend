@@ -18,14 +18,14 @@ body {
 .header_logo {
   float: left;
 }
-ul {
+.nav ul {
   list-style-type: none;
   overflow: hidden;
 }
-li {
+.nav li {
   float: right;
 }
-li a {
+.nav li a {
   display: block;
   color: white;
   text-align: center;
@@ -48,12 +48,16 @@ li a {
   height: 383px;
   color: white;
   font-family: 'AvenirNext-Bold',Helvetica,Arial,serif;
+  border-top: solid 19px rgba(247,231,27,1.0);
 }
-.footer_rectangle13 {
-  background-color: rgba(247,231,27,1.0);
-  height: 19px;
-  opacity: .9;
-  }
+
+.footer h3 {
+  color: rgba(247,231,27,1.0);
+  padding:0;
+  margin:0;
+  font-weight: normal;
+  font-size: 1em;
+}
 
 /* Home */
 .carousel img {
