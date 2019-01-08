@@ -425,11 +425,27 @@ input {
 
 .location_column{
   float: left;
-  width: 33.33%;
-  padding: 2%
+  width: 40%;
+  padding: 1% 4% 4% 4%;
+}
+.location_colum_middle{
+  float: left;
+  width: 19%;
+  padding: 2%;
 }
 .location_text{
-  font-family: 'AvenirNext-DemiBold', Helvetica, Arial, serif;
+  font-family: 'AvenirNext-Medium', Helvetica, Arial, serif;
   font-size: 18.0px;
-  color: rgba(74, 73, 74, 1.0);
+  line-height: 8px;
+}
+.location_text_header{
+  font-weight: bold;
+  color: #b300b3;
+}
+.location_text_sub_header{
+  font-weight: bold;
+}
+.contact_imgs{
+  height: 280px;
+  border: #D3D3D3 2px solid;
 }
