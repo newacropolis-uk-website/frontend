@@ -1,4 +1,4 @@
-{% extends "base0.html" %}
+{% extends "base.html" %}
 {% block title %}Events{% endblock %}
 {% block head %}
     {{ super() }}
@@ -11,7 +11,7 @@
     <p class="important">
         {% for item in events %}
             <p>
-                {{ item.title }}<br>{{ item.sub_title if item.sub_title else '' }} 
+                {{ item.title }}<br>{{ item.sub_title if item.sub_title else '' }}
                 {% for date in item.event_dates %}
                     <div>
                         {{ date.event_datetime }}

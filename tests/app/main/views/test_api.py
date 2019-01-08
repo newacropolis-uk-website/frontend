@@ -46,7 +46,7 @@ class WhenAccessingSpeakersPage(object):
             'main.speakers'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        assert page.find('li').text == 'Mr Test  (Dr Test)'
+        assert page.select_one("#content li").text == 'Mr Test  (Dr Test)'
 
 
 class WhenAccessingVenuesPage(object):
@@ -67,7 +67,7 @@ class WhenAccessingVenuesPage(object):
             'main.venues'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        assert page.find('li').text == 'London: 19 Test Terrace, N1 Bus: 1, 5, 10 2 minutes walk'
+        assert page.select_one("#content li").text == 'London: 19 Test Terrace, N1 Bus: 1, 5, 10 2 minutes walk'
 
 
 class WhenAccessingEventsPastYearPage(object):
@@ -176,7 +176,7 @@ class WhenAccessingArticlesPage(object):
             'main.articles_summary'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        assert 'Ancient Greece' in page.find('div').text
+        assert page.select_one("#content a").text == 'Ancient Greece'
 
     def it_shows_an_article(self, client, mocker, logged_in):
         article = {
@@ -195,4 +195,4 @@ class WhenAccessingArticlesPage(object):
             'main.article', id=article['id']
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        assert article['content'] in page.find('div').text
+        assert article['content'] in page.select_one("#content div").text
