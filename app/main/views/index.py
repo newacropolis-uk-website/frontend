@@ -21,10 +21,3 @@ def index():
         articles=articles,
         events=events
     )
-
-
-@main.route('/old')
-def index0():
-    return render_template(
-        'views/home0.html'
-    )
