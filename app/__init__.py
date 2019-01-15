@@ -3,6 +3,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 from flask import Blueprint, Flask, jsonify, session
+import gaesession
 
 from app.clients.api_client import ApiClient
 import requests
@@ -28,6 +29,8 @@ def create_app(**kwargs):
     setup_config(application, configs[environment_state])
 
     application.config.update(kwargs)
+
+    application.session_interface = gaesession.GaeNdbSessionInterface(application)
 
     init_app(application)
 
