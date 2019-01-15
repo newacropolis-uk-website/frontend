@@ -41,6 +41,10 @@ env_variables:
   ADMIN_CLIENT_SECRET: <admin secret - should match api>
   AUTH_USERNAME: <basic auth username>
   AUTH_PASSWORD: <basic auth password>
+  IMAGES_URL: <image url for events>
+  GOOGLE_OAUTH2_CLIENT_ID: <google oauth2 client id>
+  GOOGLE_OAUTH2_CLIENT_SECRET: <google oauth2 client secret>
+  GOOGLE_OAUTH2_REDIRECT_URI: <google auth redirect>
 ```
 
 To update a secret you will need to log into the datastore and edit the value there or remove the value and deploy the changes.
