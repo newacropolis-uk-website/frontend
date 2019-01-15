@@ -24,6 +24,8 @@ class Config(object):
     AUTH_PASSWORD = get_setting('AUTH_PASSWORD')
     GOOGLE_OAUTH2_CLIENT_ID = get_setting('GOOGLE_OAUTH2_CLIENT_ID')
     GOOGLE_OAUTH2_CLIENT_SECRET = get_setting('GOOGLE_OAUTH2_CLIENT_SECRET')
+    GOOGLE_OAUTH2_REDIRECT_URI = get_setting('GOOGLE_OAUTH2_REDIRECT_URI')
+    OAUTHLIB_INSECURE_TRANSPORT = False
 
 
 class Development(Config):
@@ -37,6 +39,7 @@ class Preview(Config):
     DEBUG = True
     SESSION_COOKIE_SECURE = False
     SESSION_PROTECTION = None
+    OAUTHLIB_INSECURE_TRANSPORT = True
 
 
 class Live(Config):
