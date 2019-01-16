@@ -29,6 +29,8 @@ def create_app(**kwargs):
 
     application.config.update(kwargs)
 
+    use_gaesession(application)
+
     init_app(application)
 
     api_client.init_app(application)
@@ -81,3 +83,8 @@ def get_env(app):
 
 def get_root_path(application):
     return application.root_path
+
+
+def use_gaesession(application):
+    import gaesession
+    application.session_interface = gaesession.GaeNdbSessionInterface(application)

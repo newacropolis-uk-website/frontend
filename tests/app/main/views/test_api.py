@@ -3,8 +3,6 @@ import uuid
 from bs4 import BeautifulSoup
 from flask import json, url_for, request
 
-from tests.conftest import AUTH_USERNAME, AUTH_PASSWORD
-
 
 class WhenAccessingPagesWithoutLoggingIn(object):
 
