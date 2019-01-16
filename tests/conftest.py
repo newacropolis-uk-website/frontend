@@ -13,6 +13,7 @@ from app import create_app, get_env
 
 # Don't import app.settings to avoid importing google.appengine.ext
 sys.modules['app.settings'] = Mock()
+sys.modules['app.gaesession'] = Mock()
 
 AUTH_USERNAME = 'user'
 AUTH_PASSWORD = 'pass'
@@ -28,7 +29,8 @@ def app():
         'API_BASE_URL': 'http://na_api_base',
         'SECRET_KEY': 'secret_key',
         'AUTH_USERNAME': AUTH_USERNAME,
-        'AUTH_PASSWORD': AUTH_PASSWORD
+        'AUTH_PASSWORD': AUTH_PASSWORD,
+        'OAUTHLIB_INSECURE_TRANSPORT': True
     })
 
     ctx = _app.app_context()
