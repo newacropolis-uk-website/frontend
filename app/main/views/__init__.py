@@ -12,9 +12,9 @@ authorization_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
 token_url = "https://www.googleapis.com/oauth2/v4/token"
 user_info_url = 'https://www.googleapis.com/oauth2/v1/userinfo'
 scope = [
-        "https://www.googleapis.com/auth/userinfo.email",
-        "https://www.googleapis.com/auth/userinfo.profile"
-    ]
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile"
+]
 
 
 def check_auth(username, password):
@@ -52,10 +52,10 @@ def requires_google_auth(f):
 
 def google_login():
     google = OAuth2Session(
-                current_app.config['GOOGLE_OAUTH2_CLIENT_ID'],
-                scope=scope,
-                redirect_uri=current_app.config['GOOGLE_OAUTH2_REDIRECT_URI']
-            )
+        current_app.config['GOOGLE_OAUTH2_CLIENT_ID'],
+        scope=scope,
+        redirect_uri=current_app.config['GOOGLE_OAUTH2_REDIRECT_URI']
+    )
     authorization_url, state = google.authorization_url(authorization_base_url)
 
     # State is used to prevent CSRF, keep this for later.
@@ -70,16 +70,16 @@ def callback():
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = current_app.config['OAUTHLIB_INSECURE_TRANSPORT']
 
     google = OAuth2Session(
-                current_app.config['GOOGLE_OAUTH2_CLIENT_ID'],
-                state=session['oauth_state'],
-                redirect_uri=current_app.config['GOOGLE_OAUTH2_REDIRECT_URI']
-            )
+        current_app.config['GOOGLE_OAUTH2_CLIENT_ID'],
+        state=session['oauth_state'],
+        redirect_uri=current_app.config['GOOGLE_OAUTH2_REDIRECT_URI']
+    )
 
     token = google.fetch_token(
-                token_url,
-                client_secret=current_app.config['GOOGLE_OAUTH2_CLIENT_SECRET'],
-                authorization_response=request.url
-            )
+        token_url,
+        client_secret=current_app.config['GOOGLE_OAUTH2_CLIENT_SECRET'],
+        authorization_response=request.url
+    )
 
     session['oauth_token'] = token
 
