@@ -3,7 +3,6 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 from flask import Blueprint, Flask, jsonify, session
-import gaesession
 
 from app.clients.api_client import ApiClient
 import requests
@@ -30,7 +29,7 @@ def create_app(**kwargs):
 
     application.config.update(kwargs)
 
-    application.session_interface = gaesession.GaeNdbSessionInterface(application)
+    use_gaesession(application)
 
     init_app(application)
 
@@ -84,3 +83,8 @@ def get_env(app):
 
 def get_root_path(application):
     return application.root_path
+
+
+def use_gaesession(application):
+    import gaesession
+    application.session_interface = gaesession.GaeNdbSessionInterface(application)
