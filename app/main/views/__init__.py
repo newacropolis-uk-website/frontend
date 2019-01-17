@@ -4,6 +4,7 @@ from functools import wraps
 from flask import current_app, redirect, request, Response, session, url_for
 import requests
 from requests_oauthlib import OAuth2Session
+from oauthlib.oauth2 import TokenExpiredError
 
 from app.main import main
 
@@ -11,6 +12,7 @@ from app.main import main
 authorization_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
 token_url = "https://www.googleapis.com/oauth2/v4/token"
 user_info_url = 'https://www.googleapis.com/oauth2/v1/userinfo'
+revoke_token_url = 'https://accounts.google.com/o/oauth2/revoke'
 scope = [
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile"
@@ -44,6 +46,14 @@ def requires_google_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = session.get('oauth_token')
+
+        if token:
+            try:
+                google = OAuth2Session(current_app.config['GOOGLE_OAUTH2_CLIENT_ID'], token=token)
+                google.get('https://www.googleapis.com/oauth2/v3/tokeninfo')
+            except TokenExpiredError:
+                del session['oauth_token']
+
         if not token:
             return google_login()
         return f(*args, **kwargs)
@@ -92,3 +102,14 @@ def callback():
     print(profile)
 
     return redirect(session.pop('source_url', url_for('.admin')))
+
+
+@main.route('/oauth2logout')
+def logout():
+    requests.post(
+        revoke_token_url,
+        params={'token': session.pop('oauth_token')},
+        headers={'content-type': 'application/x-www-form-urlencoded'}
+    )
+
+    return redirect(url_for('.index'))
