@@ -13,6 +13,7 @@ from app.main.views import requires_google_auth
 def admin():
     return render_template(
         'views/admin.html',
+        name=session['user_profile']['name']
     )
 
 
@@ -24,12 +25,3 @@ def profile():
 
     google = OAuth2Session(current_app.config['GOOGLE_OAUTH2_CLIENT_ID'], token=session['oauth_token'])
     return jsonify(google.get('https://www.googleapis.com/oauth2/v1/userinfo').json())
-
-
-# Add a logout handler.
-@main.route('/admin/logout')
-def admin_logout():
-    # Delete the user's profile and the credentials stored by oauth2.
-    del session['oauth_token']
-    session.modified = True
-    return redirect(request.referrer or '/')
