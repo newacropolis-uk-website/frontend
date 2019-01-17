@@ -20,6 +20,7 @@ def mock_oauth2session(mocker, auth_url):
             class MockProfile:
                 def json(self):
                     return {
+                        'name': 'test user',
                         'email': 'test@example.com'
                     }
 
@@ -49,10 +50,11 @@ class WhenAccessingAdminPagesWithoutLoggingIn(object):
             'oauth_state': 'state'
         }
         mocker.patch('app.main.views.session', session_dict)
+        mocker.patch('app.main.views.admin.session', session_dict)
         mocker.patch('app.main.views.os.environ', {})
 
         response = client.get(url_for(
             'main.callback'
         ), follow_redirects=True)
         assert response.status_code == 200
-        assert session_dict['user_profile'] == {'email': 'test@example.com'}
+        assert session_dict['user_profile'] == {'name': 'test user', 'email': 'test@example.com'}
