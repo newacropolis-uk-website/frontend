@@ -5,22 +5,12 @@ from flask import json, url_for, request
 
 
 class WhenAccessingHomePage(object):
-    def it_should__display_banner_text(self, client, mocker):
-        response = client.get(url_for(
-            'main.index'
-        ))
-        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        content = page.find("div", {"class": "banner_findoutmore"}).string
-        assert content == 'FIND OUT MORE'
-
-
-class WhenAccessingHomePage(object):
     def it_should_future_events(self, client, sample_future_events, sample_articles_summary):
         response = client.get(url_for(
             'main.index'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        content = page.find("div", {"class": "whatson_block_subheading"}).string
+        content = page.find("h4", {"class": "card-title"}).string
 
         intro_course = [e for e in sample_future_events if e['event_type'] == 'Introductory Course'][0]
 
@@ -46,7 +36,7 @@ class WhenAccessingHomePage(object):
                 # expect the other events to be after an intro course if they have an image
                 assert carousel_items[i + 1].text.strip() == other_events[i]['title']
 
-    @pytest.mark.parametrize('div_class', ['.header', '.footer'])
+    @pytest.mark.parametrize('div_class', ['.nav', '.footer_nav'])
     def it_shows_list_of_available_pages_on_header_and_footer(
         self, client, sample_future_events, sample_articles_summary, div_class
     ):
