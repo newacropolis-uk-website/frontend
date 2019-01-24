@@ -108,6 +108,12 @@ footer{
 .footer_icons{
   padding: 1% 5% 1% 0%;
 }
+.nav li a:active {
+  color: white !important;
+}
+.nav li a:hover {
+  color: white !important;
+}
 .nav {
   width: 100%;
 }
@@ -121,7 +127,7 @@ footer{
   margin-right: 35px;
 }
 .nav li a {
-  color: white;
+  color: rgb(220,220,220);
   text-decoration: none;
   line-height: 20px;
 }
