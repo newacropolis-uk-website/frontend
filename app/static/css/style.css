@@ -210,15 +210,17 @@ footer{
   padding: 2% 2% 5% 2%;
 }
 .pcv_block{
-  padding: 15%;
-  height: 100%;
+  padding: 21% 12% 21% 12%;
+  height: 320px;
   background-color: white;
   width: 100%;
   font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
 }
+.pcv_padding {
+  padding-bottom: 5%;
+}
 .upw{
-  margin-top: -42px;
-  padding-bottom: 20%;
+  margin-top: -65px;
 }
 .findoutmore_background {
   background-color: rgba(143,18,253,1.0);
@@ -243,8 +245,6 @@ footer{
   object-fit: cover;
   height: 252px;
 }
-
-
 .featured_background{
   background-color: rgba(215,215,215,1.0);
   border-style: solid;
