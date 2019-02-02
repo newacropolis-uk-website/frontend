@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, jsonify, session
+from flask import Flask, jsonify, request, session
 
 from app.clients.api_client import ApiClient
 import requests_toolbelt.adapters.appengine
@@ -40,8 +40,10 @@ def create_app(**kwargs):
 
 def init_app(app):
     @app.before_request
-    def make_session_permanent():
-        session.permanent = True
+    def check_auth_required():
+        from app.main.views import google_login
+        if '/admin' in request.url and not session.get('oauth_token'):
+            return google_login()
 
     @app.after_request
     def after_request(response):

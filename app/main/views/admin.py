@@ -7,7 +7,6 @@ from app.main.views import requires_google_auth
 
 
 @main.route('/admin')
-@requires_google_auth
 def admin():
     return render_template(
         'views/admin.html',
