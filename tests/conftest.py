@@ -1,15 +1,12 @@
 import os
-import subprocess
 import sys
 
 from bs4 import BeautifulSoup
-from flask import current_app
 
 import pytest
-import mock
 from mock import Mock
 
-from app import create_app, get_env
+from app import create_app
 
 # Don't import app.settings to avoid importing google.appengine.ext
 sys.modules['app.settings'] = Mock()

@@ -1,7 +1,6 @@
 import pytest
-import uuid
 from bs4 import BeautifulSoup
-from flask import json, url_for, request
+from flask import url_for
 
 
 class WhenAccessingHomePage(object):
