@@ -14,7 +14,7 @@ function display_result {
   fi
 }
 
-pycodestyle .
+flake8 .
 display_result $? 1 "Code style check"
 
 ## Code coverage

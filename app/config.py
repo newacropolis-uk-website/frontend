@@ -1,10 +1,4 @@
 #!/usr/bin/python
-
-import sys
-import argparse
-import logging
-import os
-
 from app.settings import Settings
 
 

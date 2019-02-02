@@ -1,10 +1,8 @@
-import os
-from flask import current_app, jsonify, render_template, redirect, request, session, url_for
+from flask import current_app, jsonify, render_template, session
 
 from requests_oauthlib import OAuth2Session
 
 from app.main import main
-from app import api_client
 from app.main.views import requires_google_auth
 
 

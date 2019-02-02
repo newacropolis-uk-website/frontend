@@ -1,11 +1,8 @@
-import calendar
 from flask import (
-    Blueprint,
     current_app,
     session
 )
 import json
-import jwt
 import requests
 from urlparse import urljoin
 import time

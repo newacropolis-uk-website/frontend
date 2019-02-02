@@ -3,10 +3,6 @@ from flask import (
     current_app,
     json)
 from jsonschema import ValidationError
-from sqlalchemy.exc import SQLAlchemyError, DataError
-from sqlalchemy.orm.exc import NoResultFound
-
-from app.authentication.auth import AuthError
 
 
 def register_errors(blueprint):

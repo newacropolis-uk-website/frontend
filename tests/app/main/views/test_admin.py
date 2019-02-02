@@ -1,6 +1,4 @@
-import uuid
-from bs4 import BeautifulSoup
-from flask import json, url_for, request
+from flask import url_for
 
 
 def mock_oauth2session(mocker, auth_url):
