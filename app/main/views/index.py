@@ -19,5 +19,38 @@ def index():
         images_url=current_app.config['IMAGES_URL'],
         main_article=articles[index],
         articles=articles,
-        events=events
+        events=events,
+        current_page=''
+    )
+
+
+@main.route('/resources')
+def resources():
+    return render_template(
+        'views/resources.html',
+        current_page='resources'
+    )
+
+
+@main.route('/whats-on')
+def whats_on():
+    return render_template(
+        'views/whats_on.html',
+        current_page='whats-on'
+    )
+
+
+@main.route('/what-we-offer')
+def what_we_offer():
+    return render_template(
+        'views/what_we_offer.html',
+        current_page='what-we-offer'
+    )
+
+
+@main.route('/e-shop')
+def e_shop():
+    return render_template(
+        'views/e-shop.html',
+        current_page='e-shop'
     )

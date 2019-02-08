@@ -4,17 +4,6 @@ from flask import url_for
 
 
 class WhenAccessingHomePage(object):
-    def it_should_future_events(self, client, sample_future_events, sample_articles_summary):
-        response = client.get(url_for(
-            'main.index'
-        ))
-        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        content = page.find("h4", {"class": "card-title"}).string
-
-        intro_course = [e for e in sample_future_events if e['event_type'] == 'Introductory Course'][0]
-
-        assert content == intro_course['title']
-
     def it_should_show_future_events_in_carousel(self, client, sample_future_events, sample_articles_summary):
         response = client.get(url_for(
             'main.index'
@@ -34,6 +23,17 @@ class WhenAccessingHomePage(object):
             elif event['image_filename']:
                 # expect the other events to be after an intro course if they have an image
                 assert carousel_items[i + 1].text.strip() == other_events[i]['title']
+
+    def it_should_show_future_events_in_cards(self, client, sample_future_events, sample_articles_summary):
+        response = client.get(url_for(
+            'main.index'
+        ))
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        content = page.find("h4", {"class": "card-title"}).string
+
+        intro_course = [e for e in sample_future_events if e['event_type'] == 'Introductory Course'][0]
+
+        assert content == intro_course['title']
 
     @pytest.mark.parametrize('div_class', ['.nav', '.footer_nav'])
     def it_shows_list_of_available_pages_on_header_and_footer(
