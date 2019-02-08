@@ -4,6 +4,14 @@ from flask import url_for
 
 
 class WhenAccessingHomePage(object):
+    def it_should_show_header_logo(self, client, sample_future_events, sample_articles_summary):
+        response = client.get(url_for(
+            'main.index'
+        ))
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        header_image = page.find('img')['src']
+        assert header_image == '/static/images/acropolis_header.png'
+
     def it_should_show_future_events_in_carousel(self, client, sample_future_events, sample_articles_summary):
         response = client.get(url_for(
             'main.index'
@@ -35,7 +43,26 @@ class WhenAccessingHomePage(object):
 
         assert content == intro_course['title']
 
-    @pytest.mark.parametrize('div_class', ['.navbar', '.footnav'])
+    def it_should_display_text_for_main_article(self, client, sample_future_events, sample_articles_summary):
+        response = client.get(url_for(
+            'main.index'
+        ))
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        content = page.find("h2", {"id": "main_article"}).string
+        main_article = [a for a in sample_articles_summary if a['title'] == 'Article title 3'][0]
+        assert isinstance(main_article['title'], basestring)
+        assert isinstance(content, basestring)
+
+    def it_should_show_featured_articles_in_cards(self, client, sample_future_events, sample_articles_summary):
+        response = client.get(url_for(
+            'main.index'
+        ))
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        content = page.find_all(["h4"])[6].string
+        article = [a for a in sample_articles_summary if a['title'] == 'Article title 2'][0]
+        assert content == article['title']
+
+    @pytest.mark.parametrize('div_class', ['#navbarNav', '.footnav'])
     def it_shows_list_of_available_pages_on_header_and_footer(
         self, client, sample_future_events, sample_articles_summary, div_class
     ):
@@ -46,5 +73,7 @@ class WhenAccessingHomePage(object):
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
 
         selected_div = page.select_one(div_class)
+
+        print(selected_div)
         for i, li in enumerate(selected_div.select('li a')):
             assert li.text == expected_link_text[i]
