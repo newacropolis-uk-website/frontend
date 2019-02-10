@@ -15,7 +15,7 @@ class ApiClient(BaseAPIClient):
 
     def get_events_in_future(self):
         events = self.get_nice_event_dates(self.get(url='events/future'))
-        return self.get_events_intro_courses_prioritised(events)
+        return self._get_events_intro_courses_prioritised(events)
 
     def get_events_past_year(self):
         return self.get(url='events/past_year')
@@ -40,7 +40,7 @@ class ApiClient(BaseAPIClient):
 
         return events
 
-    def get_events_intro_courses_prioritised(self, events):
+    def _get_events_intro_courses_prioritised(self, events):
         intro_courses_first = []
         other_events = []
         for event in events:
@@ -51,3 +51,22 @@ class ApiClient(BaseAPIClient):
 
         intro_courses_first.extend(other_events)
         return intro_courses_first
+
+    def get_user(self, email):
+        return self.get(url='user/{}'.format(email))
+
+    def get_users(self):
+        return self.get(url='users')
+
+    def create_user(self, profile):
+        data = {
+            'email': profile['email'],
+            'name': profile['name'],
+        }
+        return self.post(url='user', data=data)
+
+    def update_user_access_area(self, user_id, access_area):
+        data = {
+            'access_area': access_area
+        }
+        return self.post(url='user/{}'.format(user_id), data=data)
