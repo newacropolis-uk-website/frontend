@@ -40,8 +40,8 @@ def mock_sessions(mocker, session_dict={}):
 
 @pytest.fixture
 def access_areas():
-    access_areas = ['{}{}'.format(a.capitalize(), 's' if a != 'shop' else '')\
-        for a in Config.ACCESS_AREAS if a != 'admin']
+    access_areas = ['{}{}'.format(a.capitalize(), 's' if a != 'shop' else '')
+                    for a in Config.ACCESS_AREAS if a != 'admin']
     access_areas.append('Users')
     return access_areas
 
@@ -85,7 +85,8 @@ class WhenAccessingAdminPagesAfterLogin(object):
                 'access_area': 'admin'
             },
             'user_profile': {
-                'name': 'test name'
+                'name': 'test name',
+                'email': 'test@example.com'
             }
         }
         users = [
@@ -110,8 +111,7 @@ class WhenAccessingAdminPagesAfterLogin(object):
         area_strs = [a.text.strip() for a in areas]
         assert set(access_areas) == set(area_strs)
 
-
-    @pytest.mark.parametrize('areas',[
+    @pytest.mark.parametrize('areas', [
         'email,', 'email,event', 'event,report,article'
     ])
     def it_restricts_areas_for_non_admin(self, client, mocker, areas):
@@ -120,7 +120,8 @@ class WhenAccessingAdminPagesAfterLogin(object):
                 'access_area': areas
             },
             'user_profile': {
-                'name': 'test name'
+                'name': 'test name',
+                'email': 'test@example.com'
             }
         }
         users = [
