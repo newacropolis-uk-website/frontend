@@ -15,7 +15,7 @@ class WhenAccessingHomePage(object):
                 other_events.append(event)
 
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        carousel_items = page.select(".carousel_info_text")
+        carousel_items = page.select(".carousel-caption")
         for i, event in enumerate(sample_future_events):
             if event['event_type'] == 'Introductory Course':
                 # expect the first event in the carousel to be an intro course
