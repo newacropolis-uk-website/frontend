@@ -78,6 +78,10 @@ class BaseAPIClient(object):
                 headers={'Authorization': 'Bearer {}'.format(session["access_token"])}
             )
 
+            if response.status_code == 404:
+                current_app.logger.warn('404', response.json()['message'])
+                return
+
             if response.status_code == 401 and response.json()['message'] == "Signature expired":
                 self.set_access_token()
                 response = requests.request(
