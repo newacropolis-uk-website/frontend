@@ -49,6 +49,9 @@
             {% endfor %}
         <hr>
         <div class="justify-content-end">
+            {% if update_count %}
+            <span>{{ update_count }} updated</span>
+            {% endif %}
             <button type="submit" class="btn btn-outline-success">Submit</button>
             <a href="/admin" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</a>
         </div>

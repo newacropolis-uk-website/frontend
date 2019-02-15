@@ -20,6 +20,7 @@ def admin():
 def admin_users():
     users = [u for u in api_client.get_users() if u.get('access_area') != 'admin']
     form = populate_user_form(users)
+    update_count = 0
 
     if form.validate_on_submit():
         for i, user in enumerate(form.users):
@@ -42,11 +43,13 @@ def admin_users():
                 access_area += 'article,'
 
             if users[i]['access_area'] != access_area:
+                update_count += 1
                 api_client.update_user_access_area(users[i]['id'], access_area)
 
     return render_template(
         'views/admin/users.html',
         users=users,
+        update_count=update_count,
         access_areas=current_app.config['ACCESS_AREAS'],
         form=form
     )
