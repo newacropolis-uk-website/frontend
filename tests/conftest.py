@@ -27,7 +27,8 @@ def app():
         'SECRET_KEY': 'secret_key',
         'AUTH_USERNAME': AUTH_USERNAME,
         'AUTH_PASSWORD': AUTH_PASSWORD,
-        'OAUTHLIB_INSECURE_TRANSPORT': True
+        'OAUTHLIB_INSECURE_TRANSPORT': True,
+        'WTF_CSRF_ENABLED': False,
     })
 
     ctx = _app.app_context()
@@ -168,3 +169,10 @@ def sample_articles_summary(mocker):
         return_value=articles
     )
     return articles
+
+
+def mock_sessions(mocker, session_dict={}):
+    mocker.patch('app.session', session_dict)
+    mocker.patch('app.main.views.session', session_dict)
+    mocker.patch('app.main.views.admin.session', session_dict)
+    mocker.patch('app.main.views.os.environ', session_dict)
