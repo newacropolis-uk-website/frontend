@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if user_has_permissions('admin') %}
+<div class="container pb-3 text-right">
+    <form class="form" id="users_form" method="post">{{ form.csrf_token }}
+        <div class="row">
+            <div class='col-2'>
+            user
+            </div>
+            {% for area in access_areas %}
+            <div class='col-sm'>
+            {{ area }}
+            </div>
+            {% endfor %}
+        </div>
+        <hr>
+            {% for user in form.users %}
+        <div class="row">
+            <div class='col-2' style='padding-top:0;'>
+                {{ user.str_email.data }}
+                {{ user.user_id}}
+            </div>
+            <div class='col'>
+                {{ user.admin }}
+            </div>
+            <div class='col'>
+                {{ user.event }}
+            </div>
+            <div class='col'>
+                {{ user.email }}
+            </div>
+            <div class='col'>
+                {{ user.magazine }}
+            </div>
+            <div class='col'>
+                {{ user.report }}
+            </div>
+            <div class='col'>
+                {{ user.shop }}
+            </div>
+            <div class='col'>
+                {{ user.announcement }}
+            </div>
+            <div class='col'>
+                {{ user.article }}
+            </div>
+        </div>
+            {% endfor %}
+        <hr>
+        <div class="justify-content-end">
+            <button type="submit" class="btn btn-outline-success">Submit</button>
+            <a href="/admin" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,6 +1,7 @@
 import os
 
-from flask import Flask, jsonify, session
+from flask import Flask, jsonify, request, session
+from flask_wtf.csrf import CSRFProtect
 
 from app.clients.api_client import ApiClient
 import requests_toolbelt.adapters.appengine
@@ -13,6 +14,7 @@ requests_toolbelt.adapters.appengine.monkeypatch()
 __version__ = '0.0.1'
 
 api_client = ApiClient()
+csrf = CSRFProtect()
 
 
 def create_app(**kwargs):
@@ -21,6 +23,7 @@ def create_app(**kwargs):
 
     environment_state = get_env(application)
 
+    csrf.init_app(application)
     application.config.from_object(configs[environment_state])
     setup_config(application, configs[environment_state])
 
@@ -38,10 +41,34 @@ def create_app(**kwargs):
     return application
 
 
+def _get_email():
+    profile = session.get('user_profile')
+    if profile:
+        return profile['email']
+
+
+def _get_users_need_access():
+    users = [u for u in api_client.get_users() if not u['access_area']]
+    return users
+
+
+def _user_has_permissions(area):
+    access_areas = session['user']['access_area'].split(',')
+    if 'admin' in access_areas:
+        return True
+    return area in access_areas
+
+
 def init_app(app):
+    app.jinja_env.globals['get_email'] = _get_email
+    app.jinja_env.globals['get_users_need_access'] = _get_users_need_access
+    app.jinja_env.globals['user_has_permissions'] = _user_has_permissions
+
     @app.before_request
-    def make_session_permanent():
-        session.permanent = True
+    def check_auth_required():
+        if '/admin' in request.url and not session.get('user'):
+            from app.main.views import google_login
+            return google_login()
 
     @app.after_request
     def after_request(response):

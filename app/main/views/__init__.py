@@ -1,12 +1,14 @@
 import os
 
 from functools import wraps
-from flask import current_app, redirect, request, Response, session, url_for
+from flask import current_app, redirect, render_template, request, Response, session, url_for
 import requests
 from requests_oauthlib import OAuth2Session
 from oauthlib.oauth2 import TokenExpiredError
 
+from app import api_client
 from app.main import main
+from app.clients.errors import HTTPError
 
 # OAuth endpoints given in the Google API documentation
 authorization_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
@@ -70,7 +72,7 @@ def google_login():
 
     # State is used to prevent CSRF, keep this for later.
     session['oauth_state'] = state
-    session['source_url'] = request.url
+    session['target_url'] = request.url
 
     return redirect(authorization_url)
 
@@ -91,25 +93,53 @@ def callback():
         authorization_response=request.url
     )
 
-    session['oauth_token'] = token
-
-    auth_google = OAuth2Session(current_app.config['GOOGLE_OAUTH2_CLIENT_ID'], token=session['oauth_token'])
+    auth_google = OAuth2Session(current_app.config['GOOGLE_OAUTH2_CLIENT_ID'], token=token)
 
     profile = auth_google.get(user_info_url).json()
 
+    user = api_client.get_user(profile['email'])
+
+    if not user:
+        try:
+            api_client.create_user(profile)
+            return render_template(
+                'views/admin/admin_interstitial.html',
+                message="{} has registered as a user, "
+                "please wait until the web administrators setup your permissions".format(profile['email'])
+            )
+        except HTTPError as e:
+            if 'not in correct domain' in e.message:
+                return render_template(
+                    'views/admin/admin_interstitial.html',
+                    message='{}, please contact the website administrators to get an email in correct domain'.format(
+                        e.message)
+                )
+            raise
+    elif not user.get('access_area'):
+        return render_template(
+            'views/admin/admin_interstitial.html',
+            message='Waiting for permissions to be granted for {} by website administrators'.format(profile['email'])
+        )
+    else:
+        session['user'] = user
+
+    session['oauth_token'] = token
+
     # store profile in session to use later
     session['user_profile'] = profile
-    print(profile)
 
-    return redirect(session.pop('source_url', url_for('.admin')))
+    return redirect(session.pop('target_url', url_for('.admin')))
 
 
-@main.route('/oauth2logout')
+@main.route('/logout')
 def logout():
-    requests.post(
-        revoke_token_url,
-        params={'token': session.pop('oauth_token')},
-        headers={'content-type': 'application/x-www-form-urlencoded'}
-    )
+    if session.get('user_profile'):
+        del session['user_profile']
+        del session['user']
+        requests.post(
+            revoke_token_url,
+            params={'token': session.pop('oauth_token')},
+            headers={'content-type': 'application/x-www-form-urlencoded'}
+        )
 
     return redirect(url_for('.index'))

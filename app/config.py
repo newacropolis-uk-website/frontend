@@ -20,6 +20,7 @@ class Config(object):
     GOOGLE_OAUTH2_CLIENT_SECRET = get_setting('GOOGLE_OAUTH2_CLIENT_SECRET')
     GOOGLE_OAUTH2_REDIRECT_URI = get_setting('GOOGLE_OAUTH2_REDIRECT_URI')
     OAUTHLIB_INSECURE_TRANSPORT = False
+    ACCESS_AREAS = ['admin', 'event', 'email', 'magazine', 'report', 'shop', 'announcement', 'article']
 
 
 class Development(Config):

@@ -3,6 +3,7 @@ click==5.1
 Flask==1.0.2
 Flask-Script==2.0.5
 flake8==3.7.4
+Flask-WTF==0.14.2
 freezegun>=0.3.5
 gunicorn==19.9.0
 iso8601==0.1.12
@@ -19,3 +20,4 @@ requests>=2.0.0
 requests_oauthlib==1.2.0
 requests_toolbelt==0.8.0
 virtualenv==16.0.0
+WTForms==2.2.1

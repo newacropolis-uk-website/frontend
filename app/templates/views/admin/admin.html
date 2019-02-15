@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container ">
+    <div class="row">
+        {% if user_has_permissions('admin') %}
+        <div class='col-sm'>
+            <a href='/admin/users'>Users {% if get_users_need_access() %} ({{ get_users_need_access()|length }}) {% endif %}</a>
+        </div>
+        {% endif %}
+        {% if user_has_permissions('event') %}
+        <div class='col-sm'>
+            Events
+        </div>
+        {% endif %}
+        {% if user_has_permissions('email') %}
+        <div class='col-sm'>
+            Emails
+        </div>
+        {% endif %}
+        {% if user_has_permissions('magazine') %}
+        <div class='col-sm'>
+            Magazines
+        </div>
+        {% endif %}
+    </div>
+    <div class="row">
+        {% if user_has_permissions('shop') %}
+        <div class='col-sm'>
+            Shop
+        </div>
+        {% endif %}
+        {% if user_has_permissions('report') %}
+        <div class='col-sm'>
+            Reports
+        </div>
+        {% endif %}
+        {% if user_has_permissions('announcement') %}
+        <div class='col-sm'>
+            Announcements
+        </div>
+        {% endif %}
+        {% if user_has_permissions('article') %}
+        <div class='col-sm'>
+            Articles
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

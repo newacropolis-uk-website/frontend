@@ -27,7 +27,8 @@ def app():
         'SECRET_KEY': 'secret_key',
         'AUTH_USERNAME': AUTH_USERNAME,
         'AUTH_PASSWORD': AUTH_PASSWORD,
-        'OAUTHLIB_INSECURE_TRANSPORT': True
+        'OAUTHLIB_INSECURE_TRANSPORT': True,
+        'WTF_CSRF_ENABLED': False,
     })
 
     ctx = _app.app_context()
@@ -56,6 +57,11 @@ def os_environ():
     os.environ = old_env
 
 
+@pytest.fixture
+def user_not_authenticated(mocker):
+    mocker.patch('app.session', return_value={})
+
+
 def request(url, method, data=None, headers=None):
     r = method(url, data=data, headers=headers)
     r.soup = BeautifulSoup(r.get_data(as_text=True), 'html.parser')
@@ -63,13 +69,13 @@ def request(url, method, data=None, headers=None):
 
 
 @pytest.fixture(scope='function')
-def client(app):
+def client(app, user_not_authenticated):
     with app.test_request_context(), app.test_client() as client:
         yield client
 
 
 @pytest.fixture
-def logged_in(mocker):
+def logged_in(mocker, user_not_authenticated):
     class Request(object):
         class Authorization(object):
             username = AUTH_USERNAME
@@ -163,3 +169,10 @@ def sample_articles_summary(mocker):
         return_value=articles
     )
     return articles
+
+
+def mock_sessions(mocker, session_dict={}):
+    mocker.patch('app.session', session_dict)
+    mocker.patch('app.main.views.session', session_dict)
+    mocker.patch('app.main.views.admin.session', session_dict)
+    mocker.patch('app.main.views.os.environ', session_dict)

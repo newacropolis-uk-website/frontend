@@ -2,16 +2,53 @@ from flask import current_app, jsonify, render_template, session
 
 from requests_oauthlib import OAuth2Session
 
+from app import api_client
 from app.main import main
+from app.main.forms import populate_user_form
 from app.main.views import requires_google_auth
 
 
 @main.route('/admin')
-@requires_google_auth
 def admin():
     return render_template(
-        'views/admin.html',
+        'views/admin/admin.html',
         name=session['user_profile']['name']
+    )
+
+
+@main.route('/admin/users', methods=['GET', 'POST'])
+def admin_users():
+    users = [u for u in api_client.get_users() if u.get('access_area') != 'admin']
+    form = populate_user_form(users)
+
+    if form.validate_on_submit():
+        for i, user in enumerate(form.users):
+            access_area = ''
+            if user.admin.data:
+                access_area += 'admin,'
+            if user.event.data:
+                access_area += 'event,'
+            if user.email.data:
+                access_area += 'email,'
+            if user.magazine.data:
+                access_area += 'magazine,'
+            if user.report.data:
+                access_area += 'report,'
+            if user.shop.data:
+                access_area += 'shop,'
+            if user.announcement.data:
+                access_area += 'announcement,'
+            if user.article.data:
+                access_area += 'article,'
+
+            if users[i]['access_area'] != access_area:
+                api_client.update_user_access_area(users[i]['id'], access_area)
+
+    return render_template(
+        'views/admin/users.html',
+        users=users,
+        access_areas=current_app.config['ACCESS_AREAS'],
+        form=form
     )
 
 
