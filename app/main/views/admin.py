@@ -42,7 +42,7 @@ def admin_users():
                 access_area += 'article,'
 
             if users[i]['access_area'] != access_area:
-                api_client.update_user_access_area(user.user_id.data, access_area)
+                api_client.update_user_access_area(users[i]['id'], access_area)
 
     return render_template(
         'views/admin/users.html',
