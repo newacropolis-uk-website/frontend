@@ -8,6 +8,7 @@ from oauthlib.oauth2 import TokenExpiredError
 
 from app import api_client
 from app.main import main
+from app.clients.errors import HTTPError
 
 # OAuth endpoints given in the Google API documentation
 authorization_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
@@ -99,12 +100,21 @@ def callback():
     user = api_client.get_user(profile['email'])
 
     if not user:
-        api_client.create_user(profile)
-        return render_template(
-            'views/admin/admin_interstitial.html',
-            message="{} has registered as a user, "
-            "please wait until the web administrators setup your permissions".format(profile['email'])
-        )
+        try:
+            api_client.create_user(profile)
+            return render_template(
+                'views/admin/admin_interstitial.html',
+                message="{} has registered as a user, "
+                "please wait until the web administrators setup your permissions".format(profile['email'])
+            )
+        except HTTPError as e:
+            if 'not in correct domain' in e.message:
+                return render_template(
+                    'views/admin/admin_interstitial.html',
+                    message='{}, please contact the website administrators to get an email in correct domain'.format(
+                        e.message)
+                )
+            raise
     elif not user.get('access_area'):
         return render_template(
             'views/admin/admin_interstitial.html',

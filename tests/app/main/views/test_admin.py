@@ -4,8 +4,15 @@ import pytest
 
 from bs4 import BeautifulSoup
 from app.config import Config
+from app.clients.errors import HTTPError
+from tests.conftest import mock_sessions
 
-def mock_oauth2session(mocker, auth_url):
+def mock_oauth2session(mocker, auth_url, email=None):
+
+    if email:
+        _email = email
+    else:
+        _email = 'test@example.com'
 
     class MockOAuth2Session:
         def __init__(*args, **kwargs):
@@ -23,19 +30,12 @@ def mock_oauth2session(mocker, auth_url):
                 def json(self):
                     return {
                         'name': 'test user',
-                        'email': 'test@example.com'
+                        'email': _email
                     }
 
             return MockProfile()
 
     mocker.patch('app.main.views.OAuth2Session', MockOAuth2Session)
-
-
-def mock_sessions(mocker, session_dict={}):
-    mocker.patch('app.session', session_dict)
-    mocker.patch('app.main.views.session', session_dict)
-    mocker.patch('app.main.views.admin.session', session_dict)
-    mocker.patch('app.main.views.os.environ', session_dict)
 
 
 @pytest.fixture
@@ -75,6 +75,39 @@ class WhenAccessingAdminPagesWithoutLoggingIn(object):
         ))
         assert response.status_code == 302
         assert session_dict['user_profile'] == {'name': 'test user', 'email': 'test@example.com'}
+
+    def it_does_not_log_in_email_in_wrong_domain(self, client, mocker):
+        mock_oauth2session(mocker, url_for('main.callback'), 'test@invalid_domain.com')
+
+        session_dict = {
+            'oauth_state': 'state'
+        }
+        mock_sessions(mocker, session_dict)
+
+        class MockResponse:
+            status_code = 400
+
+            def json(self):
+                return {'message': 'test@invalid_domain.com not in correct domain'}
+
+        class MockException:
+            response = MockResponse()
+
+        e = HTTPError.create(MockException())
+
+        mocker.patch('app.main.views.os.environ', {})
+        mocker.patch('app.main.views.api_client.get_user', return_value=None)
+        mocker.patch('app.main.views.api_client.create_user', side_effect=e)
+
+        response = client.get(url_for(
+            'main.callback'
+        ))
+
+        assert response.status_code == 200
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        err_message = page.select_one('.col-sm')
+        assert err_message.text.strip() == 'test@invalid_domain.com not in correct domain, '\
+            'please contact the website administrators to get an email in correct domain'
 
 
 class WhenAccessingAdminPagesAfterLogin(object):
