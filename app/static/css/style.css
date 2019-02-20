@@ -55,16 +55,12 @@ figure {
 /*
 Extra small (xs) devices (portrait phones, less than 576px)
 No media query since this is the default in Bootstrap
-
 Small (sm) devices (landscape phones, 576px and up)
 @media (min-width: 576px) { ... }
-
 Medium (md) devices (tablets, 768px and up)
 @media (min-width: 768px) { ... }
-
 Large (lg) devices (desktops, 992px and up)
 @media (min-width: 992px) { ... }
-
 Extra (xl) large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) { ... }
 */
@@ -81,7 +77,7 @@ html, body {
 /* HEADER */
 
 .navbar{
-  font-family: 'AvenirNext-Bold',Helvetica,Arial,serif;
+  font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
   padding: .8rem;
   background-color: rgba(12,102,82,1.0);
   border-bottom: solid 19px rgba(247,231,27,1.0);
@@ -167,43 +163,31 @@ footer{
 }
 
 /* HOME top->bottom */
+.carousel-item{
+  min-height: 450px;
+  max-height: 450px;
+  background: no-repeat center center scroll;
+  background-size: cover;
+}
 
-.carousel img {
+.carousel-item img {
   object-fit: cover;
   height: 450px;
   width: 100%;
 }
-.carousel_info_rect {
-  background-color: rgba(49,47,47,1.0);
+.carousel-caption {
   border-style: solid;
   border-width: 1px;
   border-color: rgba(150,150,150,1.0);
-  opacity: .3;
-  position:absolute;
-  height:90px;
-  width:100%;
-  top:300px;
-}
-.carousel_info_text {
-  background-color: rgba(255,255,255,0.0);
-  position:absolute;
-  top:315px;
-  margin-left:20px;
-  text-align: center;
-  color:white;
-  width: auto;
+  height: auto;
+  background: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  left:0 !important;
   font-family: 'AvenirNext-Bold',Helvetica,Arial,serif;
-  font-size: 2.8vw;
+  margin-bottom: 20px;
 }
-.carousel_info_text a {
-  color:white;
-  text-decoration: none;
-}
-.carousel_info_text a:hover {
-  color:rgba(247,231,27,1.0);
-}
-.slick-initialized {
-  overflow-x: hidden;
+.carousel-caption h2 a {
+  color: white;
 }
 .introtext {
   font-family: 'AvenirNext-Medium',Helvetica,Arial,serif;

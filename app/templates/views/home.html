@@ -7,24 +7,27 @@
 {% block content %}
 
 <body>
-  <div class="carousel">
-    {% for event in events %}
-      {% if event.image_filename %}
-      <div>
-        <img src="{{ images_url }}{{ event.image_filename }}">
-        <div class='carousel_info_rect'></div>
-        <div class='carousel_info_text'>
-          <a href=''>
-          {% if event.carousel_text %}
-            {{ event.carousel_text }}
-          {% else %}
-            {{ event.title }}
-          {% endif %}
-        </a>
-        </div>
-      </div>
-      {% endif %}
-    {% endfor %}
+  <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+      {% for event in events %}
+        {% if event.image_filename %}
+          <div class="carousel-item {% if loop.index == 1 %} active{% endif %}">
+            <img class="d-block w-100" src="{{ images_url }}{{ event.image_filename }}">
+            <div class="carousel_caption_block">
+              <div class="carousel-caption d-md-block">
+                <h2><a href=''>
+                  {% if event.carousel_text %}
+                    {{ event.carousel_text }}
+                  {% else %}
+                    {{ event.title }}
+                  {% endif %}
+                </a></h2>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
   </div>
 
   <div class="container-fluid padding">
@@ -275,16 +278,14 @@
     </div>
   </div>
 
-  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-   <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-   <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-   <script type="text/javascript">
-     $(document).ready(function(){
-       $('.carousel').slick({
-         "autoplay": true,
-         "autoplaySpeed": 5000,
-       });
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script type="text/javascript">
+   $(document).ready(function(){
+     $('.carousel').slick({
+       "autoplay": true,
+       "autoplaySpeed": 5000,
      });
-   </script>
+   });
+  </script>
 </body>
 {% endblock %}
