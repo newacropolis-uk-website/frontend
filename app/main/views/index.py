@@ -1,11 +1,15 @@
-from flask import current_app, render_template
+from flask import Flask, current_app, render_template, request
 from random import randint
+from forms import ContactForm
 
 from app.main import main
 from app import api_client
 
 
-@main.route('/')
+app = Flask(__name__)
+app.secret_key = 'development key'
+
+@main.route('/', methods=['GET', 'POST'])
 def index():
     events = api_client.get_events_in_future(approved_only=True)
     for event in events:
@@ -14,14 +18,27 @@ def index():
 
     articles = api_client.get_articles_summary()
     index = randint(0, len(articles) - 1)
-    return render_template(
-        'views/home.html',
-        images_url=current_app.config['IMAGES_URL'],
-        main_article=articles[index],
-        articles=articles,
-        events=events,
-        current_page=''
-    )
+    form = ContactForm()
+    if request.method == 'POST':
+        return render_template(
+            'views/subscription.html',
+            images_url=current_app.config['IMAGES_URL'],
+            main_article=articles[index],
+            articles=articles,
+            events=events,
+            current_page='',
+            form=form
+        )
+    elif request.method == 'GET':
+        return render_template(
+            'views/home.html',
+            images_url=current_app.config['IMAGES_URL'],
+            main_article=articles[index],
+            articles=articles,
+            events=events,
+            current_page='',
+            form=form
+        )
 
 @main.route('/about')
 def about():
@@ -70,4 +87,11 @@ def e_shop():
     return render_template(
         'views/e-shop.html',
         current_page='e-shop'
+    )
+
+
+@main.route('/subscription')
+def subscription():
+    return render_template(
+        'views/subscription.html',
     )

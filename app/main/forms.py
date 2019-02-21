@@ -3,6 +3,9 @@ from wtforms import BooleanField, FormField, FieldList, FileField, HiddenField, 
 from wtforms.validators import DataRequired
 
 
+class ContactForm(FlaskForm):
+  email = StringField("Email")
+
 class UserForm(FlaskForm):
 
     str_email = StringField()

@@ -19,13 +19,16 @@
           <a href="https://www.youtube.com/user/nuevacropolisin/featured" class="footer_icons"><img src='/static/images/youtube.png'></a>
         </div>
       </div>
-
-      <hr class="w-100 clearfix d-md-none">
-      <div class="text-center col-md-4 col-lg-4 col-xl-3">
-        <img src="/static/images/home-image-magazine.png" class="footer_magazine"><br><br><br><br>
-        <form>
-          <input class="subscribe" type="text" id="femail" name="femail" placeholder="subscribe to our magazine">
-        </form>
+      <div class="col-md-3 text-center">
+        <div>
+          <img src="/static/images/home-image-magazine.png" class="footer_magazine"><br><br>
+          <div class="magazine_form_padding">
+            <form action="/" method=post>
+              {{ form.hidden_tag() }}
+              {{ form.email(class="subscribe") }}
+            </form>
+          </div>
+        </div>
       </div>
 
       <hr class="w-100 clearfix d-md-none">
