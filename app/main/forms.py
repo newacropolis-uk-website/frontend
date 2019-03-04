@@ -1,7 +1,7 @@
 from flask import session
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, FormField, FieldList, FileField, HiddenField, SelectField, StringField, TextAreaField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired
 
 
 class UserForm(FlaskForm):
@@ -74,6 +74,7 @@ class EventForm(FlaskForm):
     start_time = HiddenField()
     end_time = HiddenField()
     speakers = SelectField('Speakers')
+    dates_speakers = HiddenField()
 
 
 def set_events(events, event_types, speakers, venues):
@@ -95,6 +96,9 @@ def set_events(events, event_types, speakers, venues):
             'multi_day_conc_fee': form.multi_day_conc_fee.data,
             'venue': form.venue.data,
             'event_dates': form.event_dates.data,
+            'start_time': form.start_time.data,
+            'end_time': form.end_time.data,
+            'dates_speakers': form.dates_speakers.data,
         }
         session['submitted_event'] = submitted_event
 
@@ -103,10 +107,11 @@ def set_events(events, event_types, speakers, venues):
     for event in events:
         form.events.choices.append(
             (
-                event['id'], 
-                '{} - {} - {}, {}'.format(
-                    event['event_dates'][0]['event_datetime'], event['event_type'], event['title'], event['sub_title']))
+                event['id'],
+                '{} - {} - {}'.format(
+                    event['event_dates'][0]['event_datetime'], event['event_type'], event['title'])
             )
+        )
 
     form.event_type.choices = []
 
@@ -129,7 +134,7 @@ def set_events(events, event_types, speakers, venues):
             (venue['id'], u'{} - {}'.format(venue['name'], venue['address']))
         )
 
-    form.speakers.choices = [('','')]
+    form.speakers.choices = [('', '')]
     for speaker in speakers:
         form.speakers.choices.append((speaker['id'], speaker['name']))
 
