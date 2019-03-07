@@ -13,6 +13,12 @@ class ApiClient(BaseAPIClient):
     def get_venues(self):
         return self.get(url='venues')
 
+    def get_event_types(self):
+        return self.get(url='event_types')
+
+    def get_limited_events(self):
+        return self.get_nice_event_dates(self.get(url='events/limit/30'))
+
     def get_events_in_future(self):
         events = self.get_nice_event_dates(self.get(url='events/future'))
         return self._get_events_intro_courses_prioritised(events)
@@ -28,6 +34,7 @@ class ApiClient(BaseAPIClient):
 
     def get_nice_event_dates(self, events):
         for event in events:
+            dates = []
             for event_date in event['event_dates']:
                 _datetime = datetime.strptime(event_date["event_datetime"], '%Y-%m-%d %H:%M')
                 if _datetime.minute > 0:
@@ -36,8 +43,13 @@ class ApiClient(BaseAPIClient):
                     time = _datetime.strftime('%-I %p')
                 if event['event_type'] == 'Introductory Course':
                     event['event_monthyear'] = _datetime.strftime('%B %Y')
-                event_date['event_datetime'] = _datetime.strftime('%a %-d %B at {}'.format(time))
-
+                event_date['event_date'] = _datetime.strftime('%Y-%m-%d')
+                dates.append(_datetime.strftime('%Y-%m-%d'))
+                event_date['event_time'] = _datetime.strftime('%H:%M')
+                if not event.get('event_time'):
+                    event['event_time'] = _datetime.strftime('%H:%M')
+                event_date['formatted_event_datetime'] = _datetime.strftime('%a %-d %B at {}'.format(time))
+            event['dates'] = dates
         return events
 
     def _get_events_intro_courses_prioritised(self, events):

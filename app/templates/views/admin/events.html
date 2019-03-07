@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+{% block extra_head %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/en-gb.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/admin.css"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.en-GB.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.standalone.min.css"/>
+
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+{% macro admin_row(value, size=100, rows=0, cols=0, readonly=false, type='string') %}
+            <div class="row">
+                <div class='col-2'>
+                    {{value.label}}
+                </div>
+                {% if rows > 0 %}
+                    <div class='col-xs-4'>
+                        {{value(rows=rows, cols=cols)}}
+                    </div>
+                {% elif type=='file' %}
+                    <div class='col-xs-4'>
+                        <img id='file_img'>
+                        {{value}}
+                    </div>
+                {% else %}
+                    <div class='col-xs-4'>
+                        {{value(size=size, readonly=readonly)}}
+                    </div>
+                {% endif %}
+            </div>
+{% endmacro %}
+
+{% if user_has_permissions('event') %}
+<div class="container pb-3 text-right">
+    <form class="form" id="events_form" method="post" enctype="multipart/form-data">{{ form.csrf_token }}
+        <div class='text-left'>
+            <div class="row justify-content-center">
+                <div class='col-7'>
+                    <div class='row'>
+                        <div class='col-11'>{{form.events}}</div>
+                    </div>
+                    <div class="row justify-content-end">
+                        <button type="button" class="btn btn-success" disabled>Copy</button>
+                        <button type="button" class="ml-4 btn btn-danger" disabled>Delete</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class='col-xs-4'>
+                    <div id="datepicker" data-date=""></div>
+                    {{ form.event_dates }}
+                </div>
+                <div class="ml-5 mt-3 col-xs-3">
+                    <div class="row align-items-center">
+                        <div class='col--xs-3 border'>
+                            <div id="starttime"></div>
+                            {{ form.start_time }}
+                        </div>
+                        <div class='col-xs-1'>
+                            <div class='text-center'>
+                                to
+                            </div>
+                        </div>
+                        <div class='col-xs-3 border'>
+                            <div id="endtime"></div>
+                            {{ form.end_time }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id='speaker_section'></div>
+            {{ admin_row(form.event_type, size=1) }}
+            {{ admin_row(form.title) }}
+            {{ admin_row(form.sub_title) }}
+            {{ admin_row(form.description, rows=5, cols=100) }}
+            {{ admin_row(form.image_filename, type='file') }}
+            {{ admin_row(form.fee, size=10) }}
+            {{ admin_row(form.conc_fee, size=10) }}
+            {{ admin_row(form.multi_day_fee, size=10) }}
+            {{ admin_row(form.multi_day_conc_fee, size=10) }}
+            {{ admin_row(form.venue, size=1) }}
+            {{ admin_row(form.booking_code, readonly=true, size=20) }}
+            {{ form.dates_speakers }}
+        </div>
+        <hr>
+        <div class="justify-content-end">
+            <button id="pubish" type="submit" class="btn btn-outline-success">Publish</button>
+            <button type="submit" class="btn btn-outline-success" onclick="alert('under construction');return false;">Save</button>
+            <a href="/admin" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script charset="utf-8" type="text/javascript">
+$(function() {
+    var speakerCounter = 1;
+
+    $('#datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        multidate: true,
+    });
+
+    $('#datepicker').on('changeDate', function() {
+        _dates = $('#datepicker').datepicker('getFormattedDate');
+
+        if (!_dates) return;
+
+        $('#event_dates').val(_dates);
+
+        setSpeakerDates(_dates);
+    });
+
+    $('#starttime').datetimepicker({
+        inline: true,
+        format: 'HH:mm',
+    }).data("DateTimePicker").date('19:00');
+
+    $('#starttime').on('dp.change', function(event) {
+        $('#starttime').val(
+            event.date.format("HH:mm")
+        );
+    });
+
+    $('#endtime').datetimepicker({
+        inline: true,
+        format: 'HH:mm',
+    }).data("DateTimePicker").date('00:00');;
+
+    $('#endtime').on('dp.change', function(event) {
+        $('#endtime').val(
+            event.date.format("HH:mm")
+        );
+    });
+
+    $( "#events_form" ).submit(function() {
+        prepSubmit();
+    });
+
+    var elements = {
+        _events: $('#events'),
+        _event_type: $('#event_type'),
+        _title: $('#title'),
+        _sub_title: $('#sub_title'),
+        _description: $('#description'),
+        _booking_code: $('#booking_code'),
+        _file_img: $('#file_img'),
+        _fee: $('#fee'),
+        _conc_fee: $('#conc_fee'),
+        _multi_day_fee: $('#multi_day_fee'),
+        _multi_day_conc_fee: $('#multi_day_conc_fee'),
+        _venue: $('#venue'),
+        _event_dates: $('#event_dates'),
+        _start_time: $('#start_time'),
+        _end_time: $('#end_time'),
+    };
+
+    // call to update on load
+    updateEvent();
+
+    function updateEvent() {
+        var send = {
+            event: elements._events.val()
+        };
+
+        elements._title.val('');
+        elements._sub_title.val('');
+        elements._description.val('');
+        elements._booking_code.val('');
+        elements._file_img.val('');
+        elements._fee.val('');
+        elements._conc_fee.val('');
+        elements._multi_day_fee.val('');
+        elements._multi_day_conc_fee.val('');
+        elements._event_dates.val('');
+        elements._event_type.val('Talk');
+        elements._venue.prop('selectedIndex', 0);
+
+        $('#datepicker').datepicker("setDate", '');
+        $('#starttime').data("DateTimePicker").date('19:00');
+        $('#endtime').data("DateTimePicker").date('00:00');
+
+        $('#speaker_section').empty();
+        speakerCounter = 1;
+        addSpeakerRow(speakerCounter);
+
+        if (!elements._events.val()) return;
+
+        $.getJSON("{{ url_for('main._get_event') }}", send, function(data) {
+            if (data) {
+                console.log(data);
+                elements._event_type.val(data['event_type']);
+                elements._title.val(data['title']);
+                elements._sub_title.val(data['sub_title']);
+                elements._description.val(data['description']);
+                elements._booking_code.val(data['booking_code']);
+                elements._file_img.attr('style', 'display:none;');
+                if (data['image_filename']) {
+                    elements._file_img.attr('style', 'display:block;width:100px;');
+                    elements._file_img.attr('src', '{{images_url}}' + data['image_filename']);
+                }
+                elements._fee.val(data['fee']);
+                elements._conc_fee.val(data['conc_fee']);
+                elements._multi_day_fee.val(data['multi_day_fee']);
+                elements._multi_day_conc_fee.val(data['multi_day_conc_fee']);
+                elements._event_dates.val(data['dates']);
+                elements._venue.val(data['venue']['id']);
+
+                var speakers = [];
+
+                for (i=0; i < data['event_dates'].length; i++) {
+                    var item = data['event_dates'][i];
+
+                    for (j=0; j <= item['speakers'].length; j++) {
+                        var speaker = item['speakers'][j];
+
+                        if (!speaker) break;
+
+                        if (!speakers.includes(speaker['id'])) {
+                            speakers.push(speaker['id']);
+                            $('#speaker' + speakers.length).val(speaker['id']).change(
+                                updateSpeaker(speakers.length, speaker['id'], true));
+
+                            arr_dates = elements._event_dates.val().split(",").sort();
+
+                            for (k=0; k<arr_dates.length; k++) {
+                                s_date_id = 's_date' + speakers.length + '_' + arr_dates[k];
+
+                                // set speaker dates to true, otherwise set them to false
+                                $('#' + s_date_id).prop('checked', true).change();
+                            }
+                        }
+                    }
+                }
+
+                $('#datepicker').datepicker("setDate", data['dates']);
+                $('#starttime').data("DateTimePicker").date(data['event_time']);
+            }
+        });
+    }
+
+    function addSpeakerRow(counter, turn_off) {
+        $('#speaker_section').append(
+            '<div id="speaker_row' + 
+            counter + '" class="row"><div class="col-2">Speaker ' + 
+            counter + '</div><div class="col-5">{{form.speakers}}</div><div id="speaker_dates' + 
+            counter + '" class="row col-5 p-0 align-top"></div></div></div>'
+        );
+
+        if (elements._event_dates.val().length) {
+            setSpeakerDates(elements._event_dates.val(), turn_off);
+        }
+
+        $('#speakers').attr('id', 'speaker' + counter);
+        $('#speaker' + counter).prop('selectedIndex', 0);
+        $('#speaker_dates' + counter).hide();
+        $('#speaker' + counter).on('change', function() {
+            updateSpeaker(counter, this.value);
+        });
+    }
+
+    function updateSpeaker(counter, value, turn_off) {
+        nextId = '#speaker' + (counter + 1);
+
+        if (value != '' && !$(nextId).length) {
+            $('#speaker_dates' + counter).show();
+            speakerCounter = counter + 1;
+            addSpeakerRow(speakerCounter, turn_off);
+        } else if (value == '') {
+            for (i=counter; i < speakerCounter; i++) {
+                var speakerIndex = i;
+
+                $('#speaker' + i).val($('#speaker' + (i + 1)).val());
+
+                if (i < speakerCounter - 1) {
+                    var nextSpeakerIndex = speakerIndex + 1;
+                    var speakerDivId = '#speaker_dates' + speakerIndex;
+                    var nextSpeakerDivId = '#speaker_dates' + nextSpeakerIndex;
+
+                    var dates_states = [];
+
+                    arr_dates = elements._event_dates.val().split(",").sort();  
+                    for (j=0; j < arr_dates.length; j++) {
+                        s_date_id = 's_date' + speakerIndex + '_' + arr_dates[j];
+                        next_s_date_id = 's_date' + nextSpeakerIndex + '_' + arr_dates[j];
+
+                        $('#' + s_date_id).prop('checked', $('#' + next_s_date_id).is(':checked')).change();
+                    }
+                }
+
+                // reset last speaker dates to true
+                for (j=0; j < arr_dates.length; j++) {
+                    s_date_id = 's_date' + (speakerCounter - 1) + '_' + arr_dates[j];
+
+                    $('#' + s_date_id).prop('checked', true).change();
+                }
+            }
+            $('#speaker_row' + speakerCounter).remove();
+            speakerCounter--;
+            $('#speaker_dates' + speakerCounter).hide();
+        }
+    }
+
+    function setSpeakerDates(_dates, turn_off) {
+        if (!_dates) return;
+
+        arr_dates = _dates.split(",").sort();
+
+        for (s=0; s < speakerCounter; s++) {
+            var speakerIndex = s + 1;
+            var speakerDivId = '#speaker_dates' + speakerIndex;
+
+            var currentState = [];
+
+            for (j=0; j < arr_dates.length; j++) {
+                s_date_id = 's_date' + speakerIndex + '_' + arr_dates[j];
+
+                if ($('#' + s_date_id).length) {
+                    currentState[s_date_id] = $('#' + s_date_id).is(':checked');
+                }
+            }
+
+            $(speakerDivId).html('');
+
+            for (i=0; i < arr_dates.length; i++) {
+                date_parts = arr_dates[i].split('-');
+                s_date_id = 's_date' + speakerIndex + '_' + arr_dates[i];
+                $(speakerDivId).append('<div class="col-2"><input id="' + s_date_id + '" checked type="checkbox"></div>');
+
+                $('<script>')
+                    .attr('type', 'text/javascript')
+                    .text('$(function() {$("#' + s_date_id + '").bootstrapToggle({' + 
+                        'on: "' + date_parts[2] + '/' + date_parts[1] + '", off: "' + date_parts[2] + '/' + date_parts[1] + '",' +
+                        'size: "small"' +
+                    '});})')
+                    .appendTo(speakerDivId);
+            }
+
+            for (j=0; j < arr_dates.length; j++) {
+                s_date_id = 's_date' + speakerIndex + '_' + arr_dates[j];
+
+                if (turn_off) {
+                    date_state = false;
+                } else {
+                    date_state = currentState[s_date_id];
+                }
+
+                $('#' + s_date_id).prop('checked', date_state).change();
+            }
+        }
+    }
+
+    function prepSubmit() {
+        dates_speakers = [];
+
+        arr_dates = $('#event_dates').val().split(",").sort();
+
+        dates = [];
+        for (j=0; j<arr_dates.length; j++) {
+            speakers = [];
+            for (i=1; i<speakerCounter; i++) {
+                s_date_id = 's_date' + i + '_' + arr_dates[j];
+
+                if ($('#' + s_date_id).is(':checked')) {
+                    speakers.push({'speaker_id': $('#speaker' + i).val()});
+                }
+            }
+            dates.push({'event_date': arr_dates[j], 'speakers': speakers});
+
+            dates_speakers.push(dates);
+        }
+
+        $('#dates_speakers').val(JSON.stringify(dates_speakers));
+    }
+
+    elements._events.on('change', function() {
+        updateEvent();
+    });
+
+});
+
+</script>
+{% endif %}
+{% endblock %}

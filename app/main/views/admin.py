@@ -1,10 +1,12 @@
-from flask import current_app, jsonify, render_template, session
+import base64
+from flask import current_app, jsonify, render_template, request, session
+# from werkzeug import secure_filename
 
 from requests_oauthlib import OAuth2Session
 
 from app import api_client
 from app.main import main
-from app.main.forms import populate_user_form
+from app.main.forms import populate_user_form, set_events
 from app.main.views import requires_google_auth
 
 
@@ -53,6 +55,42 @@ def admin_users():
         access_areas=current_app.config['ACCESS_AREAS'],
         form=form
     )
+
+
+@main.route('/admin/events', methods=['GET', 'POST'])
+def admin_events():
+    events = api_client.get_limited_events()
+    event_types = api_client.get_event_types()
+    speakers = api_client.get_speakers()
+    venues = api_client.get_venues()
+    session['events'] = events
+    form = set_events(events, event_types, speakers, venues)
+
+    if form.validate_on_submit():
+        event = session.get('submitted_event')
+        file_request = request.files.get('image_filename')
+        if file_request:
+            # filename = secure_filename(file_request.filename)
+            file_data = file_request.read()
+            file_data_encoded = base64.b64encode(file_data)
+
+            print('file_encoded', file_data_encoded)
+
+        print('event', event)
+
+    return render_template(
+        'views/admin/events.html',
+        form=form,
+        images_url=current_app.config['IMAGES_URL'],
+    )
+
+
+@main.route('/admin/_get_event/')
+def _get_event():
+    event = [e for e in session['events'] if e['id'] == request.args.get('event')]
+    if event:
+        return jsonify(event[0])
+    return ''
 
 
 @main.route("/profile", methods=["GET"])
