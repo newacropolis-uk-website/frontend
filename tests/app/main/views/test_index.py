@@ -43,24 +43,26 @@ class WhenAccessingHomePage(object):
 
         assert content == intro_course['title']
 
-    def it_should_display_text_for_main_article(self, client, sample_future_events, sample_articles_summary):
+    def it_should_display_text_for_main_article(self, mocker, client, sample_future_events, sample_articles_summary):
+        mocker.patch('app.main.views.index.randint', return_value=0)
         response = client.get(url_for(
             'main.index'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        content = page.find("h2", {"id": "main_article"}).string
-        main_article = [a for a in sample_articles_summary if a['title'] == 'Article title 3'][0]
-        assert isinstance(main_article['title'], basestring)
-        assert isinstance(content, basestring)
+        title = page.select_one("#main_article h2").text
+        content = page.select_one("#main_article p").text
+
+        assert title == sample_articles_summary[0]['title']
+        assert content == sample_articles_summary[0]['short_content'] + " READ MORE"
 
     def it_should_show_featured_articles_in_cards(self, client, sample_future_events, sample_articles_summary):
         response = client.get(url_for(
             'main.index'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        content = page.find_all(["h4"])[6].string
-        article = [a for a in sample_articles_summary if a['title'] == 'Article title 2'][0]
-        assert content == article['title']
+        article_title = page.find("h4", {"id": "article_1"}).string
+
+        assert article_title == sample_articles_summary[0]['title']
 
     @pytest.mark.parametrize('div_class', ['#navbarNav', '.footnav'])
     def it_shows_list_of_available_pages_on_header_and_footer(
@@ -74,6 +76,5 @@ class WhenAccessingHomePage(object):
 
         selected_div = page.select_one(div_class)
 
-        print(selected_div)
         for i, li in enumerate(selected_div.select('li a')):
             assert li.text == expected_link_text[i]
