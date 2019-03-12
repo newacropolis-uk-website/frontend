@@ -155,6 +155,12 @@ footer{
   text-align: center;
   margin: 0 auto;
 }
+.privacy_policy {
+  color: white;
+}
+.privacy_policy:hover {
+  color: white;
+}
 
 /* HOME top->bottom */
 .carousel-item{
