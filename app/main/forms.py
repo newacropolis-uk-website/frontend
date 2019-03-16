@@ -74,7 +74,7 @@ class EventForm(FlaskForm):
     start_time = HiddenField()
     end_time = HiddenField()
     speakers = SelectField('Speakers')
-    dates_speakers = HiddenField()
+    dates = HiddenField()
 
 
 def set_events(events, event_types, speakers, venues):
@@ -98,7 +98,7 @@ def set_events(events, event_types, speakers, venues):
             'event_dates': form.event_dates.data,
             'start_time': form.start_time.data,
             'end_time': form.end_time.data,
-            'dates_speakers': form.dates_speakers.data,
+            'dates': form.dates.data,
         }
         session['submitted_event'] = submitted_event
 

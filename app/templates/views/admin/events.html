@@ -57,7 +57,7 @@
             <div class="row justify-content-center">
                 <div class='col-xs-4'>
                     <div id="datepicker" data-date=""></div>
-                    {{ form.event_dates }}
+                    {{ form.dates }}
                 </div>
                 <div class="ml-5 mt-3 col-xs-3">
                     <div class="row align-items-center">
@@ -90,7 +90,7 @@
             {{ admin_row(form.multi_day_conc_fee, size=10) }}
             {{ admin_row(form.venue, size=1) }}
             {{ admin_row(form.booking_code, readonly=true, size=20) }}
-            {{ form.dates_speakers }}
+            {{ form.event_dates }}
         </div>
         <hr>
         <div class="justify-content-end">
@@ -115,7 +115,7 @@ $(function() {
 
         if (!_dates) return;
 
-        $('#event_dates').val(_dates);
+        $('#dates').val(_dates);
 
         setSpeakerDates(_dates);
     });
@@ -162,6 +162,7 @@ $(function() {
         _event_dates: $('#event_dates'),
         _start_time: $('#start_time'),
         _end_time: $('#end_time'),
+        _dates: $('#dates'),
     };
 
     // call to update on load
@@ -177,11 +178,12 @@ $(function() {
         elements._description.val('');
         elements._booking_code.val('');
         elements._file_img.val('');
+        elements._file_img.attr('style', 'display:none;');
         elements._fee.val('');
         elements._conc_fee.val('');
         elements._multi_day_fee.val('');
         elements._multi_day_conc_fee.val('');
-        elements._event_dates.val('');
+        elements._dates.val('');
         elements._event_type.val('Talk');
         elements._venue.prop('selectedIndex', 0);
 
@@ -212,7 +214,7 @@ $(function() {
                 elements._conc_fee.val(data['conc_fee']);
                 elements._multi_day_fee.val(data['multi_day_fee']);
                 elements._multi_day_conc_fee.val(data['multi_day_conc_fee']);
-                elements._event_dates.val(data['dates']);
+                elements._dates.val(data['dates']);
                 elements._venue.val(data['venue']['id']);
 
                 var speakers = [];
@@ -228,9 +230,9 @@ $(function() {
                         if (!speakers.includes(speaker['id'])) {
                             speakers.push(speaker['id']);
                             $('#speaker' + speakers.length).val(speaker['id']).change(
-                                updateSpeaker(speakers.length, speaker['id'], true));
+                                updateSpeaker(speakers.length, speaker['id']));
 
-                            arr_dates = elements._event_dates.val().split(",").sort();
+                            arr_dates = elements._dates.val().split(",").sort();
 
                             for (k=0; k<arr_dates.length; k++) {
                                 s_date_id = 's_date' + speakers.length + '_' + arr_dates[k];
@@ -256,13 +258,13 @@ $(function() {
             counter + '" class="row col-5 p-0 align-top"></div></div></div>'
         );
 
-        if (elements._event_dates.val().length) {
-            setSpeakerDates(elements._event_dates.val(), turn_off);
+        if (elements._dates.val().length) {
+            setSpeakerDates(elements._dates.val(), turn_off);
         }
 
         $('#speakers').attr('id', 'speaker' + counter);
         $('#speaker' + counter).prop('selectedIndex', 0);
-        $('#speaker_dates' + counter).hide();
+        /*$('#speaker_dates' + counter).hide();   */
         $('#speaker' + counter).on('change', function() {
             updateSpeaker(counter, this.value);
         });
@@ -272,7 +274,7 @@ $(function() {
         nextId = '#speaker' + (counter + 1);
 
         if (value != '' && !$(nextId).length) {
-            $('#speaker_dates' + counter).show();
+            /*$('#speaker_dates' + counter).show();*/
             speakerCounter = counter + 1;
             addSpeakerRow(speakerCounter, turn_off);
         } else if (value == '') {
@@ -288,7 +290,7 @@ $(function() {
 
                     var dates_states = [];
 
-                    arr_dates = elements._event_dates.val().split(",").sort();  
+                    arr_dates = elements._dates.val().split(",").sort();  
                     for (j=0; j < arr_dates.length; j++) {
                         s_date_id = 's_date' + speakerIndex + '_' + arr_dates[j];
                         next_s_date_id = 's_date' + nextSpeakerIndex + '_' + arr_dates[j];
@@ -306,7 +308,7 @@ $(function() {
             }
             $('#speaker_row' + speakerCounter).remove();
             speakerCounter--;
-            $('#speaker_dates' + speakerCounter).hide();
+            /*$('#speaker_dates' + speakerCounter).hide();*/
         }
     }
 
@@ -360,9 +362,9 @@ $(function() {
     }
 
     function prepSubmit() {
-        dates_speakers = [];
+        event_dates = [];
 
-        arr_dates = $('#event_dates').val().split(",").sort();
+        arr_dates = $('#dates').val().split(",").sort();
 
         dates = [];
         for (j=0; j<arr_dates.length; j++) {
@@ -376,10 +378,10 @@ $(function() {
             }
             dates.push({'event_date': arr_dates[j], 'speakers': speakers});
 
-            dates_speakers.push(dates);
+            event_dates.push(dates);
         }
 
-        $('#dates_speakers').val(JSON.stringify(dates_speakers));
+        $('#event_dates').val(JSON.stringify(event_dates));
     }
 
     elements._events.on('change', function() {
