@@ -75,9 +75,10 @@ class EventForm(FlaskForm):
     end_time = HiddenField()
     speakers = SelectField('Speakers')
     dates = HiddenField()
+    default_event_type = HiddenField()
 
 
-def set_events(events, event_types, speakers, venues):
+def set_events_form(events, event_types, speakers, venues):
     form = EventForm()
     if form.events:
         if form.image_filename.data:
@@ -85,16 +86,17 @@ def set_events(events, event_types, speakers, venues):
         else:
             filename = ''
         submitted_event = {
-            'event_type': form.event_type.data,
+            'event_id': form.events.data,
+            'event_type_id': form.event_type.data,
             'title': form.title.data,
             'sub_title': form.sub_title.data,
             'description': form.description.data,
             'image_filename': filename,
-            'fee': form.fee.data,
-            'conc_fee': form.conc_fee.data,
-            'multi_day_fee': form.multi_day_fee.data,
-            'multi_day_conc_fee': form.multi_day_conc_fee.data,
-            'venue': form.venue.data,
+            'fee': int(form.fee.data) if form.fee.data else 0,
+            'conc_fee': int(form.conc_fee.data) if form.fee.data else 0,
+            'multi_day_fee': int(form.multi_day_fee.data) if form.fee.data else 0,
+            'multi_day_conc_fee': int(form.multi_day_conc_fee.data) if form.fee.data else 0,
+            'venue_id': form.venue.data,
             'event_dates': form.event_dates.data,
             'start_time': form.start_time.data,
             'end_time': form.end_time.data,
@@ -102,25 +104,17 @@ def set_events(events, event_types, speakers, venues):
         }
         session['submitted_event'] = submitted_event
 
-    form.events.choices = [('', 'New event')]
-
-    for event in events:
-        form.events.choices.append(
-            (
-                event['id'],
-                '{} - {} - {}'.format(
-                    event['event_dates'][0]['event_datetime'], event['event_type'], event['title'])
-            )
-        )
+    set_events(form, events)
 
     form.event_type.choices = []
 
     for i, event_type in enumerate(event_types):
-        form.event_type.choices.append(
-            (event_type['event_type'], event_type['event_type'])
-        )
         if event_type['event_type'] == 'Talk':
-            form.event_type.default = (event_type['event_type'], event_type['event_type'])
+            form.default_event_type.data = i
+
+        form.event_type.choices.append(
+            (event_type['id'], event_type['event_type'])
+        )
 
     form.venue.choices = []
 
@@ -137,5 +131,20 @@ def set_events(events, event_types, speakers, venues):
     form.speakers.choices = [('', '')]
     for speaker in speakers:
         form.speakers.choices.append((speaker['id'], speaker['name']))
+
+    return form
+
+
+def set_events(form, events):
+    form.events.choices = [('', 'New event')]
+
+    for event in events:
+        form.events.choices.append(
+            (
+                event['id'],
+                '{} - {} - {}'.format(
+                    event['event_dates'][0]['event_datetime'], event['event_type'], event['title'])
+            )
+        )
 
     return form

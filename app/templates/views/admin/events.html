@@ -49,8 +49,8 @@
                         <div class='col-11'>{{form.events}}</div>
                     </div>
                     <div class="row justify-content-end">
-                        <button type="button" class="btn btn-success" disabled>Copy</button>
-                        <button type="button" class="ml-4 btn btn-danger" disabled>Delete</button>
+                        <button id='copy-event' type="button" class="btn btn-success">Copy</button>
+                        <a id='delete-event' disabled class="ml-4 btn btn-danger">Delete</a>
                     </div>
                 </div>
             </div>
@@ -80,6 +80,7 @@
 
             <div id='speaker_section'></div>
             {{ admin_row(form.event_type, size=1) }}
+            {{ form.default_event_type }}
             {{ admin_row(form.title) }}
             {{ admin_row(form.sub_title) }}
             {{ admin_row(form.description, rows=5, cols=100) }}
@@ -93,17 +94,24 @@
             {{ form.event_dates }}
         </div>
         <hr>
+        {% if errors %}
+        <div id='error_section' class='text-warning'></div>
+        {% endif %}
         <div class="justify-content-end">
             <button id="pubish" type="submit" class="btn btn-outline-success">Publish</button>
             <button type="submit" class="btn btn-outline-success" onclick="alert('under construction');return false;">Save</button>
-            <a href="/admin" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</a>
+            <a href="{{ url_for('main.admin') }}" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</a>
         </div>
     </form>
 </div>
 
 <script charset="utf-8" type="text/javascript">
+var speakerCounter = 1;
+
 $(function() {
-    var speakerCounter = 1;
+    {% if temp_event %}
+    temp_event = {{temp_event|safe}};
+    {% endif %}
 
     $('#datepicker').datepicker({
         format: 'yyyy-mm-dd',
@@ -126,7 +134,7 @@ $(function() {
     }).data("DateTimePicker").date('19:00');
 
     $('#starttime').on('dp.change', function(event) {
-        $('#starttime').val(
+        $('#start_time').val(
             event.date.format("HH:mm")
         );
     });
@@ -137,7 +145,7 @@ $(function() {
     }).data("DateTimePicker").date('00:00');;
 
     $('#endtime').on('dp.change', function(event) {
-        $('#endtime').val(
+        $('#end_time').val(
             event.date.format("HH:mm")
         );
     });
@@ -173,26 +181,61 @@ $(function() {
             event: elements._events.val()
         };
 
-        elements._title.val('');
-        elements._sub_title.val('');
-        elements._description.val('');
-        elements._booking_code.val('');
-        elements._file_img.val('');
-        elements._file_img.attr('style', 'display:none;');
-        elements._fee.val('');
-        elements._conc_fee.val('');
-        elements._multi_day_fee.val('');
-        elements._multi_day_conc_fee.val('');
-        elements._dates.val('');
-        elements._event_type.val('Talk');
-        elements._venue.prop('selectedIndex', 0);
+        try{ 
+            temp_event; 
 
-        $('#datepicker').datepicker("setDate", '');
-        $('#starttime').data("DateTimePicker").date('19:00');
-        $('#endtime').data("DateTimePicker").date('00:00');
+            console.log(temp_event);
+            elements._title.val(temp_event['title']);
+            elements._sub_title.val(temp_event['sub_title']);
+            elements._description.val(temp_event['description']);
+            elements._booking_code.val(temp_event['booking_code']);
+//            elements._file_img.val('');
+//            elements._file_img.attr('style', 'display:none;');
+            elements._fee.val(temp_event['fee']);
+            elements._conc_fee.val(temp_event['con_fee']);
+            elements._multi_day_fee.val(temp_event['multi_day_fee']);
+            elements._multi_day_conc_fee.val(temp_event['multi_day_conc_fee']);
+            elements._event_type.val(temp_event['event_type_id']);
+            elements._venue.val(temp_event['venue_id']);
 
-        $('#speaker_section').empty();
-        speakerCounter = 1;
+            set_event_dates(temp_event['event_dates']);
+            set_start_time(temp_event['start_time']);
+            set_end_time(temp_event['end_time']);
+
+            {% if errors %}
+            var errors = {{ errors|safe }};
+            for (i=0; i<errors.length; i++) {
+                addErrorRow(errors[i]['error'], errors[i]['message']);
+            }
+            {% endif %}
+            delete temp_event;
+        }
+        catch(e) {
+            elements._title.val('');
+            elements._sub_title.val('');
+            elements._description.val('');
+            elements._booking_code.val('');
+            elements._file_img.val('');
+            elements._file_img.attr('style', 'display:none;');
+            elements._fee.val('');
+            elements._conc_fee.val('');
+            elements._multi_day_fee.val('');
+            elements._multi_day_conc_fee.val('');
+            elements._dates.val('');
+            elements._event_type.prop('selectedIndex', $('#default_event_type').val());
+            elements._venue.prop('selectedIndex', 0);
+
+            $('#datepicker').datepicker("setDate", '');
+            set_start_time('19:00');
+            set_end_time('00:00');
+
+            $('#delete-event').prop("href", "/admin/_delete_event/" + $("#events").val());
+
+            $('#speaker_section').empty();
+            speakerCounter = 1;
+        }
+        $("#delete-event").prop('disabled', $("events").prop("selectedIndex") == 0);
+
         addSpeakerRow(speakerCounter);
 
         if (!elements._events.val()) return;
@@ -200,7 +243,7 @@ $(function() {
         $.getJSON("{{ url_for('main._get_event') }}", send, function(data) {
             if (data) {
                 console.log(data);
-                elements._event_type.val(data['event_type']);
+                elements._event_type.val(data['event_type_id']);
                 elements._title.val(data['title']);
                 elements._sub_title.val(data['sub_title']);
                 elements._description.val(data['description']);
@@ -217,37 +260,59 @@ $(function() {
                 elements._dates.val(data['dates']);
                 elements._venue.val(data['venue']['id']);
 
-                var speakers = [];
-
-                for (i=0; i < data['event_dates'].length; i++) {
-                    var item = data['event_dates'][i];
-
-                    for (j=0; j <= item['speakers'].length; j++) {
-                        var speaker = item['speakers'][j];
-
-                        if (!speaker) break;
-
-                        if (!speakers.includes(speaker['id'])) {
-                            speakers.push(speaker['id']);
-                            $('#speaker' + speakers.length).val(speaker['id']).change(
-                                updateSpeaker(speakers.length, speaker['id']));
-
-                            arr_dates = elements._dates.val().split(",").sort();
-
-                            for (k=0; k<arr_dates.length; k++) {
-                                s_date_id = 's_date' + speakers.length + '_' + arr_dates[k];
-
-                                // set speaker dates to true, otherwise set them to false
-                                $('#' + s_date_id).prop('checked', true).change();
-                            }
-                        }
-                    }
-                }
+                set_event_dates(data['event_dates']);
 
                 $('#datepicker').datepicker("setDate", data['dates']);
-                $('#starttime').data("DateTimePicker").date(data['event_time']);
+                set_start_time(data['event_time']);
+                set_end_time(data['end_time']);
             }
         });
+    }
+
+    function set_event_dates(event_dates) {
+        var speakers = [];
+
+        for (i=0; i < event_dates.length; i++) {
+            var item = event_dates[i];
+
+            for (l=0; l < item['speakers'].length; l++) {
+                var speaker = item['speakers'][l];
+
+                if (!speakers.includes(speaker['id'])) {
+                    speakers.push(speaker['id']);
+                    $('#speaker' + speakers.length).val(speaker['id']).change(
+                        updateSpeaker(speakers.length, speaker['id']));
+
+                    arr_dates = elements._dates.val().split(",").sort();
+
+                    for (k=0; k<arr_dates.length; k++) {
+                        s_date_id = 's_date' + speakers.length + '_' + arr_dates[k];
+
+                        // set speaker dates to true, otherwise set them to false
+                        $('#' + s_date_id).prop('checked', true).change();
+                    }
+                }
+            }
+        }
+    }
+
+    function set_start_time(event_time) {
+        $('#starttime').data("DateTimePicker").date(event_time);
+        $('#start_time').val(event_time);
+    }
+
+    function set_end_time(event_time) {
+        if (event_time) {
+            $('#endtime').data("DateTimePicker").date(event_time);
+            $('#end_time').val(event_time);
+        }
+    }
+
+    function addErrorRow(error_type, message) {
+        $('#error_section').append(
+            '<div class="row"><div class="col-2">' + 
+            error_type + '</div><div class="col-10">' + message + '</div></div></div>'
+        );
     }
 
     function addSpeakerRow(counter, turn_off) {
@@ -313,13 +378,17 @@ $(function() {
     }
 
     function setSpeakerDates(_dates, turn_off) {
-        if (!_dates) return;
-
-        arr_dates = _dates.split(",").sort();
+        if (_dates) {
+            arr_dates = _dates.split(",").sort();
+        }
 
         for (s=0; s < speakerCounter; s++) {
             var speakerIndex = s + 1;
             var speakerDivId = '#speaker_dates' + speakerIndex;
+
+            $(speakerDivId).html('');
+
+            if (!_dates) continue;
 
             var currentState = [];
 
@@ -330,8 +399,6 @@ $(function() {
                     currentState[s_date_id] = $('#' + s_date_id).is(':checked');
                 }
             }
-
-            $(speakerDivId).html('');
 
             for (i=0; i < arr_dates.length; i++) {
                 date_parts = arr_dates[i].split('-');
@@ -366,7 +433,6 @@ $(function() {
 
         arr_dates = $('#dates').val().split(",").sort();
 
-        dates = [];
         for (j=0; j<arr_dates.length; j++) {
             speakers = [];
             for (i=1; i<speakerCounter; i++) {
@@ -376,18 +442,27 @@ $(function() {
                     speakers.push({'speaker_id': $('#speaker' + i).val()});
                 }
             }
-            dates.push({'event_date': arr_dates[j], 'speakers': speakers});
-
-            event_dates.push(dates);
+            event_date = arr_dates[j] + ' '  + $('#start_time').val()
+            event_dates.push({'event_date': event_date, 'speakers': speakers, 'end_time': $('#end_time').val()});
         }
 
         $('#event_dates').val(JSON.stringify(event_dates));
     }
 
+    $('#copy-event').on('click', function() {
+        today = moment(new Date()).format("YYYY-MM-DD");
+        $('#datepicker').datepicker("setDate", today);
+        elements._booking_code.val('');
+        $("#events").prop("selectedIndex", 0);
+    })
+
     elements._events.on('change', function() {
         updateEvent();
     });
 
+    {% if selected_event_id %}
+    $("#events").val("{{selected_event_id}}").change();
+    {% endif %}
 });
 
 </script>

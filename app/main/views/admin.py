@@ -1,12 +1,14 @@
 import base64
-from flask import current_app, jsonify, render_template, request, session
+from flask import current_app, jsonify, redirect, render_template, request, session, url_for
+import json
 # from werkzeug import secure_filename
 
 from requests_oauthlib import OAuth2Session
 
 from app import api_client
+from app.clients.errors import HTTPError
 from app.main import main
-from app.main.forms import populate_user_form, set_events
+from app.main.forms import populate_user_form, set_events_form
 from app.main.views import requires_google_auth
 
 
@@ -58,30 +60,57 @@ def admin_users():
 
 
 @main.route('/admin/events', methods=['GET', 'POST'])
-def admin_events():
+@main.route('/admin/events/<uuid:selected_event_id>', methods=['GET', 'POST'])
+def admin_events(selected_event_id=None):
     events = api_client.get_limited_events()
     event_types = api_client.get_event_types()
     speakers = api_client.get_speakers()
     venues = api_client.get_venues()
     session['events'] = events
-    form = set_events(events, event_types, speakers, venues)
+    form = set_events_form(events, event_types, speakers, venues)
 
     if form.validate_on_submit():
-        event = session.get('submitted_event')
+        event = session.pop('submitted_event')
+
+        adjusted_event = event.copy()
+
+        from cgi import escape
+        adjusted_event['description'] = escape(adjusted_event['description'])
+        adjusted_event['event_dates'] = json.loads(str(event['event_dates']))
+
         file_request = request.files.get('image_filename')
         if file_request:
             # filename = secure_filename(file_request.filename)
             file_data = file_request.read()
             file_data_encoded = base64.b64encode(file_data)
 
-            print('file_encoded', file_data_encoded)
+            adjusted_event['image_data'] = file_data_encoded
 
-        print('event', event)
+        # remove empty values
+        for key, value in event.iteritems():
+            if not value:
+                del adjusted_event[key]
+
+        try:
+            response = api_client.add_event(adjusted_event)
+
+            return redirect(url_for('main.admin_events', selected_event_id=response['id']))
+
+        except HTTPError as e:
+            current_app.logger.error(e)
+            return render_template(
+                'views/admin/events.html',
+                form=form,
+                images_url=current_app.config['IMAGES_URL'],
+                temp_event=json.dumps(event),
+                errors=json.dumps(e.message),
+            )
 
     return render_template(
         'views/admin/events.html',
         form=form,
         images_url=current_app.config['IMAGES_URL'],
+        selected_event_id=selected_event_id
     )
 
 
@@ -89,8 +118,16 @@ def admin_events():
 def _get_event():
     event = [e for e in session['events'] if e['id'] == request.args.get('event')]
     if event:
+        from bs4 import BeautifulSoup
+        event[0]['description'] = BeautifulSoup(event[0]['description']).contents[0]
         return jsonify(event[0])
     return ''
+
+
+@main.route('/admin/_delete_event/<uuid:event_id>')
+def _delete_event(event_id):
+    response = api_client.delete_event(event_id)
+    return redirect(url_for('main.admin_events'))
 
 
 @main.route("/profile", methods=["GET"])
