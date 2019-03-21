@@ -55,7 +55,7 @@ class ApiClient(BaseAPIClient):
                 if not event.get('event_time'):
                     event['event_time'] = _datetime.strftime('%H:%M')
                 if not event.get('end_time'):
-                    event['end_time'] = event_date["end_time"]
+                    event['end_time'] = event_date.get("end_time")
                 event_date['formatted_event_datetime'] = _datetime.strftime('%a %-d %B at {}'.format(time))
             event['dates'] = dates
         return events
