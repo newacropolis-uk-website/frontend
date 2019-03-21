@@ -126,7 +126,7 @@ def _get_event():
 
 @main.route('/admin/_delete_event/<uuid:event_id>')
 def _delete_event(event_id):
-    response = api_client.delete_event(event_id)
+    api_client.delete_event(event_id)
     return redirect(url_for('main.admin_events'))
 
 
