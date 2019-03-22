@@ -1,3 +1,6 @@
+# coding: utf-8
+import json
+import pytest
 from flask import url_for
 
 from bs4 import BeautifulSoup
@@ -138,10 +141,33 @@ class WhenShowingEvents:
 
 
 class WhenCallingAjaxDeleteEvent:
-    def it_makes_delete_api_call(self):
-        pass
+    @pytest.mark.skip()
+    def it_makes_delete_api_call(self, client, mocker):
+        mock_delete_event = mocker.patch('app.main.views.admin.api_client.delete_event')
+
+        # response = client.get('/admin/_delete_event/{}'.format('test_id'))
+        response = client.get(url_for('main._delete_event', event_id='test_id'))
+
+        assert response.status_code == 302
 
 
 class WhenCallingAjaxGetEvent:
-    def it_makes_get_api_call(self):
+    def it_makes_get_api_call(self, client, mocker):
+        mocker.patch(
+            'app.main.views.admin.session', 
+            {'events': [
+                    {'id': 'test', 'description': '&pound;test description'}
+                ]
+            }
+        )
+
+        response = client.get(url_for('main._get_event', event='test'))
+
+        assert response.status_code == 200
+        data = json.loads(response.get_data(as_text=True))
+        assert data == {'description': u'£test description', 'id': 'test'}
+
+
+class WhenSubmittingEventsForm:
+    def it_uploads_a_filename(self):
         pass

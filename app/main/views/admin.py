@@ -118,8 +118,9 @@ def admin_events(selected_event_id=None):
 def _get_event():
     event = [e for e in session['events'] if e['id'] == request.args.get('event')]
     if event:
-        from bs4 import BeautifulSoup
-        event[0]['description'] = BeautifulSoup(event[0]['description']).contents[0]
+        from HTMLParser import HTMLParser
+        h = HTMLParser()
+        event[0]['description'] = h.unescape(event[0]['description'])
         return jsonify(event[0])
     return ''
 
