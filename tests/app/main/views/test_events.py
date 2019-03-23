@@ -1,7 +1,9 @@
 # coding: utf-8
+import base64
 import json
-import pytest
+from uuid import UUID
 from flask import url_for
+from mock import Mock, call
 
 from bs4 import BeautifulSoup
 
@@ -141,21 +143,23 @@ class WhenShowingEvents:
 
 
 class WhenCallingAjaxDeleteEvent:
-    @pytest.mark.skip()
     def it_makes_delete_api_call(self, client, mocker):
         mock_delete_event = mocker.patch('app.main.views.admin.api_client.delete_event')
 
-        # response = client.get('/admin/_delete_event/{}'.format('test_id'))
-        response = client.get(url_for('main._delete_event', event_id='test_id'))
+        response = client.get(url_for('main._delete_event', event_id='9ad571e1-4b5e-49af-a814-0958b23888c5'))
 
         assert response.status_code == 302
+        args = mock_delete_event.call_args_list[0]
+        arg, _ = args
+        assert arg == (UUID('9ad571e1-4b5e-49af-a814-0958b23888c5'),)
 
 
 class WhenCallingAjaxGetEvent:
     def it_makes_get_api_call(self, client, mocker):
         mocker.patch(
-            'app.main.views.admin.session', 
-            {'events': [
+            'app.main.views.admin.session',
+            {
+                'events': [
                     {'id': 'test', 'description': '&pound;test description'}
                 ]
             }
@@ -169,5 +173,43 @@ class WhenCallingAjaxGetEvent:
 
 
 class WhenSubmittingEventsForm:
-    def it_uploads_a_filename(self):
-        pass
+    def it_uploads_a_file(self, client, mocker, mock_admin_logged_in):
+        mock_api_client = MockAPIClient()
+        mock_api_client.add_event = Mock()
+        mock_api_client.add_event.return_value = {'id': 'test_id'}
+        mocker.patch('app.main.views.admin.api_client', mock_api_client)
+
+        mock_form = Mock()
+        mock_form.validate_on_submit.return_value = True
+
+        mocker.patch('app.main.views.admin.set_events_form', return_value=mock_form)
+        mocker.patch('app.main.views.admin.session', {
+            'submitted_event': {
+                'description': '<test>',
+                'event_dates': '[{"event_date": "2019-03-23 19:00", "end_time": "21:00"}]',
+                'to_strip': None
+            }
+        })
+
+        mock_request = Mock()
+        mock_request.files.get.return_value = Mock()
+        mock_request.files.get.return_value.read.return_value = 'test data'
+
+        mocker.patch('app.main.views.admin.request', mock_request)
+
+        response = client.post(url_for(
+            'main.admin_events',
+            data={'event_id': '9ad571e1-4b5e-49af-a814-0958b23888c5'}
+        ))
+
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        href = page.select_one('a')['href']
+
+        assert mock_api_client.add_event.call_args == call(
+            {
+                'image_data': base64.b64encode('test data'),
+                'event_dates': [{"event_date": "2019-03-23 19:00", "end_time": "21:00"}],
+                'description': '&lt;test&gt;'
+            }
+        )
+        assert href == '{}/{}'.format(url_for('main.admin_events'), 'test_id')

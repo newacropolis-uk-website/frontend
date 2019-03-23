@@ -75,7 +75,7 @@ def admin_events(selected_event_id=None):
         adjusted_event = event.copy()
 
         from cgi import escape
-        adjusted_event['description'] = escape(adjusted_event['description'])
+        adjusted_event['description'] = escape(event['description'])
         adjusted_event['event_dates'] = json.loads(str(event['event_dates']))
 
         file_request = request.files.get('image_filename')
@@ -114,7 +114,7 @@ def admin_events(selected_event_id=None):
     )
 
 
-@main.route('/admin/_get_event/')
+@main.route('/admin/_get_event')
 def _get_event():
     event = [e for e in session['events'] if e['id'] == request.args.get('event')]
     if event:
