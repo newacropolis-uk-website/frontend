@@ -59,12 +59,14 @@ def _has_access_area(area, user_access_area):
 class EventForm(FlaskForm):
 
     events = SelectField('Events')
+    alt_event_images = SelectField('Event Images')
     event_type = SelectField('Event type', validators=[DataRequired()])
     title = StringField('Title', validators=[DataRequired()])
     sub_title = StringField('Sub-title')
     description = TextAreaField('Description', validators=[DataRequired()])
     booking_code = StringField('Booking code')
     image_filename = FileField('Image filename')
+    existing_image_filename = HiddenField('Existing image filename')
     fee = StringField('Fee')
     conc_fee = StringField('Concession fee')
     multi_day_fee = StringField('Multi day fee')
@@ -84,7 +86,7 @@ def set_events_form(events, event_types, speakers, venues):
         if form.image_filename.data:
             filename = form.image_filename.data.filename
         else:
-            filename = ''
+            filename = form.existing_image_filename.data
         submitted_event = {
             'event_id': form.events.data,
             'event_type_id': form.event_type.data,
@@ -104,7 +106,8 @@ def set_events_form(events, event_types, speakers, venues):
         }
         session['submitted_event'] = submitted_event
 
-    set_events(form, events)
+    set_events(form.events, events, 'New event')
+    set_events(form.alt_event_images, events, 'Or use an existing event image:')
 
     form.event_type.choices = []
 
@@ -135,16 +138,14 @@ def set_events_form(events, event_types, speakers, venues):
     return form
 
 
-def set_events(form, events):
-    form.events.choices = [('', 'New event')]
+def set_events(form_select, events, first_item_text=''):
+    form_select.choices = [('', first_item_text)]
 
     for event in events:
-        form.events.choices.append(
+        form_select.choices.append(
             (
                 event['id'],
                 '{} - {} - {}'.format(
                     event['event_dates'][0]['event_datetime'], event['event_type'], event['title'])
             )
         )
-
-    return form

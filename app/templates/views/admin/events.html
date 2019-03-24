@@ -30,6 +30,9 @@
                     <div class='col-xs-4'>
                         <img id='file_img'>
                         {{value}}
+                        <div>
+                            {{form.alt_event_images}}
+                        </div>
                     </div>
                 {% else %}
                     <div class='col-xs-4'>
@@ -85,6 +88,7 @@
             {{ admin_row(form.sub_title) }}
             {{ admin_row(form.description, rows=5, cols=100) }}
             {{ admin_row(form.image_filename, type='file') }}
+            {{ form.existing_image_filename }}
             {{ admin_row(form.fee, size=10) }}
             {{ admin_row(form.conc_fee, size=10) }}
             {{ admin_row(form.multi_day_fee, size=10) }}
@@ -156,6 +160,7 @@ $(function() {
 
     var elements = {
         _events: $('#events'),
+        _alt_event_images: $('#alt_event_images'),
         _event_type: $('#event_type'),
         _title: $('#title'),
         _sub_title: $('#sub_title'),
@@ -269,6 +274,23 @@ $(function() {
         });
     }
 
+    function updateAltEventImage() {
+        var send = {
+            event: elements._alt_event_images.val()
+        };
+
+        $.getJSON("{{ url_for('main._get_event') }}", send, function(data) {
+            if (data) {
+                console.log(data);
+                elements._file_img.attr('style', 'display:none;');
+                if (data['image_filename']) {
+                    elements._file_img.attr('style', 'display:block;width:100px;');
+                    elements._file_img.attr('src', '{{images_url}}' + data['image_filename']);
+                }
+            }
+        });
+    }
+
     function set_event_dates(event_dates) {
         var speakers = [];
 
@@ -329,7 +351,6 @@ $(function() {
 
         $('#speakers').attr('id', 'speaker' + counter);
         $('#speaker' + counter).prop('selectedIndex', 0);
-        /*$('#speaker_dates' + counter).hide();   */
         $('#speaker' + counter).on('change', function() {
             updateSpeaker(counter, this.value);
         });
@@ -339,7 +360,6 @@ $(function() {
         nextId = '#speaker' + (counter + 1);
 
         if (value != '' && !$(nextId).length) {
-            /*$('#speaker_dates' + counter).show();*/
             speakerCounter = counter + 1;
             addSpeakerRow(speakerCounter, turn_off);
         } else if (value == '') {
@@ -373,7 +393,6 @@ $(function() {
             }
             $('#speaker_row' + speakerCounter).remove();
             speakerCounter--;
-            /*$('#speaker_dates' + speakerCounter).hide();*/
         }
     }
 
@@ -447,6 +466,7 @@ $(function() {
         }
 
         $('#event_dates').val(JSON.stringify(event_dates));
+        $('#existing_image_filename').val(elements._file_img.attr('src'));
     }
 
     $('#copy-event').on('click', function() {
@@ -458,6 +478,10 @@ $(function() {
 
     elements._events.on('change', function() {
         updateEvent();
+    });
+
+    elements._alt_event_images.on('change', function() {
+        updateAltEventImage();
     });
 
     {% if selected_event_id %}
