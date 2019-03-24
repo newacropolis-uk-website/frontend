@@ -1,13 +1,25 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+from flask import session
+>>>>>>> Fix linting issues for tests
+=======
+from flask import session, url_for
+>>>>>>> Uses redirect on form submission
+=======
+from flask import session
+>>>>>>> Fix linting issues for tests
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, FormField, FieldList, FileField, HiddenField, SelectField, StringField, TextAreaField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Email
 
 
-class ContactForm(FlaskForm):
-  email = StringField("Email")
+class SubscriptionForm(FlaskForm):
+    email = StringField('email', validators=[DataRequired(), Email()])
+
 
 class UserForm(FlaskForm):
-
     str_email = StringField()
     user_id = HiddenField()
     admin = BooleanField('admin')

@@ -172,6 +172,9 @@ footer{
 .privacy_policy:hover {
   color: white;
 }
+.error_text {
+  color: red;
+}
 
 /* HOME top->bottom */
 .carousel-item{
@@ -407,4 +410,9 @@ footer{
   font-family: 'AvenirNext-Medium',Helvetica,Arial,serif;
   padding: 2% 7% 2% 7%;
   width: 100%;
+}
+/* SUBSCIPTION */
+.privacy_policy_iframe {
+  width: 800;
+  height: 800;
 }

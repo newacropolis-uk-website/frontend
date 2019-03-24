@@ -114,3 +114,6 @@ class ApiClient(BaseAPIClient):
             'access_area': access_area
         }
         return self.post(url='user/{}'.format(user_id), data=data)
+
+    def get_subscription_email(self, email):
+        return self.get(url='subscription')

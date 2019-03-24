@@ -3,13 +3,17 @@
 
 {% block content %}
 
-<h1> Subscription </h1>
-<p> Your are subscribing to acropolis </p>
-
-<button type="button">Click to confirm</button>
-
-<p class="text-xs-center privacy_policy">
-  <a href="/static/pdfs/Website_Privacy_Notice.pdf" target="_blank">Privacy Policy</a>
-</p>
+<div class="container-fluid padding">
+  <div class="row padding text-center ">
+    <div class="col-xs-12 col-sm-12 col-md-6">
+       <h2> Do you wish to subscribe to the Acropolis newsletter? </h2><br>
+       <h4>Email: {{ email }}</h4><br>
+       <button type="button">Click to confirm</button>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6">
+      <iframe src="/static/pdfs/Website_Privacy_Notice.pdf" width="100%" height="480"></iframe>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
