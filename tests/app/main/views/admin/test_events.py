@@ -187,7 +187,6 @@ class WhenSubmittingEventsForm:
             'submitted_event': {
                 'description': '<test>',
                 'event_dates': '[{"event_date": "2019-03-23 19:00", "end_time": "21:00"}]',
-                'to_strip': None
             }
         })
 
@@ -208,6 +207,89 @@ class WhenSubmittingEventsForm:
         assert mock_api_client.add_event.call_args == call(
             {
                 'image_data': base64.b64encode('test data'),
+                'event_dates': [{"event_date": "2019-03-23 19:00", "end_time": "21:00"}],
+                'description': '&lt;test&gt;'
+            }
+        )
+        assert href == '{}/{}'.format(url_for('main.admin_events'), 'test_id')
+
+    def it_uses_an_existing_image_file(self, client, mocker, mock_admin_logged_in):
+        mock_api_client = MockAPIClient()
+        mock_api_client.add_event = Mock()
+        mock_api_client.add_event.return_value = {'id': 'test_id'}
+        mocker.patch('app.main.views.admin.api_client', mock_api_client)
+
+        mock_form = Mock()
+        mock_form.validate_on_submit.return_value = True
+
+        mocker.patch('app.main.views.admin.set_events_form', return_value=mock_form)
+        mocker.patch('app.main.views.admin.session', {
+            'submitted_event': {
+                'description': '<test>',
+                'image_filename': 'test.png',
+                'event_dates': '[{"event_date": "2019-03-23 19:00", "end_time": "21:00"}]',
+            }
+        })
+
+        mock_request = Mock()
+        mock_request.files.get.return_value = None
+
+        mocker.patch('app.main.views.admin.request', mock_request)
+
+        response = client.post(url_for(
+            'main.admin_events',
+            data={'event_id': '9ad571e1-4b5e-49af-a814-0958b23888c5'}
+        ))
+
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        href = page.select_one('a')['href']
+
+        assert mock_api_client.add_event.call_args == call(
+            {
+                'image_filename': 'test.png',
+                'event_dates': [{"event_date": "2019-03-23 19:00", "end_time": "21:00"}],
+                'description': '&lt;test&gt;'
+            }
+        )
+        assert href == '{}/{}'.format(url_for('main.admin_events'), 'test_id')
+
+    def it_updates_an_event(self, client, mocker, mock_admin_logged_in):
+        mock_api_client = MockAPIClient()
+        mock_api_client.update_event = Mock()
+        mock_api_client.update_event.return_value = {'id': 'test_id'}
+        mocker.patch('app.main.views.admin.api_client', mock_api_client)
+
+        mock_form = Mock()
+        mock_form.validate_on_submit.return_value = True
+
+        mocker.patch('app.main.views.admin.set_events_form', return_value=mock_form)
+        mocker.patch('app.main.views.admin.session', {
+            'submitted_event': {
+                'event_id': 'test_id',
+                'description': '<test>',
+                'image_filename': 'test.png',
+                'event_dates': '[{"event_date": "2019-03-23 19:00", "end_time": "21:00"}]',
+            }
+        })
+
+        mock_request = Mock()
+        mock_request.files.get.return_value = None
+
+        mocker.patch('app.main.views.admin.request', mock_request)
+
+        response = client.post(url_for(
+            'main.admin_events',
+            data={'event_id': '9ad571e1-4b5e-49af-a814-0958b23888c5'}
+        ))
+
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        href = page.select_one('a')['href']
+
+        assert mock_api_client.update_event.call_args == call(
+            'test_id',
+            {
+                'event_id': 'test_id',
+                'image_filename': 'test.png',
                 'event_dates': [{"event_date": "2019-03-23 19:00", "end_time": "21:00"}],
                 'description': '&lt;test&gt;'
             }

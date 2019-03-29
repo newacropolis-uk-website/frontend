@@ -92,13 +92,12 @@ def admin_events(selected_event_id=None):
                 del adjusted_event[key]
 
         try:
-            if event['event_id']:
+            if event.get('event_id'):
                 response = api_client.update_event(event['event_id'], adjusted_event)
             else:
                 response = api_client.add_event(adjusted_event)
 
             return redirect(url_for('main.admin_events', selected_event_id=response['id']))
-
         except HTTPError as e:
             current_app.logger.error(e)
             return render_template(
