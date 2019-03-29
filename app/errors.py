@@ -2,6 +2,7 @@ from flask import (
     jsonify,
     current_app,
     json)
+from flask_wtf.csrf import CSRFError
 from jsonschema import ValidationError
 
 
@@ -9,6 +10,11 @@ def register_errors(blueprint):
 
     @blueprint.errorhandler(ValidationError)
     def validation_error(error):
+        current_app.logger.exception(error)
+        return jsonify(json.loads(error.message)), 400
+
+    @blueprint.errorhandler(CSRFError)
+    def csrf_error(error):
         current_app.logger.exception(error)
         return jsonify(json.loads(error.message)), 400
 

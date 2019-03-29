@@ -13,6 +13,15 @@ class ApiClient(BaseAPIClient):
     def get_venues(self):
         return self.get(url='venues')
 
+    def add_event(self, event):
+        return self.post(url='event', data=event)
+
+    def delete_event(self, event_id):
+        return self.delete(url='event/{}'.format(event_id))
+
+    def update_event(self, event_id, event):
+        return self.post(url='event/{}'.format(event_id), data=event)
+
     def get_event_types(self):
         return self.get(url='event_types')
 
@@ -48,6 +57,8 @@ class ApiClient(BaseAPIClient):
                 event_date['event_time'] = _datetime.strftime('%H:%M')
                 if not event.get('event_time'):
                     event['event_time'] = _datetime.strftime('%H:%M')
+                if not event.get('end_time'):
+                    event['end_time'] = event_date.get("end_time")
                 event_date['formatted_event_datetime'] = _datetime.strftime('%a %-d %B at {}'.format(time))
             event['dates'] = dates
         return events

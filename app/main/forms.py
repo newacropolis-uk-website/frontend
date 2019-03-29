@@ -59,12 +59,14 @@ def _has_access_area(area, user_access_area):
 class EventForm(FlaskForm):
 
     events = SelectField('Events')
+    alt_event_images = SelectField('Event Images')
     event_type = SelectField('Event type', validators=[DataRequired()])
     title = StringField('Title', validators=[DataRequired()])
     sub_title = StringField('Sub-title')
     description = TextAreaField('Description', validators=[DataRequired()])
     booking_code = StringField('Booking code')
     image_filename = FileField('Image filename')
+    existing_image_filename = HiddenField('Existing image filename')
     fee = StringField('Fee')
     conc_fee = StringField('Concession fee')
     multi_day_fee = StringField('Multi day fee')
@@ -74,53 +76,48 @@ class EventForm(FlaskForm):
     start_time = HiddenField()
     end_time = HiddenField()
     speakers = SelectField('Speakers')
-    dates_speakers = HiddenField()
+    dates = HiddenField()
+    default_event_type = HiddenField()
 
 
-def set_events(events, event_types, speakers, venues):
+def set_events_form(events, event_types, speakers, venues):
     form = EventForm()
     if form.events:
         if form.image_filename.data:
             filename = form.image_filename.data.filename
         else:
-            filename = ''
+            filename = form.existing_image_filename.data
         submitted_event = {
-            'event_type': form.event_type.data,
+            'event_id': form.events.data,
+            'event_type_id': form.event_type.data,
             'title': form.title.data,
             'sub_title': form.sub_title.data,
             'description': form.description.data,
             'image_filename': filename,
-            'fee': form.fee.data,
-            'conc_fee': form.conc_fee.data,
-            'multi_day_fee': form.multi_day_fee.data,
-            'multi_day_conc_fee': form.multi_day_conc_fee.data,
-            'venue': form.venue.data,
+            'fee': int(form.fee.data) if form.fee.data else 0,
+            'conc_fee': int(form.conc_fee.data) if form.fee.data else 0,
+            'multi_day_fee': int(form.multi_day_fee.data) if form.fee.data else 0,
+            'multi_day_conc_fee': int(form.multi_day_conc_fee.data) if form.fee.data else 0,
+            'venue_id': form.venue.data,
             'event_dates': form.event_dates.data,
             'start_time': form.start_time.data,
             'end_time': form.end_time.data,
-            'dates_speakers': form.dates_speakers.data,
+            'dates': form.dates.data,
         }
         session['submitted_event'] = submitted_event
 
-    form.events.choices = [('', 'New event')]
-
-    for event in events:
-        form.events.choices.append(
-            (
-                event['id'],
-                '{} - {} - {}'.format(
-                    event['event_dates'][0]['event_datetime'], event['event_type'], event['title'])
-            )
-        )
+    set_events(form.events, events, 'New event')
+    set_events(form.alt_event_images, events, 'Or use an existing event image:')
 
     form.event_type.choices = []
 
     for i, event_type in enumerate(event_types):
-        form.event_type.choices.append(
-            (event_type['event_type'], event_type['event_type'])
-        )
         if event_type['event_type'] == 'Talk':
-            form.event_type.default = (event_type['event_type'], event_type['event_type'])
+            form.default_event_type.data = i
+
+        form.event_type.choices.append(
+            (event_type['id'], event_type['event_type'])
+        )
 
     form.venue.choices = []
 
@@ -139,3 +136,16 @@ def set_events(events, event_types, speakers, venues):
         form.speakers.choices.append((speaker['id'], speaker['name']))
 
     return form
+
+
+def set_events(form_select, events, first_item_text=''):
+    form_select.choices = [('', first_item_text)]
+
+    for event in events:
+        form_select.choices.append(
+            (
+                event['id'],
+                '{} - {} - {}'.format(
+                    event['event_dates'][0]['event_datetime'], event['event_type'], event['title'])
+            )
+        )

@@ -19,6 +19,9 @@ class BaseAPIClient(object):
     def post(self, url, data):
         return self.request("POST", url, data=data)
 
+    def delete(self, url):
+        return self.request("DELETE", url)
+
     def get(self, url, params=None):
         return self.request("GET", url, params=params)
 
