@@ -19,6 +19,9 @@ class ApiClient(BaseAPIClient):
     def delete_event(self, event_id):
         return self.delete(url='event/{}'.format(event_id))
 
+    def update_event(self, event_id, event):
+        return self.post(url='event/{}'.format(event_id), data=event)
+
     def get_event_types(self):
         return self.get(url='event_types')
 

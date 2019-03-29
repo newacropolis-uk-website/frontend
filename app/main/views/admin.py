@@ -92,7 +92,10 @@ def admin_events(selected_event_id=None):
                 del adjusted_event[key]
 
         try:
-            response = api_client.add_event(adjusted_event)
+            if event['event_id']:
+                response = api_client.update_event(event['event_id'], adjusted_event)
+            else:
+                response = api_client.add_event(adjusted_event)
 
             return redirect(url_for('main.admin_events', selected_event_id=response['id']))
 
