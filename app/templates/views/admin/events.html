@@ -296,8 +296,8 @@ $(function() {
     function set_event_dates(event_dates) {
         var speakers = [];
 
-        for (i=0; i < event_dates.length; i++) {
-            var item = event_dates[i];
+        for (d_i=0; d_i < event_dates.length; d_i++) {
+            var item = event_dates[d_i];
 
             for (l=0; l < item['speakers'].length; l++) {
                 var speaker = item['speakers'][l];
@@ -312,8 +312,16 @@ $(function() {
                     for (k=0; k<arr_dates.length; k++) {
                         s_date_id = 's_date' + speakers.length + '_' + arr_dates[k];
 
+                        found = false;
+                        for (s=0; s<event_dates[k]['speakers'].length; s++) {
+                            if (speaker['id'] == event_dates[k]['speakers'][s]['id']) {
+                                found = true;
+                                break;
+                            }
+                        }
+
                         // set speaker dates to true, otherwise set them to false
-                        $('#' + s_date_id).prop('checked', true).change();
+                        $('#' + s_date_id).prop('checked', found).change();
                     }
                 }
             }
@@ -407,9 +415,10 @@ $(function() {
             var speakerIndex = s + 1;
             var speakerDivId = '#speaker_dates' + speakerIndex;
 
-            $(speakerDivId).html('');
-
-            if (!_dates) continue;
+            if (!_dates) {
+                $(speakerDivId).html('');
+                continue;
+            }
 
             var currentState = [];
 
@@ -420,6 +429,8 @@ $(function() {
                     currentState[s_date_id] = $('#' + s_date_id).is(':checked');
                 }
             }
+
+            $(speakerDivId).html('');
 
             for (i=0; i < arr_dates.length; i++) {
                 date_parts = arr_dates[i].split('-');
