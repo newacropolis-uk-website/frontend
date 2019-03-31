@@ -61,7 +61,8 @@ def admin_users():
 
 @main.route('/admin/events', methods=['GET', 'POST'])
 @main.route('/admin/events/<uuid:selected_event_id>', methods=['GET', 'POST'])
-def admin_events(selected_event_id=None):
+@main.route('/admin/events/<uuid:selected_event_id>/<api_message>', methods=['GET', 'POST'])
+def admin_events(selected_event_id=None, api_message=None):
     events = api_client.get_limited_events()
     event_types = api_client.get_event_types()
     speakers = api_client.get_speakers()
@@ -92,12 +93,14 @@ def admin_events(selected_event_id=None):
                 del adjusted_event[key]
 
         try:
+            message = None
             if event.get('event_id'):
                 response = api_client.update_event(event['event_id'], adjusted_event)
+                message = 'event updated'
             else:
                 response = api_client.add_event(adjusted_event)
 
-            return redirect(url_for('main.admin_events', selected_event_id=response['id']))
+            return redirect(url_for('main.admin_events', selected_event_id=response['id'], api_message=message))
         except HTTPError as e:
             current_app.logger.error(e)
             return render_template(
@@ -112,7 +115,8 @@ def admin_events(selected_event_id=None):
         'views/admin/events.html',
         form=form,
         images_url=current_app.config['IMAGES_URL'],
-        selected_event_id=selected_event_id
+        selected_event_id=selected_event_id,
+        message=api_message
     )
 
 
