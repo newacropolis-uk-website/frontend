@@ -101,6 +101,9 @@
         {% if errors %}
         <div id='error_section' class='text-warning'></div>
         {% endif %}
+        {% if message %}
+        <div id='message' class='text-success pb-3'>{{message}}</div>
+        {% endif %}
         <div class="justify-content-end">
             <button id="pubish" type="submit" class="btn btn-outline-success">Publish</button>
             <button type="submit" class="btn btn-outline-success" onclick="alert('under construction');return false;">Save</button>
@@ -489,10 +492,20 @@ $(function() {
         $("#events").prop("selectedIndex", 0);
     })
 
+    {% if message %}
+    var showMessage=true;
+    elements._events.on('change', function() {
+        if (!showMessage) {
+            $('#message').attr('style', 'display:none;');
+        }
+        showMessage = false;
+        updateEvent();
+    });
+    {% else %}
     elements._events.on('change', function() {
         updateEvent();
     });
-
+    {% endif %}
     elements._alt_event_images.on('change', function() {
         updateAltEventImage();
     });

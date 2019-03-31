@@ -294,4 +294,4 @@ class WhenSubmittingEventsForm:
                 'description': '&lt;test&gt;'
             }
         )
-        assert href == '{}/{}'.format(url_for('main.admin_events'), 'test_id')
+        assert href == '{}/{}/{}'.format(url_for('main.admin_events'), 'test_id', 'event%20updated')
