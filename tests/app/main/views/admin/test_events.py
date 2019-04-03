@@ -210,10 +210,10 @@ class WhenSubmittingEventsForm:
 
         mocker.patch('app.main.views.admin.request', mock_request)
 
-        response = client.post(url_for(
-            'main.admin_events',
+        response = client.post(
+            url_for('main.admin_events'),
             data={'event_id': '9ad571e1-4b5e-49af-a814-0958b23888c5'}
-        ))
+        )
 
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         href = page.select_one('a')['href']
@@ -234,10 +234,10 @@ class WhenSubmittingEventsForm:
 
         mocker.patch('app.main.views.admin.request', mock_request)
 
-        response = client.post(url_for(
-            'main.admin_events',
+        response = client.post(
+            url_for('main.admin_events'),
             data={'event_id': '9ad571e1-4b5e-49af-a814-0958b23888c5'}
-        ))
+        )
 
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         href = page.select_one('a')['href']
@@ -262,10 +262,10 @@ class WhenSubmittingEventsForm:
 
         mocker.patch('app.main.views.admin.request', mock_request)
 
-        response = client.post(url_for(
-            'main.admin_events',
+        response = client.post(
+            url_for('main.admin_events'),
             data={'event_id': '9ad571e1-4b5e-49af-a814-0958b23888c5'}
-        ))
+        )
 
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         href = page.select_one('a')['href']

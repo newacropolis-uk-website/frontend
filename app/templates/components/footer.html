@@ -25,14 +25,16 @@
           <div class="magazine_form_padding">
             {% if subscription_form %}
               <form action="/" method=post>
-                {{ subscription_form.hidden_tag() }}
+                {{ subscription_form.csrf_token }}
                 {{ subscription_form.email(class="subscribe") }}
                 <br><br><br>
                   {% for error in subscription_form.email.errors %}
                   <li class="error_text">{{ error }}
                   {% endfor %}
+                  <input class="submit_button" type="submit" value="Submit">
               </form>
             {% endif %}
+            
           </div>
         </div>
       </div>

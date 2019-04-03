@@ -117,3 +117,6 @@ class ApiClient(BaseAPIClient):
 
     def get_subscription_email(self, email):
         return self.get(url='subscription')
+
+    def add_subscription_email(self, email):
+        return self.post(url='subscription', data=email)

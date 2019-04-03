@@ -1,7 +1,6 @@
 from flask import current_app, render_template, request, redirect, url_for
 from random import randint
 from app.main.forms import SubscriptionForm
-
 from app.main import main
 from app import api_client
 
@@ -16,6 +15,7 @@ def index():
     articles = api_client.get_articles_summary()
     index = randint(0, len(articles) - 1)
     subscription_form = SubscriptionForm()
+
     if subscription_form.validate_on_submit():
         return redirect(url_for('.subscription', email=subscription_form.email.data))
 
@@ -26,7 +26,8 @@ def index():
         articles=articles,
         events=events,
         current_page='',
-        subscription_form=subscription_form
+        subscription_form=subscription_form,
+        email=subscription_form.email.data
     )
 
 @main.route('/about')
@@ -87,9 +88,16 @@ def e_shop():
     )
 
 
-@main.route('/subscription')
+@main.route('/subscription', methods=['GET', 'POST'])
 def subscription():
     subscription_form = SubscriptionForm()
+    """
+    if subscription_form.validate_on_submit():
+        return render_template(
+            'views/subscription.html',
+            subscription_form=subscription_form
+        )
+    """
     return render_template(
         'views/subscription.html',
         subscription_form=subscription_form,

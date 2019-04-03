@@ -133,6 +133,17 @@ footer{
     display: block;
   }
 }
+.submit_button {
+  background-color: white;
+  color: black;
+  border: 2px solid #e7e7e7;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.submit_button:hover {
+  background-color: #e7e7e7;
+}
 #yellow_txt {
   color: rgb(240,200,129);
 }
