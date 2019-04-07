@@ -483,6 +483,7 @@ $(function() {
 
         $('#event_dates').val(JSON.stringify(event_dates));
         $('#existing_image_filename').val(elements._file_img.attr('src').replace('{{images_url}}', ''));
+        $('#pubish').prop('disabled', true);
     }
 
     $('#copy-event').on('click', function() {
