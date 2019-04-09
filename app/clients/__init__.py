@@ -79,7 +79,7 @@ class BaseAPIClient(object):
                 data=payload,
                 params=params,
                 headers={'Authorization': 'Bearer {}'.format(session["access_token"])},
-                timeout=20
+                timeout=30
             )
 
             if response.status_code == 404:

@@ -22,6 +22,9 @@ class Config(object):
     OAUTHLIB_INSECURE_TRANSPORT = False
     ACCESS_AREAS = ['admin', 'event', 'email', 'magazine', 'report', 'shop', 'announcement', 'article']
 
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_TIME_LIMIT = None
+
 
 class Development(Config):
     DEBUG = True
