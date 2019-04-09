@@ -103,6 +103,7 @@ def set_events_form(events, event_types, speakers, venues):
             'start_time': form.start_time.data,
             'end_time': form.end_time.data,
             'dates': form.dates.data,
+            'booking_code': form.booking_code.data
         }
         session['submitted_event'] = submitted_event
 
