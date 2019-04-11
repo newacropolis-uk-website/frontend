@@ -7,7 +7,7 @@ class WhenAccessingPagesWithoutLoggingIn(object):
 
     def it_returns_401(self, client, mocker):
         response = client.get(url_for(
-            'main.speakers'
+            'main.api_speakers'
         ))
         assert response.status_code == 401
         text = response.get_data(as_text=True)
@@ -18,7 +18,7 @@ class WhenAccessingPagesWithIncorrectLogIn(object):
 
     def it_returns_401(self, client, mocker, invalid_log_in):
         response = client.get(url_for(
-            'main.speakers'
+            'main.api_speakers'
         ))
         assert response.status_code == 401
         text = response.get_data(as_text=True)
@@ -40,7 +40,7 @@ class WhenAccessingSpeakersPage(object):
         )
 
         response = client.get(url_for(
-            'main.speakers'
+            'main.api_speakers'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         assert page.select_one("#content li").text == 'Mr Test  (Dr Test)'
@@ -61,7 +61,7 @@ class WhenAccessingVenuesPage(object):
         )
 
         response = client.get(url_for(
-            'main.venues'
+            'main.api_venues'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         assert page.select_one("#content li").text == 'London: 19 Test Terrace, N1 Bus: 1, 5, 10 2 minutes walk'
@@ -148,7 +148,7 @@ class WhenAccessingEventsPastYearPage(object):
         )
 
         response = client.get(url_for(
-            'main.past_events'
+            'main.api_past_events'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         assert 'Test event description 1' in page.find('p').text
@@ -170,10 +170,10 @@ class WhenAccessingArticlesPage(object):
         )
 
         response = client.get(url_for(
-            'main.articles_summary'
+            'main.api_articles_summary'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        assert page.select_one("#content a").text == 'Ancient Greece'
+        assert page.select_one("#content p a").text == 'Ancient Greece'
 
     def it_shows_an_article(self, client, mocker, logged_in):
         article = {
@@ -189,7 +189,7 @@ class WhenAccessingArticlesPage(object):
         )
 
         response = client.get(url_for(
-            'main.article', id=article['id']
+            'main.api_article', id=article['id']
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         assert article['content'] in page.select_one("#content div").text

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-5">
+        <a href="{{ url_for('main.api_test') }}">API test home</a>
+        {% block api_content %}{% endblock %}
+</div>
+{% endblock %}
