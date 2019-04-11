@@ -13,9 +13,9 @@ def api_test():
     )
 
 
-@main.route('/speakers')
+@main.route('/api/speakers')
 @requires_auth
-def speakers():
+def api_speakers():
     speakers = api_client.get_speakers()
     return render_template(
         'views/speakers.html',
@@ -23,9 +23,9 @@ def speakers():
     )
 
 
-@main.route('/venues')
+@main.route('/api/venues')
 @requires_auth
-def venues():
+def api_venues():
     venues = api_client.get_venues()
     return render_template(
         'views/venues.html',
@@ -33,8 +33,8 @@ def venues():
     )
 
 
-@main.route('/past_events')
-def past_events():
+@main.route('/api/past_events')
+def api_past_events():
     events = api_client.get_events_past_year()
     return render_template(
         'views/events.html',
@@ -44,20 +44,21 @@ def past_events():
     )
 
 
-@main.route('/future_events')
-def future_events():
+@main.route('/api/future_events')
+def api_future_events():
     events = api_client.get_events_in_future()
 
     return render_template(
         'views/events.html',
         images_url=current_app.config['IMAGES_URL'],
         events=_unescape_html(events, 'description'),
-        api_base_url=api_client.base_url
+        api_base_url=api_client.base_url,
+        paypal_account=current_app.config['PAYPAL_ACCOUNT']
     )
 
 
-@main.route('/articles/summary')
-def articles_summary():
+@main.route('/api/articles/summary')
+def api_articles_summary():
     articles = api_client.get_articles_summary()
     return render_template(
         'views/articles_summary.html',
@@ -65,8 +66,8 @@ def articles_summary():
     )
 
 
-@main.route('/article/<uuid:id>')
-def article(id):
+@main.route('/api/article/<uuid:id>')
+def api_article(id):
     article = api_client.get_article(id)
     return render_template(
         'views/article.html',
