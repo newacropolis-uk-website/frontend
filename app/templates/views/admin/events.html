@@ -189,7 +189,9 @@ $(function() {
             event: elements._events.val()
         };
 
-        try{ 
+        $('#pubish').prop('disabled', false);
+
+        try {
             temp_event; 
 
             console.log(temp_event);
@@ -482,7 +484,8 @@ $(function() {
         }
 
         $('#event_dates').val(JSON.stringify(event_dates));
-        $('#existing_image_filename').val(elements._file_img.attr('src').replace('{{images_url}}', ''));
+        if ($('#file_img').attr('src'))
+            $('#existing_image_filename').val($('#file_img').attr('src').replace('{{images_url}}', ''));
         $('#pubish').prop('disabled', true);
     }
 
