@@ -79,8 +79,8 @@ html, body {
 .navbar{
   font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
   padding: .8rem;
-  background-color: rgba(12,102,82,1.0);
-  border-bottom: solid 19px rgba(247,231,27,1.0);
+  background-color: rgb(10,134,101);
+  border-bottom: solid 19px rgb(238,191,109);
 }
 .navbar-nav li {
   padding-right: 15px;
@@ -93,12 +93,12 @@ html, body {
 /* FOOTER */
 
 footer{
-  background-color: rgba(12,102,82,1.0);
+  background-color :rgb(10,134,101);
   color: white;
   padding: 2% 4% 2% 4%;
   font-size: 0.8em;
   line-height: 5px;
-  border-top: solid 19px rgba(247,231,27,1.0);
+  border-top: solid 19px rgb(238,191,109);
   font-family: 'AvenirNext-Medium',Helvetica,Arial,serif;
 }
 .footer_icons{
@@ -134,10 +134,18 @@ footer{
   }
 }
 #yellow_txt {
+  color: rgb(238,191,109);
+}
+#bright_yellow_txt {
   color: rgba(247,231,27,1.0);
 }
-#purple_txt {
-  color: rgba(247,231,27,1.0);
+#blue_txt {
+  color: rgb(105,152,219);
+}
+.dark_grey_txt {
+  font-family: 'AvenirNext-Medium',Helvetica,Arial,serif;
+  color: rgb(74,74,74);
+  font-size: 25px;
 }
 .footer_magazine{
   height: 215px;
@@ -191,13 +199,12 @@ footer{
 }
 .introtext {
   font-family: 'AvenirNext-Medium',Helvetica,Arial,serif;
-  padding: 2%;
+  padding: 2% 9% 2% 9%;
   font-size: 1.4em;
-  color: rgba(12,102,82,1.0);
+  color: rgb(157,157,157);
 }
-.grey_backgroundcolour{
-  background-color: rgba(215,215,215,0.5);
-  padding: 2% 2% 5% 2%;
+.cream_backgroundcolour{
+  background-color: rgb(245,242,234);
 }
 .pcv_block{
   padding: 21% 12% 21% 12%;
@@ -205,6 +212,7 @@ footer{
   background-color: white;
   width: 100%;
   font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
+  color: rgb(157,157,157); 
 }
 .pcv_padding {
   padding-bottom: 5%;
@@ -213,7 +221,7 @@ footer{
   margin-top: -65px;
 }
 .findoutmore_background {
-  background-color: rgba(143,18,253,1.0);
+  background-color: rgb(63,96,144);
   height: auto;
   font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
   width: 100%;
@@ -224,14 +232,17 @@ footer{
   font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
   padding-top: 2%
 }
-.card {
+.cardmulti {
   background-color: rgba(215,215,215,1.0);
   border-style: solid;
   border-width: 1px;
   border-color: rgba(150,150,150,1.0);
   height: 510px;
+} 
+.cardtextmulti {
+  color: rgb(157,157,157);
 }
-.card-img-top {
+.cardimgtopmulti {
   object-fit: cover;
   height: 252px;
 }
@@ -241,19 +252,23 @@ footer{
   border-width: 1px;
   border-color: rgba(150,150,150,1.0);
 }
+.light_text {
+  font-family: 'AvenirNext-Medium',Helvetica,Arial,serif;
+  color: rgb(157,157,157);
+}
 .subscribe_section{
-  background-color: rgba(245,165,35,1.0);
+  background-color: rgb(63,96,144);
   height: auto;
   width: 100%;
   font-family: 'AvenirNext-Bold',Helvetica,Arial,serif;
-  color: rgba(0,0,0,1.0);
+  color: white;
   line-height: 27.0px;
-  padding: 2%;
+  padding: 1%;
 }
 .magazine_txt {
   font-size: 2.5em;
   font-family: 'AvenirNext-Bold',Helvetica,Arial,serif;
-  color: rgba(245,165,35,1.0);
+  color: rgb(105,152,219);
   text-align: right;
 }
 .magazine_email {
@@ -267,14 +282,14 @@ footer{
   opacity: .33;
 }
 .magazine_box {
-  background-color: rgba(143,18,253,1.0);
+  background-color: rgb(238,191,109);
   border-radius: 8px;
   opacity: .76;
   height: auto;
   width: auto;
   font-family: 'AvenirNext-Bold',Helvetica,Arial,serif;
   font-size: 2em;
-  color: rgba(247,231,27,1.0);
+  color: rgb(74,74,74);
   line-height: 32.0px;
   padding: 5%;
 }
@@ -283,9 +298,14 @@ footer{
 }
 .contactus_img{
   border: #D3D3D3 2px solid;
+  height: 100px;
 }
 .founding_img {
-  background-color: rgba(245, 165, 35, 1.0);
+  background-color: rgb(10,134,101);
   height: 98px;
   width: 98px;
+}
+.founding_headings {
+  font-family: 'AvenirNext-bold',Helvetica,Arial,serif;
+  color: rgb(74,74,74);
 }
