@@ -315,3 +315,40 @@ footer{
 .contactus_padding {
   padding: 0% 5% 5% 5%;
 }
+
+.modal,.modal-open {
+    padding-right: 0!important
+}
+.modal-open {
+    overflow: auto
+}
+.scrollable {
+    overflow-y: auto
+}
+.modal-footer {
+	display: flex;
+  justify-content: flex-start;
+  height: 30px;
+}
+.card_img_size {
+  max-height: 310px;
+  max-width: 220px;
+}
+.modal-dialog{
+  position: relative;
+  display: table;
+  overflow-y: auto;    
+  overflow-x: auto;
+  width: auto;
+  min-width: 430px;   
+}
+@media screen and (max-width: 1100px) {
+  .modal-dialog {
+    min-width: 300px;
+  }
+}
+@media screen and (max-width: 700px) {
+  .modal-dialog {
+    min-width: 230px;
+  }
+}
