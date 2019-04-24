@@ -293,19 +293,22 @@ footer{
   line-height: 32.0px;
   padding: 5%;
 }
-.contactus_text{
-  line-height: 10px;
-}
-.contactus_img{
-  border: #D3D3D3 2px solid;
-  height: 100px;
-}
 .founding_img {
   background-color: rgb(10,134,101);
   height: 98px;
   width: 98px;
 }
-.founding_headings {
-  font-family: 'AvenirNext-bold',Helvetica,Arial,serif;
-  color: rgb(74,74,74);
+
+/* Contact */
+.card-img-top_contact {
+  object-fit: cover;
+  max-height: 300px;
+}
+.contactus_text{
+  line-height: 10px;
+  font-family: 'AvenirNext-Medium',Helvetica,Arial,serif;
+  padding-left: 5%;
+}
+.contactus_padding {
+  padding: 0% 5% 5% 5%;
 }
