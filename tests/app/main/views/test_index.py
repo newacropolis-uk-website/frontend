@@ -37,7 +37,7 @@ class WhenAccessingHomePage(object):
             'main.index'
         ))
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        content = page.find("h4", {"class": "card-title"}).string
+        content = page.find("p", {"class": "card-text cardtextmulti dark_grey_txt"}).string
 
         intro_course = [e for e in sample_future_events if e['event_type'] == 'Introductory Course'][0]
 
