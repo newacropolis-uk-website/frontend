@@ -142,6 +142,9 @@ footer{
 #blue_txt {
   color: rgb(105,152,219);
 }
+#footer_title_txt {
+  color: rgba(175,154,89);
+}
 .dark_grey_txt {
   font-family: 'AvenirNext-Medium',Helvetica,Arial,serif;
   color: rgb(74,74,74);
