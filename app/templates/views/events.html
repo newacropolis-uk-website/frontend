@@ -51,7 +51,16 @@
                         
                     </table>
                     <input type="hidden" name="currency_code" value="GBP">
-                    <input type="image" src="https://www.sandbox.paypal.com/en_GB/i/btn/btn_cart_SM.gif" border="0" name="submit" alt="PayPal � The safer, easier way to pay online.">
+                    <input 
+                        type="image"
+                        src="https://www.sandbox.paypal.com/en_GB/i/btn/btn_cart_SM.gif"
+                        border="0"
+                        name="submit"
+                        alt="PayPal � The safer, easier way to pay online."
+                        {% if not item.booking_code %}
+                            onclick="return false;"
+                        {% endif %}
+                    >
                     <img alt="" border="0" src="https://www.sandbox.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1">
                     </form>
                     
