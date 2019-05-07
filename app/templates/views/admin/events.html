@@ -136,13 +136,13 @@ $(function() {
             title: $('#title').val(),
             sub_title: $('#sub_title').val(),
             description: $('#description').val(),
-            file_img: $('#file_img').val(),
+            image_filename: $('#file_img').attr('src').replace('{{images_url}}', ''),
             fee: $('#fee').val(),
             conc_fee: $('#conc_fee').val(),
             multi_day_fee: $('#multi_day_fee').val(),
             multi_day_conc_fee: $('#multi_day_conc_fee').val(),
             venue_id: $('#venue').val(),
-            event_dates: getEventDates(),
+            event_dates: getEventDates(true),
             start_time: $('#start_time').val(),
             end_time: $('#end_time').val()
         }
@@ -500,7 +500,7 @@ $(function() {
         }
     }
 
-    function getEventDates() {
+    function getEventDates(is_preview) {
         event_dates = [];
 
         arr_dates = $('#dates').val().split(",").sort();
@@ -515,7 +515,11 @@ $(function() {
                 }
             }
             event_date = arr_dates[j] + ' '  + $('#start_time').val()
-            event_dates.push({'event_date': event_date, 'speakers': speakers, 'end_time': $('#end_time').val()});
+            if (is_preview) {
+                event_dates.push({'event_datetime': event_date, 'speakers': speakers, 'end_time': $('#end_time').val()});
+            }
+            else 
+                event_dates.push({'event_date': event_date, 'speakers': speakers, 'end_time': $('#end_time').val()});
         }
 
         return event_dates;
