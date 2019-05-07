@@ -13,6 +13,9 @@ class ApiClient(BaseAPIClient):
     def get_venues(self):
         return self.get(url='venues')
 
+    def get_venue_by_id(self, venue_id):
+        return self.get(url='venue/{}'.format(venue_id))
+
     def add_event(self, event):
         return self.post(url='event', data=event)
 

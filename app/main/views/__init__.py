@@ -48,8 +48,9 @@ def requires_google_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = session.get('oauth_token')
+        state = session.get('oauth_state')
 
-        if token:
+        if token and state:
             try:
                 google = OAuth2Session(current_app.config['GOOGLE_OAUTH2_CLIENT_ID'], token=token)
                 google.get('https://www.googleapis.com/oauth2/v3/tokeninfo')

@@ -1,6 +1,7 @@
 import base64
 from flask import current_app, jsonify, redirect, render_template, request, session, url_for
 import json
+import urlparse
 # from werkzeug import secure_filename
 
 from requests_oauthlib import OAuth2Session
@@ -135,6 +136,25 @@ def _get_event():
 def _delete_event(event_id):
     api_client.delete_event(event_id)
     return redirect(url_for('main.admin_events'))
+
+
+@main.route('/admin/preview_event')
+def preview_event():
+    data = json.loads(urlparse.unquote(request.args.get('data')))
+
+    current_app.logger.info(u'Preview args: {}'.format(data))
+
+    venue = api_client.get_venue_by_id(data['venue_id'])
+
+    data['venue'] = venue
+
+    return render_template(
+        'views/admin/preview.html',
+        images_url=current_app.config['IMAGES_URL'],
+        events=[data],
+        api_base_url=api_client.base_url,
+        paypal_account=current_app.config['PAYPAL_ACCOUNT']
+    )
 
 
 @main.route("/profile", methods=["GET"])
