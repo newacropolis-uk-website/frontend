@@ -9,7 +9,7 @@ from requests_oauthlib import OAuth2Session
 from app import api_client
 from app.clients.errors import HTTPError
 from app.main import main
-from app.main.forms import populate_user_form, set_events_form
+from app.main.forms import UserListForm, set_events_form
 from app.main.views import requires_google_auth
 
 
@@ -24,7 +24,7 @@ def admin():
 @main.route('/admin/users', methods=['GET', 'POST'])
 def admin_users():
     users = [u for u in api_client.get_users() if u.get('access_area') != 'admin']
-    form = populate_user_form(users)
+    form = UserListForm()
     update_count = 0
 
     if form.validate_on_submit():
@@ -50,6 +50,8 @@ def admin_users():
             if users[i]['access_area'] != access_area:
                 update_count += 1
                 api_client.update_user_access_area(users[i]['id'], access_area)
+
+    form.populate_user_form(users)
 
     return render_template(
         'views/admin/users.html',
