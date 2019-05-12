@@ -9,7 +9,7 @@ from app import api_client
 @main.route('/api')
 def api_test():
     return render_template(
-        'views/api.html'
+        'views/api_test/api.html'
     )
 
 
@@ -18,7 +18,7 @@ def api_test():
 def api_speakers():
     speakers = api_client.get_speakers()
     return render_template(
-        'views/speakers.html',
+        'views/api_test/speakers.html',
         speakers=speakers
     )
 
@@ -28,7 +28,7 @@ def api_speakers():
 def api_venues():
     venues = api_client.get_venues()
     return render_template(
-        'views/venues.html',
+        'views/api_test/venues.html',
         venues=venues
     )
 
@@ -37,7 +37,7 @@ def api_venues():
 def api_past_events():
     events = api_client.get_events_past_year()
     return render_template(
-        'views/events.html',
+        'views/api_test/events.html',
         images_url=current_app.config['IMAGES_URL'],
         events=events,
         api_base_url=api_client.base_url
@@ -49,7 +49,7 @@ def api_future_events():
     events = api_client.get_events_in_future()
 
     return render_template(
-        'views/events.html',
+        'views/api_test/events.html',
         images_url=current_app.config['IMAGES_URL'],
         events=_unescape_html(events, 'description'),
         api_base_url=api_client.base_url,
@@ -61,7 +61,7 @@ def api_future_events():
 def api_articles_summary():
     articles = api_client.get_articles_summary()
     return render_template(
-        'views/articles_summary.html',
+        'views/api_test/articles_summary.html',
         articles=articles
     )
 
@@ -70,7 +70,7 @@ def api_articles_summary():
 def api_article(id):
     article = api_client.get_article(id)
     return render_template(
-        'views/article.html',
+        'views/api_test/article.html',
         article=article
     )
 

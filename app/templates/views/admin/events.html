@@ -108,7 +108,7 @@
             <input id='submit_type' type='hidden' value='publish'>
             <button id="preview" type="submit" class="btn btn-outline-info">Preview</button>
             <button id="pubish" type="submit" class="btn btn-outline-success">Publish</button>
-            <button type="submit" class="btn btn-outline-success" onclick="alert('under construction');return false;">Save</button>
+            <button id="draft" type="submit" class="btn btn-outline-success">Draft</button>
             <a href="{{ url_for('main.admin') }}" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</a>
         </div>
     </form>
@@ -155,6 +155,10 @@ $(function() {
         }, 1000);
 
         return false;
+    })
+
+    $('#draft').on('click', function() {
+        $('#submit_type').val('preview');
     })
 
     $('#datepicker').on('changeDate', function() {
