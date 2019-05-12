@@ -9,7 +9,7 @@ from requests_oauthlib import OAuth2Session
 from app import api_client
 from app.clients.errors import HTTPError
 from app.main import main
-from app.main.forms import UserListForm, set_events_form
+from app.main.forms import UserListForm, EventForm
 from app.main.views import requires_google_auth
 
 
@@ -71,10 +71,32 @@ def admin_events(selected_event_id=None, api_message=None):
     speakers = api_client.get_speakers()
     venues = api_client.get_venues()
     session['events'] = events
-    form = set_events_form(events, event_types, speakers, venues)
+    form = EventForm()
+
+    form.set_events_form(events, event_types, speakers, venues)
 
     if form.validate_on_submit():
-        event = session.pop('submitted_event')
+        if form.image_filename.data:
+            filename = form.image_filename.data.filename
+        else:
+            filename = form.existing_image_filename.data
+
+        event = {
+            'event_id': form.events.data,
+            'event_type_id': form.event_type.data,
+            'title': form.title.data,
+            'sub_title': form.sub_title.data,
+            'description': form.description.data,
+            'image_filename': filename,
+            'fee': int(form.fee.data) if form.fee.data else 0,
+            'conc_fee': int(form.conc_fee.data) if form.conc_fee.data else 0,
+            'multi_day_fee': int(form.multi_day_fee.data) if form.multi_day_fee.data else 0,
+            'multi_day_conc_fee': int(form.multi_day_conc_fee.data) if form.multi_day_conc_fee.data else 0,
+            'venue_id': form.venue.data,
+            'event_dates': form.event_dates.data,
+            'start_time': form.start_time.data,
+            'end_time': form.end_time.data,
+        }
 
         adjusted_event = event.copy()
 
