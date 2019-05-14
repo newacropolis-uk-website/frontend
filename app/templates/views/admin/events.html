@@ -105,10 +105,14 @@
         <div id='message' class='text-success pb-3'>{{message}}</div>
         {% endif %}
         <div class="justify-content-end">
-            <input id='submit_type' type='hidden' value='publish'>
+            {{ form.submit_type }}
             <button id="preview" type="submit" class="btn btn-outline-info">Preview</button>
-            <button id="pubish" type="submit" class="btn btn-outline-success">Publish</button>
-            <button id="draft" type="submit" class="btn btn-outline-success">Draft</button>
+            <button id="draft" type="submit" class="btn btn-outline-warning">Draft</button>
+            <button id="ready" type="submit" class="btn btn-outline-success">Ready</button>
+            {% if is_admin_user %}
+                <button id="reject" type="submit" class="btn btn-outline-danger">Reject</button>
+                <button id="pubish" type="submit" class="btn btn-outline-success">Publish</button>
+            {% endif %}
             <a href="{{ url_for('main.admin') }}" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</a>
         </div>
     </form>
@@ -311,6 +315,8 @@ $(function() {
                 $('#datepicker').datepicker("setDate", data['dates']);
                 set_start_time(data['event_time']);
                 set_end_time(data['end_time']);
+
+                update_for_event_state(data['event_state']);
             }
         });
     }
@@ -332,6 +338,13 @@ $(function() {
                 }
             }
         });
+    }
+
+    function update_for_event_state(event_state) {
+        {% if is_admin_user %}
+            $('#reject').prop('disabled', event_state == 'draft');
+            $('#publish').prop('disabled', event_state == 'draft');
+        {% endif %}
     }
 
     function set_event_dates(event_dates) {

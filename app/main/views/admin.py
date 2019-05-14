@@ -13,6 +13,11 @@ from app.main.forms import UserListForm, EventForm
 from app.main.views import requires_google_auth
 
 
+def is_admin_user():
+    user = session['user']
+    return 'admin' in user.get('access_area') or user.get('access_area') == 'admin'
+
+
 @main.route('/admin')
 def admin():
     return render_template(
@@ -141,7 +146,8 @@ def admin_events(selected_event_id=None, api_message=None):
         form=form,
         images_url=current_app.config['IMAGES_URL'],
         selected_event_id=selected_event_id,
-        message=api_message
+        message=api_message,
+        is_admin_user=is_admin_user()
     )
 
 
