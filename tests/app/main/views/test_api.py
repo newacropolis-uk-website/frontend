@@ -155,6 +155,96 @@ class WhenAccessingEventsPastYearPage(object):
         assert 'Test description event 2' in page.find('p').text
 
 
+class WhenAccessingFutureEventsPage(object):
+    def it_shows_list_of_approved_events(self, client, mocker, logged_in):
+        mocker.patch(
+            "app.clients.api_client.ApiClient.get",
+            return_value=[
+                {
+                    "booking_code": "111222XXXYYY",
+                    "conc_fee": 3,
+                    "description": "Test description draft event",
+                    "event_type": 'talk',
+                    "event_state": 'draft',
+                    "event_dates": [
+                        {
+                            "event_datetime": "2019-04-15 19:00",
+                            "speakers": []
+                        }
+                    ],
+                    "fee": 5,
+                    "image_filename": "2019/test_image.jpg",
+                    "multi_day_conc_fee": 0,
+                    "multi_day_fee": 0,
+                    "old_id": 286,
+                    "sub_title": "",
+                    "title": "Test title 1",
+                    "venue": {
+                        "address": "19 Compton Terrace N1 2UN, next door to Union Chapel.",
+                        "default": True,
+                        "directions": "<div>Bus: Bus routes 4, 19, 30, 43 & 277 stop nearby</div>",
+                        "name": "Head Branch",
+                    }
+                },
+                {
+                    "booking_code": "222333444XXXZZZ",
+                    "conc_fee": 12,
+                    "description": "Test description approved event",
+                    "event_type": 'short course',
+                    "event_state": 'approved',
+                    "event_dates": [
+                        {
+                            "event_datetime": "2019-05-15 19:00",
+                            "speakers": [
+                                {
+                                    "name": "Various",
+                                    "title": None
+                                }
+                            ]
+                        },
+                        {
+                            "event_datetime": "2019-05-26 19:00",
+                            "speakers": [
+                                {
+                                    "name": "Various",
+                                    "title": None
+                                }
+                            ]
+                        },
+                        {
+                            "event_datetime": "2019-05-03 19:00",
+                            "speakers": [
+                                {
+                                    "name": "Various",
+                                    "title": None
+                                }
+                            ]
+                        }
+                    ],
+                    "fee": 15,
+                    "image_filename": "2019/IMG_2122.JPG",
+                    "multi_day_conc_fee": 30,
+                    "multi_day_fee": 40,
+                    "old_id": 288,
+                    "sub_title": "",
+                    "title": "The Language of Symbols",
+                    "venue": {
+                        "address": "19 Compton Terrace N1 2UN, next door to Union Chapel.",
+                        "default": True,
+                        "directions": "<div>Bus: Bus routes 4, 19, 30, 43 & 277 stop nearby</div>",
+                        "name": "Head Branch",
+                    }
+                }
+            ]
+        )
+        response = client.get(url_for(
+            'main.api_future_events'
+        ))
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+        assert 'Test description draft event' not in page.find('p').text
+        assert 'Test description approved event' in page.find('p').text
+
+
 class WhenAccessingArticlesPage(object):
 
     def it_shows_list_of_articles(self, client, mocker, logged_in):

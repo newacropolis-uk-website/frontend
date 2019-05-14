@@ -46,7 +46,7 @@ def api_past_events():
 
 @main.route('/api/future_events')
 def api_future_events():
-    events = api_client.get_events_in_future()
+    events = api_client.get_events_in_future(approved_only=True)
 
     return render_template(
         'views/api_test/events.html',

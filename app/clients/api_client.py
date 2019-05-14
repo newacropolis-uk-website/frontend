@@ -1,6 +1,17 @@
 from datetime import datetime
+from functools import wraps
 
 from app.clients import BaseAPIClient
+
+
+def only_show_approved_events(func):
+    @wraps(func)
+    def _only_show_approved_events(*args, **kwargs):
+        events = func(*args)
+        if kwargs.get('approved_only'):
+            return [e for e in events if e.get('event_state') == 'approved']
+        return events
+    return _only_show_approved_events
 
 
 class ApiClient(BaseAPIClient):
@@ -31,10 +42,12 @@ class ApiClient(BaseAPIClient):
     def get_limited_events(self):
         return self.get_nice_event_dates(self.get(url='events/limit/30'))
 
+    @only_show_approved_events
     def get_events_in_future(self):
         events = self.get_nice_event_dates(self.get(url='events/future'))
         return self._get_events_intro_courses_prioritised(events)
 
+    @only_show_approved_events
     def get_events_past_year(self):
         return self.get(url='events/past_year')
 
