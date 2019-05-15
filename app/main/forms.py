@@ -72,7 +72,7 @@ class EventForm(FlaskForm):
     speakers = SelectField('Speakers')
     dates = HiddenField()
     default_event_type = HiddenField()
-    submit_form = HiddenField()
+    submit_type = HiddenField()
 
     def set_events_form(self, events, event_types, speakers, venues):
         self.set_events(self.events, events, 'New event')
