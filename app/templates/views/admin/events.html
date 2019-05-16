@@ -215,6 +215,8 @@ $(function() {
     })
 
     $('#reject').on('click', function() {
+        $('#rejectModal').modal('toggle');
+        $('#rejectBtn').prop('disabled', true);
         $('#submit_type').val('rejected');
     })
 
@@ -412,7 +414,7 @@ $(function() {
         $('#status_bar').attr('class', base_css + css);
         $('#status_bar').text(event_state);
         {% if is_admin_user %}
-            $('#rejectBtn').prop('disabled', event_state != 'ready');
+            $('#rejectBtn').prop('disabled', $.inArray( event_state, [ "draft", "rejected" ] ) >= 0);
             $('#publish').prop('disabled', event_state != 'ready');
         {% endif %}
     }
