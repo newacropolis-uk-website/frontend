@@ -1,4 +1,4 @@
-from flask import current_app, render_template, request, redirect, url_for
+from flask import current_app, render_template, redirect, url_for
 from random import randint
 from app.main.forms import SubscriptionForm
 from app.main import main
@@ -17,7 +17,7 @@ def index():
     subscription_form = SubscriptionForm()
 
     if subscription_form.validate_on_submit():
-        return redirect(url_for('.subscription', email=subscription_form.email.data))
+        return redirect(url_for('main.subscription', email=subscription_form.email.data))
 
     return render_template(
         'views/home.html',
@@ -85,21 +85,4 @@ def e_shop():
         'views/e-shop.html',
         current_page='e-shop',
         subscription_form=subscription_form
-    )
-
-
-@main.route('/subscription', methods=['GET', 'POST'])
-def subscription():
-    subscription_form = SubscriptionForm()
-    """
-    if subscription_form.validate_on_submit():
-        return render_template(
-            'views/subscription.html',
-            subscription_form=subscription_form
-        )
-    """
-    return render_template(
-        'views/subscription.html',
-        subscription_form=subscription_form,
-        email=request.args['email']
     )
