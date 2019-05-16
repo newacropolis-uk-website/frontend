@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+<body>
+  <div id="aboutCarousel" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+      {% for event in events %}
+        {% if event.image_filename %}
+          <div class="carousel-item {% if loop.index == 1 %} active{% endif %}">
+            <img class="d-block w-100" src="{{ images_url }}{{ event.image_filename }}">
+            <div class="carousel_caption_block">
+              <div class="carousel-caption d-md-block">
+                <h2><a href=''>
+                  {% if event.carousel_text %}
+                    {{ event.carousel_text }}
+                  {% else %}
+                    {{ event.title }}
+                  {% endif %}
+                </a></h2>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="container-fluid padding">
+    <div class="row text-center ">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <img src="/static/images/pyramid.png" class="img-fluid pyramid">
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <div class="cream_backgroundcolour about_box">
+          <p class="about_box_text">Philosophy has always been a search for spiritual truth, a process of going more deeply into the knowledge of nature, the human being and the universe. Every act of searching is at the same the time an exercise of freedom of consciousness in opposition to ignorance, confusion and the prejudices that prevent calm and deep reflection.</p>
+          <p class="about_box_text">For us, Philosophy is an innate attitude in human being. Our task is to enable that innate attitude to be expressed in actions that will allow us to develop our full potential and improve our world. We propose a practical philosophy that will be useful for each individual and for society.</p>
+          <p class="about_box_text">We do this not only through reading, studying and theoretical knowledge. But also by setting ourselves the goal of learning to live well, with strength and efficiency, at every moment in our lives; taking advantage of the opportunities that arise and leaning something positive even from adversity.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid padding blue_background">
+    <div class="row text-center padding">
+      <div class="col-lg-12">
+        <h3 id="yellow_txt">Today New Acropolis is present in over 50 countries and growing.</h3>
+        <h3>The figures below are taken from our 2018 yearbook.</h3>
+        <p>For more information visit our <a href="" id="yellow_txt">international website</a></p>
+      </div>
+        <div class="col-lg-4 col-md-6">
+          <h1 class="statistics_font">48.584</h1>
+          <p id="yellow_txt">Volunteers Participating in our pograms</p>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <h1 class="statistics_font">1.050.717</h1>
+          <p id="yellow_txt">Beneficeries of our activities</p>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <h1 class="statistics_font">1.771.350</h1>
+          <p id="yellow_txt">Training hours</p>
+        </div>
+        <div class="col-lg-6 col-md-6">
+          <h1 class="statistics_font">2.602.404</h1>
+          <p id="yellow_txt">Volunteers Participating in our pograms</p>
+        </div>
+        <div class="col-lg-6">
+          <h1 class="statistics_font">800.000</h1>
+          <p id="yellow_txt">Books in our libraries</p>
+        </div>
+    </div>
+  </div>
+  
+  <div class="container-fluid padding yellow_background">
+    <div class="row text-center padding">
+      <div class="col-lg-12">
+        <h2 class="visit_website_section">Visit our <a href="">International Website</a> to find out more about our activities and International
+            Headquaters in different Countires</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid padding">
+    <div class="row welcome text-center">
+      <div class="col-12">
+        <h1 class="display-4"> FOUNDING CHARTER </h1>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid padding">
+    <div class="row text-center padding">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <img src="/static/images/founding-hands.png" class="founding_img"><br><br>
+        <h5 class="founding_headings"> FRATERNITY </h5>
+        <p class="light_text">To promote an Ideal of international fraternity, based on respect for human dignity, beyond racial, sexual, cultural, religious, social or other differences.</p>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <img src="/static/images/founding-book.png" class="founding_img"><br><br>
+        <h5 class="founding_headings"> KNOWLEDGE </h5>
+        <p class="light_text">To encourage the love of wisdom through the comparative study of philosophies, religions, sciences and arts, in order to promote the knowledge of the human being, the laws of Nature and the Universe.</p>
+      </div>
+      <div class="col-xs-12 col-md-4">
+        <img src="/static/images/founding-spiral.png" class="founding_img"><br><br>
+        <h5 class="founding_headings"> DEVELOPMENT </h5>
+        <p class="light_text">To develop the best of the human potential, by promoting the realization of the human being as an individual and his or her integration as an active and conscious part of society and nature, in order to improve the world.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid padding py-3 cream_backgroundcolour">
+    <div class="card border_about">
+      <div class="row padding">
+        <div class="col-md-4">
+          <img src="/static/images/man.png" class="card-img_person card-img">
+        </div>
+        <div class="col-md-8 px-3">
+          <div class="card-block px-3">
+            <h3 class="card-title" id="blue_txt">FOUNDER</h3>
+            <h4 class="card-title">Jorge Agel Livraga Rizzi</h4>
+            <p class="card-text">Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+            <p class="card-text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container-fluid padding blue_background">
+    <div class="row text-center padding">
+      <div class="col-lg-12">
+        <img src="/static/images/quote_img.png" class="quote_img">
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid padding py-3 cream_backgroundcolour">
+    <div class="card border_about">
+      <div class="row padding">
+        <div class="col-md-4">
+          <img src="/static/images/lady.png" class="card-img_person card-img">
+        </div>
+        <div class="col-md-8 px-3">
+          <div class="card-block px-3">
+            <h3 class="card-title" id="blue_txt">CURRENT INTERNATIONAL PRESIDENT</h3>
+            <h4 class="card-title">Delia Steinberg Guzman</h4>
+            <p class="card-text">Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+            <p class="card-text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid padding yellow_background">
+    <div class="row text-center padding">
+      <div class="col-lg-12">
+        <h1>New Acropolis UK</h1>
+        <h4 class="ourschool_text">Our school in the <b>UK</b> was first established in <b>1974</b> and we have been in <b>Islington</b> since <b>1996</b>.
+            We hold classes and talks here on a regular basis, we have our philosophical library available
+            for members and we also have our <b>Melissa Bee Sanctuary</b> with two thriving hives at the rear of the school.</h4>
+        <h4 class="ourschool_text">We openly welcome visitors who, we just ask that you let us know in advance of when you are planning
+            to visit so that we can ensure someone is around to welcome and show you around.</h4>
+      </div>
+    </div>
+  </div>
+
+  {% include "components/contact.html" %}
+
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script type="text/javascript">
+   $(document).ready(function(){
+     $('.carousel').slick({
+       "autoplay": true,
+       "autoplaySpeed": 5000,
+     });
+   });
+  </script>
+</body>
+
+{% endblock %}

@@ -23,6 +23,23 @@ def index():
         current_page=''
     )
 
+@main.route('/about')
+def about():
+    events = api_client.get_events_in_future()
+    for event in events:
+        if event['event_type'] == 'Introductory Course':
+            event['carousel_text'] = 'Courses starting {}'.format(event['event_monthyear'])
+
+    articles = api_client.get_articles_summary()
+    index = randint(0, len(articles) - 1)
+    return render_template(
+        'views/about.html',
+        images_url=current_app.config['IMAGES_URL'],
+        main_article=articles[index],
+        articles=articles,
+        events=events,
+        current_page='about'
+    )
 
 @main.route('/resources')
 def resources():

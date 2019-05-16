@@ -134,7 +134,7 @@ footer{
   }
 }
 #yellow_txt {
-  color: rgb(238,191,109);
+  color: rgb(240,200,129);
 }
 #bright_yellow_txt {
   color: rgba(247,231,27,1.0);
@@ -223,7 +223,7 @@ footer{
 .upw{
   margin-top: -65px;
 }
-.findoutmore_background {
+.blue_background {
   background-color: rgb(63,96,144);
   height: auto;
   font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
@@ -365,4 +365,46 @@ footer{
 .modal-content{
   max-width: 450px;
   max-height: 760px;
+}
+
+/* About Page */
+.about_box{
+  height: auto;
+  border: solid 2px rgba(121, 121, 121, 0.5);
+}
+.about_box_text{
+  font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
+  color: rgba(105, 105, 105, 0.5);
+  padding: 2% 5% 2% 5%;
+}
+.pyramid {
+  max-width: 450px;
+  max-height: 450px;
+  border: solid 2px rgba(121, 121, 121, 0.5);
+}
+.statistics_font {
+  font-family: 'AvenirNext-Bold',Helvetica,Arial,serif;
+  font-size: 4em;
+}
+.quote_img {
+  width: 100%;
+  height: auto;
+}
+.yellow_background{
+  background-color: rgb(240,200,129);
+}
+.visit_website_section{
+  height: auto;
+  width: 100%;
+  font-family: 'AvenirNext-Bold',Helvetica,Arial,serif;
+  padding: 2% 5% 2% 5%;
+}
+.card-img_person {
+  max-height: 420px;
+  max-width: 420px;
+}
+.ourschool_text{
+  font-family: 'AvenirNext-Medium',Helvetica,Arial,serif;
+  padding: 2% 7% 2% 7%;
+  width: 100%;
 }
