@@ -101,7 +101,8 @@ def admin_events(selected_event_id=None, api_message=None):
             'event_dates': form.event_dates.data,
             'start_time': form.start_time.data,
             'end_time': form.end_time.data,
-            'event_state': form.submit_type.data
+            'event_state': form.submit_type.data,
+            'reject_reason': form.reject_reason.data
         }
 
         adjusted_event = event.copy()

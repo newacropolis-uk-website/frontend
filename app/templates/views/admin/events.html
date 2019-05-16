@@ -132,7 +132,31 @@
             <button id="ready" type="submit" class="btn btn-outline-warning">Ready</button>
             {% if is_admin_user %}
                 <button id="publish" type="submit" class="btn btn-outline-success">Publish</button>
-                <button id="reject" type="submit" class="btn btn-outline-danger">Reject</button>
+                <button id="rejectBtn" type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectModal">Reject</button>
+
+                <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rejectModalLabel" style='white-space:pre;'>Enter rejection reason:</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                        <div class="form-group">
+                            {{ form.reject_reason(class_="form-control") }}
+                        </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="reject" type="submit" class="btn btn-outline-danger">Reject</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
             {% endif %}
             <a href="{{ url_for('main.admin') }}" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</a>
         </div>
@@ -388,7 +412,7 @@ $(function() {
         $('#status_bar').attr('class', base_css + css);
         $('#status_bar').text(event_state);
         {% if is_admin_user %}
-            $('#reject').prop('disabled', event_state != 'ready');
+            $('#rejectBtn').prop('disabled', event_state != 'ready');
             $('#publish').prop('disabled', event_state != 'ready');
         {% endif %}
     }

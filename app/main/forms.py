@@ -73,6 +73,7 @@ class EventForm(FlaskForm):
     dates = HiddenField()
     default_event_type = HiddenField()
     submit_type = HiddenField()
+    reject_reason = TextAreaField('Reject reason')
 
     def set_events_form(self, events, event_types, speakers, venues):
         self.set_events(self.events, events, 'New event')
