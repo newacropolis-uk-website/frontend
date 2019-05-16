@@ -1,9 +1,10 @@
 # coding: utf-8
 import base64
 import json
+import pytest
 from uuid import UUID
 from flask import url_for
-from mock import Mock, call
+from mock import Mock
 
 from bs4 import BeautifulSoup
 
@@ -172,23 +173,35 @@ class WhenCallingAjaxGetEvent:
         assert data == {'description': u'£test description', 'id': 'test'}
 
 
+@pytest.fixture
+def mock_event_form(mocker):
+    mock_form = Mock()
+    mock_form.validate_on_submit.return_value = True
+    mock_form.events.data = None
+    mock_form.fee.data = None
+    mock_form.conc_fee.data = None
+    mock_form.multi_day_fee.data = None
+    mock_form.multi_day_conc_fee.data = None
+    mock_form.description.data = '<test>'
+    mock_form.event_dates.data = '[{"event_date": "2019-03-23 19:00", "end_time": "21:00"}]'
+
+    mocker.patch('app.main.views.admin.EventForm', return_value=mock_form)
+    return mock_form
+
+
+@pytest.fixture
+def mock_event_form_with_image(mock_event_form):
+    mock_event_form.image_filename.data = None
+    mock_event_form.existing_image_filename.data = 'test.png'
+    return mock_event_form
+
+
 class WhenSubmittingEventsForm:
-    def it_uploads_a_file(self, client, mocker, mock_admin_logged_in):
+    def it_uploads_a_file(self, client, mocker, mock_admin_logged_in, mock_event_form):
         mock_api_client = MockAPIClient()
         mock_api_client.add_event = Mock()
         mock_api_client.add_event.return_value = {'id': 'test_id'}
         mocker.patch('app.main.views.admin.api_client', mock_api_client)
-
-        mock_form = Mock()
-        mock_form.validate_on_submit.return_value = True
-
-        mocker.patch('app.main.views.admin.set_events_form', return_value=mock_form)
-        mocker.patch('app.main.views.admin.session', {
-            'submitted_event': {
-                'description': '<test>',
-                'event_dates': '[{"event_date": "2019-03-23 19:00", "end_time": "21:00"}]',
-            }
-        })
 
         mock_request = Mock()
         mock_request.files.get.return_value = Mock()
@@ -204,33 +217,17 @@ class WhenSubmittingEventsForm:
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         href = page.select_one('a')['href']
 
-        assert mock_api_client.add_event.call_args == call(
-            {
-                'image_data': base64.b64encode('test data'),
-                'event_dates': [{"event_date": "2019-03-23 19:00", "end_time": "21:00"}],
-                'description': '&lt;test&gt;'
-            }
-        )
+        assert mock_api_client.add_event.call_args[0][0]['event_dates'] == json.loads(mock_event_form.event_dates.data)
+        assert mock_api_client.add_event.call_args[0][0]['image_data'] == base64.b64encode('test data')
+        assert mock_api_client.add_event.call_args[0][0]['description'] == '&lt;test&gt;'
         assert href == '{}/{}'.format(url_for('main.admin_events'), 'test_id')
 
-    def it_uses_an_existing_image_file(self, client, mocker, mock_admin_logged_in):
+    def it_uses_an_existing_image_file(self, client, mocker, mock_admin_logged_in, mock_event_form_with_image):
         mock_api_client = MockAPIClient()
         mock_api_client.add_event = Mock()
         mock_api_client.add_event.return_value = {'id': 'test_id'}
         mocker.patch('app.main.views.admin.api_client', mock_api_client)
 
-        mock_form = Mock()
-        mock_form.validate_on_submit.return_value = True
-
-        mocker.patch('app.main.views.admin.set_events_form', return_value=mock_form)
-        mocker.patch('app.main.views.admin.session', {
-            'submitted_event': {
-                'description': '<test>',
-                'image_filename': 'test.png',
-                'event_dates': '[{"event_date": "2019-03-23 19:00", "end_time": "21:00"}]',
-            }
-        })
-
         mock_request = Mock()
         mock_request.files.get.return_value = None
 
@@ -244,33 +241,20 @@ class WhenSubmittingEventsForm:
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         href = page.select_one('a')['href']
 
-        assert mock_api_client.add_event.call_args == call(
-            {
-                'image_filename': 'test.png',
-                'event_dates': [{"event_date": "2019-03-23 19:00", "end_time": "21:00"}],
-                'description': '&lt;test&gt;'
-            }
-        )
+        assert mock_api_client.add_event.call_args[0][0]['event_dates'] == json.loads(
+            mock_event_form_with_image.event_dates.data)
+        assert mock_api_client.add_event.call_args[0][0]['image_filename'] == 'test.png'
+        assert 'image_data' not in mock_api_client.add_event.call_args[0][0].keys()
+        assert mock_api_client.add_event.call_args[0][0]['description'] == '&lt;test&gt;'
         assert href == '{}/{}'.format(url_for('main.admin_events'), 'test_id')
 
-    def it_updates_an_event(self, client, mocker, mock_admin_logged_in):
+    def it_updates_an_event(self, client, mocker, mock_admin_logged_in, mock_event_form_with_image):
         mock_api_client = MockAPIClient()
         mock_api_client.update_event = Mock()
         mock_api_client.update_event.return_value = {'id': 'test_id'}
         mocker.patch('app.main.views.admin.api_client', mock_api_client)
 
-        mock_form = Mock()
-        mock_form.validate_on_submit.return_value = True
-
-        mocker.patch('app.main.views.admin.set_events_form', return_value=mock_form)
-        mocker.patch('app.main.views.admin.session', {
-            'submitted_event': {
-                'event_id': 'test_id',
-                'description': '<test>',
-                'image_filename': 'test.png',
-                'event_dates': '[{"event_date": "2019-03-23 19:00", "end_time": "21:00"}]',
-            }
-        })
+        mock_event_form_with_image.events.data = 'test_id'
 
         mock_request = Mock()
         mock_request.files.get.return_value = None
@@ -285,13 +269,9 @@ class WhenSubmittingEventsForm:
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
         href = page.select_one('a')['href']
 
-        assert mock_api_client.update_event.call_args == call(
-            'test_id',
-            {
-                'event_id': 'test_id',
-                'image_filename': 'test.png',
-                'event_dates': [{"event_date": "2019-03-23 19:00", "end_time": "21:00"}],
-                'description': '&lt;test&gt;'
-            }
-        )
+        assert mock_api_client.update_event.call_args[0][0] == 'test_id'
+        assert mock_api_client.update_event.call_args[0][1]['event_dates'] == json.loads(
+            mock_event_form_with_image.event_dates.data)
+        assert mock_api_client.update_event.call_args[0][1]['image_filename'] == 'test.png'
+        assert mock_api_client.update_event.call_args[0][1]['description'] == '&lt;test&gt;'
         assert href == '{}/{}/{}'.format(url_for('main.admin_events'), 'test_id', 'event%20updated')

@@ -218,6 +218,9 @@ class MockForm:
             mock_user_field.set_values(user)
             self.users.append(mock_user_field)
 
+    def populate_user_form(self, users):
+        pass
+
 
 session_dict = {
     'user': {
@@ -293,7 +296,7 @@ class WhenPostingUsers:
 
         mocker.patch('app.api_client.get_users', return_value=users)
         mock_api_client = mocker.patch('app.api_client.update_user_access_area')
-        mocker.patch('app.main.views.admin.populate_user_form', return_value=mock_form)
+        mocker.patch('app.main.views.admin.UserListForm', return_value=mock_form)
 
         mock_sessions(mocker, session_dict)
         client.post(url_for(
@@ -369,7 +372,7 @@ class WhenPostingUsers:
 
         mocker.patch('app.api_client.get_users', return_value=users)
         mock_api_client = mocker.patch('app.api_client.update_user_access_area')
-        mocker.patch('app.main.views.admin.populate_user_form', return_value=mock_form)
+        mocker.patch('app.main.views.admin.UserListForm', return_value=mock_form)
 
         mock_sessions(mocker, session_dict)
         client.post(url_for(

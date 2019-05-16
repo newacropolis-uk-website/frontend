@@ -9,8 +9,13 @@ from requests_oauthlib import OAuth2Session
 from app import api_client
 from app.clients.errors import HTTPError
 from app.main import main
-from app.main.forms import populate_user_form, set_events_form
+from app.main.forms import UserListForm, EventForm
 from app.main.views import requires_google_auth
+
+
+def is_admin_user():
+    user = session['user']
+    return 'admin' in user.get('access_area') or user.get('access_area') == 'admin'
 
 
 @main.route('/admin')
@@ -24,7 +29,7 @@ def admin():
 @main.route('/admin/users', methods=['GET', 'POST'])
 def admin_users():
     users = [u for u in api_client.get_users() if u.get('access_area') != 'admin']
-    form = populate_user_form(users)
+    form = UserListForm()
     update_count = 0
 
     if form.validate_on_submit():
@@ -51,6 +56,8 @@ def admin_users():
                 update_count += 1
                 api_client.update_user_access_area(users[i]['id'], access_area)
 
+    form.populate_user_form(users)
+
     return render_template(
         'views/admin/users.html',
         users=users,
@@ -69,10 +76,34 @@ def admin_events(selected_event_id=None, api_message=None):
     speakers = api_client.get_speakers()
     venues = api_client.get_venues()
     session['events'] = events
-    form = set_events_form(events, event_types, speakers, venues)
+    form = EventForm()
+
+    form.set_events_form(events, event_types, speakers, venues)
 
     if form.validate_on_submit():
-        event = session.pop('submitted_event')
+        if form.image_filename.data:
+            filename = form.image_filename.data.filename
+        else:
+            filename = form.existing_image_filename.data
+
+        event = {
+            'event_id': form.events.data,
+            'event_type_id': form.event_type.data,
+            'title': form.title.data,
+            'sub_title': form.sub_title.data,
+            'description': form.description.data,
+            'image_filename': filename,
+            'fee': int(form.fee.data) if form.fee.data else 0,
+            'conc_fee': int(form.conc_fee.data) if form.conc_fee.data else 0,
+            'multi_day_fee': int(form.multi_day_fee.data) if form.multi_day_fee.data else 0,
+            'multi_day_conc_fee': int(form.multi_day_conc_fee.data) if form.multi_day_conc_fee.data else 0,
+            'venue_id': form.venue.data,
+            'event_dates': form.event_dates.data,
+            'start_time': form.start_time.data,
+            'end_time': form.end_time.data,
+            'event_state': form.submit_type.data,
+            'reject_reason': form.reject_reason.data
+        }
 
         adjusted_event = event.copy()
 
@@ -117,7 +148,8 @@ def admin_events(selected_event_id=None, api_message=None):
         form=form,
         images_url=current_app.config['IMAGES_URL'],
         selected_event_id=selected_event_id,
-        message=api_message
+        message=api_message,
+        is_admin_user=is_admin_user()
     )
 
 
