@@ -315,3 +315,54 @@ footer{
 .contactus_padding {
   padding: 0% 5% 5% 5%;
 }
+
+.modal,.modal-open {
+    padding-right: 0!important
+}
+.modal-open {
+    overflow: auto
+}
+.scrollable {
+    overflow-y: auto
+}
+.modal-footer {
+	display: flex;
+  justify-content: flex-start;
+  height: 30px;
+}
+.card_img_size {
+  max-height: 310px;
+  max-width: 220px;
+}
+.modal-dialog{
+  position: relative;
+  display: table;
+  overflow-y: auto;    
+  overflow-x: auto;
+  min-width: 450px;
+  min-height: 760px;
+}
+@media screen and (max-width: 1100px) {
+  .modal-body {
+    max-width: 350px;
+    max-height: 660px;
+  }
+  .modal-dialog {
+    min-width: 350px;
+    min-height: 660px;
+  }
+}
+@media screen and (max-width: 800px) {
+  .modal-body {
+    max-width: 250px;
+    max-height: 560px;
+  }
+  .modal-dialog {
+    min-width: 250px;
+    min-height: 560px;
+  }
+}
+.modal-content{
+  max-width: 450px;
+  max-height: 760px;
+}
