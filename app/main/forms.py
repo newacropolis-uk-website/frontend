@@ -50,6 +50,12 @@ def _has_access_area(area, user_access_area):
     return False
 
 
+class RejectForm(FlaskForm):
+    id = HiddenField()
+    reason = StringField()
+    resolved = BooleanField('resolved')
+
+
 class EventForm(FlaskForm):
 
     events = SelectField('Events')
@@ -73,9 +79,11 @@ class EventForm(FlaskForm):
     dates = HiddenField()
     default_event_type = HiddenField()
     submit_type = HiddenField()
+    reject_reasons = FieldList(FormField(RejectForm), min_entries=0)
     reject_reason = TextAreaField('Reject reason')
+    reject_reasons_json = HiddenField()
 
-    def set_events_form(self, events, event_types, speakers, venues):
+    def set_events_form(self, events, event_types, _reject_reasons, speakers, venues):
         self.set_events(self.events, events, 'New event')
         self.set_events(self.alt_event_images, events, 'Or use an existing event image:')
 
@@ -104,6 +112,14 @@ class EventForm(FlaskForm):
         self.speakers.choices = [('', '')]
         for speaker in speakers:
             self.speakers.choices.append((speaker['id'], speaker['name']))
+
+        for _reject_reason in _reject_reasons:
+            reject_form = RejectForm()
+            reject_form.id = _reject_reason['id']
+            reject_form.reason = _reject_reason['reason']
+            reject_form.resolved = _reject_reason['resolved']
+
+            self.reject_reasons.append_entry(reject_form)
 
     def set_events(self, form_select, events, first_item_text=''):
         form_select.choices = [('', first_item_text)]
