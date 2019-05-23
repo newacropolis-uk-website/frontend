@@ -6,8 +6,7 @@
 <div class="container-fluid padding">
   <div class="row padding text-center ">
     <div class="col-xs-12 col-sm-12 col-md-6">
-       <h2> Do you wish to subscribe to the Acropolis newsletter? </h2><br>
-       <h4>Email: {{ email }}</h4>
+       <h2> Click submit to subscribe to the newsletter:</h2><br>
        <form action="/subscription" method=post>
         {{ subscription_form.csrf_token }}
         {{ subscription_form.email(value=email) }}

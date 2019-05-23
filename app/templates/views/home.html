@@ -242,10 +242,19 @@
           </div>
         </div>
         <div class="col-xs-12 col-md-4 text-center">
-          <form>
-            <label for="fname"><h5>enter your email address below</h5></label><br>
-            <input class="magazine_email" type="text" id="femail" name="femail">
-          </form><br><br><br><br>
+            {% if subscription_form %}
+            <form action="/" method=post>
+              {{ subscription_form.csrf_token }}
+              <label for="fname"><h5>enter your email address below</h5></label><br>
+              {{ subscription_form.email(class="magazine_email") }}
+       
+                {% for error in subscription_form.email.errors %}
+                <li class="error_text">{{ error }}
+                {% endfor %}
+                <input class="submit_button" type="submit" value="Submit">
+            </form>
+          {% endif %}
+          <br><br><br>
           <div class="magazine_box">
             <p>Annual UK postal subscription 4 Issues £12</p>
           </div>

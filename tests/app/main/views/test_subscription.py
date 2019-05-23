@@ -28,9 +28,9 @@ class WhenSubmittingSubscriptionForm(object):
         assert response.status_code == 200
 
         page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
-        submitted_email = page.select_one('h4').string
+        submitted_email = page.find('input')['value']
 
-        assert submitted_email == "Email: test@test.com"
+        assert submitted_email == "test@test.com"
 
     def it_shows_validation_error_when_empty(self, client, mocker, sample_future_events, sample_articles_summary):
         response = client.post(

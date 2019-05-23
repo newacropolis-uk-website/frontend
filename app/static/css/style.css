@@ -291,7 +291,7 @@ footer{
 .magazine_email {
   background-color: rgba(215,215,215,1.0);
   height: 43px;
-  width: 100%;
+  min-width: 300px;
   border-radius: 8px;
   border-style: solid;
   border-width: 1px;
