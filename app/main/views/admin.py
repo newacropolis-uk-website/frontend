@@ -81,12 +81,7 @@ def admin_events(selected_event_id=None, api_message=None):
     temp_event = None
     errors = reject_reasons = []
 
-    if selected_event_id:
-        events_found = [e for e in events if e['id'] == str(selected_event_id)]
-        if events_found:
-            reject_reasons = events_found[0].get('reject_reasons')
-
-    form.set_events_form(events, event_types, reject_reasons, speakers, venues)
+    form.set_events_form(events, event_types, speakers, venues)
 
     if form.validate_on_submit():
         if form.image_filename.data:

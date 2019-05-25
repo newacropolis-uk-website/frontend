@@ -82,13 +82,6 @@
                     </div>
                     <div class='row'>
                         <div id='reject_reasons' class='col'>
-                            {% for reject_reason in form.reject_reasons %}
-                                {{ reject_reason.id }}
-                            <div style='padding-top:0;'>
-                                <span class='m-2'>{{ reject_reason.resolved}}</span>
-                                {{ reject_reason.reason.data}}
-                            </div>
-                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -342,6 +335,7 @@ $(function() {
             elements._multi_day_conc_fee.val(temp_event['multi_day_conc_fee']);
             elements._event_type.val(temp_event['event_type_id']);
             elements._venue.val(temp_event['venue_id']);
+            elements._reject_reasons.html('');
 
             set_event_dates(temp_event['event_dates']);
             set_start_time(temp_event['start_time']);
@@ -665,13 +659,15 @@ $(function() {
         reject_reasons = [];
         var num_reject_reasons = $('#reject_reasons .row').length;
         for (i=0; i<num_reject_reasons; i++){
-            reject_reasons.push(
-                {
-                    'id': $('#reject_reasons-' + i + '-id').val(),
-                    'reason': $('#reject_reasons-' + i + '-reason').val(),
-                    'resolved': $('#reject_reasons-' + i + '-resolved').prop('checked') ? true : false,
-                }
-            );
+            if ($('#reject_reasons-' + i + '-id').val()) {
+                reject_reasons.push(
+                    {
+                        'id': $('#reject_reasons-' + i + '-id').val(),
+                        'reason': $('#reject_reasons-' + i + '-reason').val(),
+                        'resolved': $('#reject_reasons-' + i + '-resolved').prop('checked') ? true : false,
+                    }
+                );
+            }
         }
         return reject_reasons;
     }
