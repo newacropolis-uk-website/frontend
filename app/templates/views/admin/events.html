@@ -30,6 +30,10 @@
             background-color: #2F3E48;
             color: white;
         }
+
+        .modal-footer{
+            height: 60px;
+        }
     </style>
 {% endblock %}
 
@@ -70,10 +74,14 @@
                         <div class='col-11'>{{form.events}}</div>
                     </div>
                     <div class='row'>
-                        <div id='status_bar' class='col-7 rounded mb-1 ml-3 pl-4 w-70 bg-default'>draft</div>
+                        <div id='status_bar' class='col-7 rounded mb-1 ml-3 pl-4 w-70 bg-primary text-white'>new</div>
                         <div class="justify-content-end col-4">
                             <button id='copy-event' type="button" class="btn btn-success">Copy</button>
-                            <a id='delete-event' disabled class="ml-4 btn btn-danger">Delete</a>
+                            <button id='delete-event' type="button" class="ml-4 btn btn-danger">Delete</button>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div id='reject_reasons' class='col'>
                         </div>
                     </div>
                 </div>
@@ -117,10 +125,11 @@
             {{ admin_row(form.venue, size=1) }}
             {{ admin_row(form.booking_code, readonly=true, size=20) }}
             {{ form.event_dates }}
+            {{ form.reject_reasons_json }}
         </div>
         <hr>
         {% if errors %}
-        <div id='error_section' class='text-warning'></div>
+        <div id='error_section' class='text-danger'></div>
         {% endif %}
         {% if message %}
         <div id='message' class='text-success pb-3'>{{message}}</div>
@@ -169,6 +178,10 @@ var speakerCounter = 1;
 $(function() {
     {% if temp_event %}
     temp_event = {{temp_event|safe}};
+    {% endif %}
+
+    {% if errors %}
+    var errors = {{ errors|safe }};
     {% endif %}
 
     $('#datepicker').datepicker({
@@ -278,6 +291,7 @@ $(function() {
         _start_time: $('#start_time'),
         _end_time: $('#end_time'),
         _dates: $('#dates'),
+        _reject_reasons: $('#reject_reasons'),
     };
 
     // call to update on load
@@ -293,6 +307,21 @@ $(function() {
         try {
             temp_event; 
 
+            {% if errors %}
+            $('#error_section').html('');
+
+            if (errors) {
+                if (Array.isArray(errors)) {
+                    for (i=0; i<errors.length; i++) {
+                        addErrorRow(errors[i]['error'], errors[i]['message']);
+                    }
+                } else {
+                    addErrorRow('Error', errors);
+                }
+                errors = null;
+            }
+            {% endif %}
+
             console.log(temp_event);
             elements._title.val(temp_event['title']);
             elements._sub_title.val(temp_event['sub_title']);
@@ -306,17 +335,12 @@ $(function() {
             elements._multi_day_conc_fee.val(temp_event['multi_day_conc_fee']);
             elements._event_type.val(temp_event['event_type_id']);
             elements._venue.val(temp_event['venue_id']);
+            elements._reject_reasons.html('');
 
             set_event_dates(temp_event['event_dates']);
             set_start_time(temp_event['start_time']);
             set_end_time(temp_event['end_time']);
 
-            {% if errors %}
-            var errors = {{ errors|safe }};
-            for (i=0; i<errors.length; i++) {
-                addErrorRow(errors[i]['error'], errors[i]['message']);
-            }
-            {% endif %}
             delete temp_event;
         }
         catch(e) {
@@ -333,22 +357,20 @@ $(function() {
             elements._dates.val('');
             elements._event_type.prop('selectedIndex', $('#default_event_type').val());
             elements._venue.prop('selectedIndex', 0);
+            elements._reject_reasons.html('');
 
             $('#datepicker').datepicker("setDate", '');
             set_start_time('19:00');
             set_end_time('00:00');
 
-            $('#delete-event').prop("href", "/admin/_delete_event/" + $("#events").val());
-
             $('#speaker_section').empty();
             speakerCounter = 1;
         }
-        $("#delete-event").prop('disabled', $("events").prop("selectedIndex") == 0);
 
         addSpeakerRow(speakerCounter);
 
         if (!elements._events.val()) {
-            update_for_event_state('draft');
+            update_for_event_state('new');
             return;
         }
 
@@ -379,6 +401,7 @@ $(function() {
                 set_end_time(data['end_time']);
 
                 update_for_event_state(data['event_state']);
+                setRejectReasons(data['reject_reasons']);
             }
         });
     }
@@ -406,6 +429,7 @@ $(function() {
         var base_css = 'rounded col-7 mb-1 ml-3 pl-4 w-70 ';
         var css = '';
         switch(event_state) {
+            case 'new': css = 'bg-primary text-white'; break;
             case 'draft': css = 'bg-default'; break;
             case 'ready': css = 'bg-warning'; break;
             case 'rejected': css = 'bg-danger text-white'; break;
@@ -414,7 +438,9 @@ $(function() {
         $('#status_bar').attr('class', base_css + css);
         $('#status_bar').text(event_state);
         {% if is_admin_user %}
-            $('#rejectBtn').prop('disabled', $.inArray( event_state, [ "draft", "rejected" ] ) >= 0);
+            $('#copy-event').prop('disabled', event_state == 'new');
+            $('#delete-event').prop('disabled', event_state == 'new');
+            $('#rejectBtn').prop('disabled', $.inArray( event_state, [ "draft", "new" ] ) >= 0);
             $('#publish').prop('disabled', event_state != 'ready');
         {% endif %}
     }
@@ -614,10 +640,44 @@ $(function() {
         return event_dates;
     }
 
+    function setRejectReasons(reject_reasons) {
+        for (i=0; i<reject_reasons.length; i++){
+            elements._reject_reasons.append(
+                '<div id="reject_reason_row-' + i + '" class="row">' + 
+                '<input id="reject_reasons-' + i + '-id" type="hidden" value="' +
+                reject_reasons[i]['id'] + '">' + 
+                '<input id="reject_reasons-' + i + '-reason" type="hidden" value="' +
+                reject_reasons[i]['reason'] + '">' + 
+                ' <div class="col"><span class="m-2"><input id="reject_reasons-' + i +
+                '-resolved" type="checkbox"' + (reject_reasons[i]['resolved'] ? ' checked' : '') + '></span>' +
+                reject_reasons[i]['reason'] + '</div></div></div>'
+            );
+        }
+    }
+
+    function getRejectReasons() {
+        reject_reasons = [];
+        var num_reject_reasons = $('#reject_reasons .row').length;
+        for (i=0; i<num_reject_reasons; i++){
+            if ($('#reject_reasons-' + i + '-id').val()) {
+                reject_reasons.push(
+                    {
+                        'id': $('#reject_reasons-' + i + '-id').val(),
+                        'reason': $('#reject_reasons-' + i + '-reason').val(),
+                        'resolved': $('#reject_reasons-' + i + '-resolved').prop('checked') ? true : false,
+                    }
+                );
+            }
+        }
+        return reject_reasons;
+    }
+
     function prepSubmit() {
         event_dates = getEventDates();
+        reject_reasons = getRejectReasons();
 
         $('#event_dates').val(JSON.stringify(event_dates));
+        $('#reject_reasons_json').val(JSON.stringify(reject_reasons));
         if ($('#file_img').attr('src'))
             $('#existing_image_filename').val($('#file_img').attr('src').replace('{{images_url}}', ''));
         $('#pubish').prop('disabled', true);
@@ -628,7 +688,11 @@ $(function() {
         $('#datepicker').datepicker("setDate", today);
         elements._booking_code.val('');
         $("#events").prop("selectedIndex", 0);
-    })
+    });
+
+    $('#delete-event').on('click', function() {
+        window.location.replace("/admin/_delete_event/" + $("#events").val());
+    });
 
     {% if message %}
     var showMessage=true;

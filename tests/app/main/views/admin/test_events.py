@@ -184,6 +184,7 @@ def mock_event_form(mocker):
     mock_form.multi_day_conc_fee.data = None
     mock_form.description.data = '<test>'
     mock_form.event_dates.data = '[{"event_date": "2019-03-23 19:00", "end_time": "21:00"}]'
+    mock_form.reject_reasons_json.data = '[]'
 
     mocker.patch('app.main.views.admin.EventForm', return_value=mock_form)
     return mock_form

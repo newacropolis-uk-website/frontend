@@ -78,6 +78,9 @@ def admin_events(selected_event_id=None, api_message=None):
     session['events'] = events
     form = EventForm()
 
+    temp_event = None
+    errors = reject_reasons = []
+
     form.set_events_form(events, event_types, speakers, venues)
 
     if form.validate_on_submit():
@@ -85,6 +88,16 @@ def admin_events(selected_event_id=None, api_message=None):
             filename = form.image_filename.data.filename
         else:
             filename = form.existing_image_filename.data
+
+        reject_reasons = json.loads(form.reject_reasons_json.data)
+
+        if form.reject_reason.data:
+            reject_reasons.append(
+                {
+                    'reason': form.reject_reason.data,
+                    'created_by': session['user']['id']
+                }
+            )
 
         event = {
             'event_id': form.events.data,
@@ -102,7 +115,7 @@ def admin_events(selected_event_id=None, api_message=None):
             'start_time': form.start_time.data,
             'end_time': form.end_time.data,
             'event_state': form.submit_type.data,
-            'reject_reason': form.reject_reason.data
+            'reject_reasons': reject_reasons
         }
 
         adjusted_event = event.copy()
@@ -135,13 +148,8 @@ def admin_events(selected_event_id=None, api_message=None):
             return redirect(url_for('main.admin_events', selected_event_id=response['id'], api_message=message))
         except HTTPError as e:
             current_app.logger.error(e)
-            return render_template(
-                'views/admin/events.html',
-                form=form,
-                images_url=current_app.config['IMAGES_URL'],
-                temp_event=json.dumps(event),
-                errors=json.dumps(e.message),
-            )
+            temp_event = json.dumps(event)
+            errors = json.dumps(e.message)
 
     return render_template(
         'views/admin/events.html',
@@ -149,7 +157,9 @@ def admin_events(selected_event_id=None, api_message=None):
         images_url=current_app.config['IMAGES_URL'],
         selected_event_id=selected_event_id,
         message=api_message,
-        is_admin_user=is_admin_user()
+        is_admin_user=is_admin_user(),
+        temp_event=temp_event,
+        errors=errors
     )
 
 

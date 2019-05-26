@@ -183,6 +183,7 @@ def mock_sessions(mocker, session_dict={}):
 def mock_admin_logged_in(mocker):
     session_dict = {
         'user': {
+            'id': 'test_id',
             'access_area': 'admin'
         },
         'user_profile': {
