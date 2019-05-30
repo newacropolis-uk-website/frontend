@@ -619,8 +619,13 @@ $(function() {
         event_dates = [];
 
         arr_dates = $('#dates').val().split(",").sort();
+        dates_processed = [];
 
         for (j=0; j<arr_dates.length; j++) {
+            if ($.inArray( dates_processed, arr_dates[j] ) >= 0)
+                continue;
+            dates_processed.push(arr_dates[j]);
+
             speakers = [];
             for (i=1; i<speakerCounter; i++) {
                 s_date_id = 's_date' + i + '_' + arr_dates[j];
