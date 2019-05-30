@@ -1,7 +1,7 @@
 import os
 
-from flask import Flask, jsonify, request, session
-from flask_wtf.csrf import CSRFProtect
+from flask import Flask, jsonify, make_response, render_template, request, session
+from flask_wtf.csrf import CSRFProtect, CSRFError
 
 from app.clients.api_client import ApiClient
 import requests_toolbelt.adapters.appengine
@@ -91,6 +91,19 @@ def init_app(app):
         app.logger.exception(msg)
         return jsonify(result='error', message=msg), 404
 
+    @app.errorhandler(CSRFError)
+    def handle_csrf(err):
+        app.logger.warning('csrf.error_message: {}'.format(err))
+        app.logger.warning(
+            'csrf.invalid_token: Aborting request, user_id: {}'.format(session['user']['id'])
+        )
+
+        resp = make_response(render_template(
+            "errors/400.html",
+            message=['Something went wrong, please go back and try again.']
+        ), 400)
+        return useful_headers_after_request(resp)
+
 
 def setup_config(application, config_class):
     application.config.from_object(config_class)
@@ -112,3 +125,21 @@ def get_root_path(application):
 def use_gaesession(application):
     import gaesession
     application.session_interface = gaesession.GaeNdbSessionInterface(application)
+
+
+def useful_headers_after_request(response):
+    response.headers.add('X-Frame-Options', 'deny')
+    response.headers.add('X-Content-Type-Options', 'nosniff')
+    response.headers.add('X-XSS-Protection', '1; mode=block')
+    response.headers.add('Content-Security-Policy', (
+        "default-src 'self' {} 'unsafe-inline';"
+        "script-src 'self' {} *.google-analytics.com 'unsafe-inline' 'unsafe-eval' data:;"
+        "connect-src 'self' *.google-analytics.com;"
+        "object-src 'self';"
+        "font-src 'self' {} data:;"
+    ))
+    if 'Cache-Control' in response.headers:
+        del response.headers['Cache-Control']
+    response.headers.add(
+        'Cache-Control', 'no-store, no-cache, private, must-revalidate')
+    return response
