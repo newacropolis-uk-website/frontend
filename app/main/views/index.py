@@ -7,7 +7,7 @@ from app import api_client
 
 @main.route('/')
 def index():
-    events = api_client.get_events_in_future()
+    events = api_client.get_events_in_future(approved_only=True)
     for event in events:
         if event['event_type'] == 'Introductory Course':
             event['carousel_text'] = 'Courses starting {}'.format(event['event_monthyear'])
@@ -25,7 +25,7 @@ def index():
 
 @main.route('/about')
 def about():
-    events = api_client.get_events_in_future()
+    events = api_client.get_events_in_future(approved_only=True)
     for event in events:
         if event['event_type'] == 'Introductory Course':
             event['carousel_text'] = 'Courses starting {}'.format(event['event_monthyear'])

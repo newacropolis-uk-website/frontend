@@ -103,7 +103,8 @@ def sample_future_events(mocker):
             "image_filename": "event.png",
             "event_dates": [{
                 "event_datetime": "2018-12-30 19:00"
-            }]
+            }],
+            "event_state": "approved"
         },
         {
             "title": "Test title 2",
@@ -111,7 +112,8 @@ def sample_future_events(mocker):
             "image_filename": "event.png",
             "event_dates": [{
                 "event_datetime": "2018-12-31 19:00"
-            }]
+            }],
+            "event_state": "approved"
         },
         {
             "title": "Test title 3",
@@ -120,7 +122,8 @@ def sample_future_events(mocker):
             "event_dates": [{
                 "event_datetime": "2019-01-01 19:00"
             }],
-            "event_monthyear": "January 2019"
+            "event_monthyear": "January 2019",
+            "event_state": "approved"
         },
         {
             "title": "Test title 4",
@@ -129,6 +132,7 @@ def sample_future_events(mocker):
             "event_dates": [{
                 "event_datetime": "2019-01-02 19:00"
             }],
+            "event_state": "approved"
         },
     ]
 
