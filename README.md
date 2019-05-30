@@ -56,3 +56,7 @@ Pushing changes to the github repo will trigger an automatic deployment onto app
 ## Viewing the frontend
 
 Run `make dev-server` and visit `http://localhost:8080/`
+
+## Switching between API environments
+
+Remember to remove all sessions, otherwise new keys will not be reloaded
