@@ -119,5 +119,4 @@ class ApiClient(BaseAPIClient):
         data = {
             'email': email
         }
-        print(data)
         return self.post(url='subscription', data=data)

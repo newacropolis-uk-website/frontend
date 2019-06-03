@@ -13,7 +13,6 @@ def subscription():
             api_client.add_subscription_email(subscription_form.email.data)
             return redirect(url_for('.index'))
         except Exception as e:
-            print("EXCEPTION")
             print(e)
             return render_template(
                 'views/subscription.html',
