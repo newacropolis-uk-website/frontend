@@ -180,6 +180,18 @@ def _delete_event(event_id):
     return redirect(url_for('main.admin_events'))
 
 
+@main.route('/admin/_add_speaker')
+def _add_speaker():
+    name = request.args.get('name')
+    if name:
+        try:
+            speaker = api_client.add_speaker(name)
+            return jsonify(speaker)
+        except HTTPError as e:
+            return jsonify({'error': e.message})
+
+
+
 @main.route('/admin/preview_event')
 def preview_event():
     data = json.loads(urlparse.unquote(request.args.get('data')))
