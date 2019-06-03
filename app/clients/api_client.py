@@ -21,6 +21,11 @@ class ApiClient(BaseAPIClient):
     def get_speakers(self):
         return self.get(url='speakers')
 
+    def add_speaker(self, name):
+        data = {'name': name}
+
+        return self.post(url='speaker', data=data)
+
     def get_venues(self):
         return self.get(url='venues')
 
