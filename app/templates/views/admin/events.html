@@ -93,7 +93,7 @@
                 </div>
                 <div class="ml-5 mt-3 col-xs-3">
                     <div class="row align-items-center">
-                        <div class='col--xs-3 border'>
+                        <div class='col-xs-3 border'>
                             <div id="starttime"></div>
                             {{ form.start_time }}
                         </div>
@@ -111,6 +111,34 @@
             </div>
 
             <div id='speaker_section'></div>
+
+            <div class="modal fade" id="speakerModal" tabindex="-1" role="dialog" aria-labelledby="speakerModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="speakerModalLabel" style='white-space:pre;'>Add new speaker</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                        <div class="form-group">
+                            <div class='row pl-2'>
+                                <div class='col-2'>Name</div><div class='col-3'><input id='speakerName' type='text' size=40></div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="add_speaker" type="submit" class="btn btn-outline-danger">Add speaker</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+
             {{ admin_row(form.event_type, size=1) }}
             {{ form.default_event_type }}
             {{ admin_row(form.title) }}
@@ -128,9 +156,7 @@
             {{ form.reject_reasons_json }}
         </div>
         <hr>
-        {% if errors %}
         <div id='error_section' class='text-danger'></div>
-        {% endif %}
         {% if message %}
         <div id='message' class='text-success pb-3'>{{message}}</div>
         {% endif %}
@@ -144,27 +170,27 @@
                 <button id="rejectBtn" type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectModal">Reject</button>
 
                 <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="rejectModalLabel" style='white-space:pre;'>Enter rejection reason:</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                        <div class="form-group">
-                            {{ form.reject_reason(class_="form-control") }}
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="rejectModalLabel" style='white-space:pre;'>Enter rejection reason:</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        </form>
+                        <div class="modal-body">
+                            <form>
+                            <div class="form-group">
+                                {{ form.reject_reason(class_="form-control") }}
+                            </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button id="reject" type="submit" class="btn btn-outline-danger">Reject</button>
+                        </div>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="reject" type="submit" class="btn btn-outline-danger">Reject</button>
-                    </div>
-                    </div>
-                </div>
                 </div>
             {% endif %}
             <a href="{{ url_for('main.admin') }}" id="cancel" name="cancel" class="btn btn-outline-secondary">Cancel</a>
@@ -209,8 +235,6 @@ $(function() {
             end_time: $('#end_time').val()
         }
 
-        console.log('vals: ' + send['_venue']);
-
         var preview = window.open("{{ url_for('main.preview_event') }}?data=" + encodeURIComponent(JSON.stringify(send)));
         setTimeout(function() {
             preview.postMessage(send, '*');
@@ -235,6 +259,53 @@ $(function() {
 
     $('#publish').on('click', function() {
         $('#submit_type').val('approved');
+    })
+
+    $('#add_speaker').on('click', function() {
+        $('#speakerModal').modal('toggle');
+        var send = {
+            name: $('#speakerName').val()
+        };
+
+        $.getJSON("{{ url_for('main._add_speaker') }}", send, function(data) {
+            if (data) {
+                if (data['error']) {
+                    addErrorRow('Error', data['error']);
+                } else {
+                    $('#speakerName').val('');
+                    for (i=1; i<=speakerCounter; i++){
+                        if ($('#speaker' + i).val() == 'new') {
+                            console.log('setting speaker ' + i);
+                            $('#speaker' + i).append(
+                                $('<option>', {
+                                    value: data['id'],
+                                    text: data['name']
+                                })
+                            );
+                            $('#speaker' + i).val(data['id']);
+
+                            updateSpeaker(i, data['id']);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        return false;
+    })
+
+    $('#speakerModal').on('shown.bs.modal', function () {
+        $('#speakerName').focus();
+    })
+
+    $('#speakerModal').on('hidden.bs.modal', function () {
+        for (i=1; i<=speakerCounter; i++){
+            if ($('#speaker' + i).val() == 'new') {
+                $('#speaker' + i).prop('selectedIndex', 0);
+                break;
+            }
+        }
     })
 
     $('#datepicker').on('changeDate', function() {
@@ -303,12 +374,10 @@ $(function() {
         };
 
         $('#pubish').prop('disabled', false);
+        $('#error_section').html('');
 
         try {
             temp_event; 
-
-            {% if errors %}
-            $('#error_section').html('');
 
             if (errors) {
                 if (Array.isArray(errors)) {
@@ -320,7 +389,6 @@ $(function() {
                 }
                 errors = null;
             }
-            {% endif %}
 
             console.log(temp_event);
             elements._title.val(temp_event['title']);
@@ -514,7 +582,12 @@ $(function() {
         $('#speakers').attr('id', 'speaker' + counter);
         $('#speaker' + counter).prop('selectedIndex', 0);
         $('#speaker' + counter).on('change', function() {
-            updateSpeaker(counter, this.value);
+            if (this.value == 'new') {
+                $('#speakerModal').modal('show');
+            }
+            else {
+                updateSpeaker(counter, this.value);
+            }
         });
     }
 

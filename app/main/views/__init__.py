@@ -84,7 +84,7 @@ def callback():
 
     google = OAuth2Session(
         current_app.config['GOOGLE_OAUTH2_CLIENT_ID'],
-        state=session['oauth_state'],
+        state=session.get('oauth_state'),
         redirect_uri=current_app.config['GOOGLE_OAUTH2_REDIRECT_URI']
     )
 

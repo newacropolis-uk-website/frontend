@@ -191,7 +191,6 @@ def _add_speaker():
             return jsonify({'error': e.message})
 
 
-
 @main.route('/admin/preview_event')
 def preview_event():
     data = json.loads(urlparse.unquote(request.args.get('data')))
