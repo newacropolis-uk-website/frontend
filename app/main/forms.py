@@ -102,7 +102,7 @@ class EventForm(FlaskForm):
                 (venue['id'], u'{} - {}'.format(venue['name'], venue['address']))
             )
 
-        self.speakers.choices = [('', '')]
+        self.speakers.choices = [('', ''), ('new', 'Create new speaker')]
         for speaker in speakers:
             self.speakers.choices.append((speaker['id'], speaker['name']))
 
