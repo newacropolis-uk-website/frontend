@@ -276,12 +276,14 @@ $(function() {
                     for (i=1; i<=speakerCounter; i++){
                         if ($('#speaker' + i).val() == 'new') {
                             console.log('setting speaker ' + i);
-                            $('#speaker' + i).append(
-                                $('<option>', {
-                                    value: data['id'],
-                                    text: data['name']
-                                })
-                            );
+                            if ($("#speaker" + i + " option[value='" + data['id'] + "']").length == 0) {
+                                $('#speaker' + i).append(
+                                    $('<option>', {
+                                        value: data['id'],
+                                        text: data['name']
+                                    })
+                                );
+                            }
                             $('#speaker' + i).val(data['id']);
 
                             updateSpeaker(i, data['id']);
