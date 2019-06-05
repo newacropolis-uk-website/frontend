@@ -1,10 +1,13 @@
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, FormField, FieldList, FileField, HiddenField, SelectField, StringField, TextAreaField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Email
+
+
+class SubscriptionForm(FlaskForm):
+    email = StringField('email', validators=[DataRequired(), Email()])
 
 
 class UserForm(FlaskForm):
-
     str_email = StringField()
     user_id = HiddenField()
     admin = BooleanField('admin')
