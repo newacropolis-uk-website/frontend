@@ -97,46 +97,46 @@
         </div>
       </div>
     </div>
-    {% if events|length > 0 %}
     <div class="container-fluid padding text-center">
       <div class="row padding">
+       {% if all_events|length > 0 %}
         <div class="col-md-4 col-sm-6">
           <div class="card cardmulti bg-light">
-            <img class="card-img-top cardimgtopmulti" src="{{ images_url }}{{ events[0].image_filename }}">
+            <img class="card-img-top cardimgtopmulti" src="{{ images_url }}{{ all_events[0].image_filename }}">
             <div class="card-body">
-              <h4 class="card-title" id="blue_txt">{{ events[0].event_type }}</h4>
-              <p class="card-text cardtextmulti">{{ events[0].event_dates[0].event_datetime }}</p>
-              <p class="card-text cardtextmulti dark_grey_txt">{{ events[0].title }}</p>
-            </div>
-          </div>
-        </div>
-        {% if events|length > 1 %}
-        <div class="col-md-4 col-sm-6">
-          <div class="card cardmulti bg-light">
-            <img class="card-img-top cardimgtopmulti" src="{{ images_url }}{{ events[1].image_filename }}">
-            <div class="card-body">
-              <h4 class="card-title" id="blue_txt">{{ events[1].event_type }}</h4>
-              <p class="card-text cardtextmulti">{{ events[1].event_dates[0].event_datetime }}</p>
-              <p class="card-text cardtextmulti dark_grey_txt">{{ events[1].title }}</p>
+              <h4 class="card-title" id="blue_txt">{{ all_events[0].event_type }}</h4>
+              <p class="card-text cardtextmulti">{{ all_events[0].event_dates[0].event_datetime }}</p>
+              <p class="card-text cardtextmulti dark_grey_txt">{{ all_events[0].title }}</p>
             </div>
           </div>
         </div>
         {% endif %}
-        {% if events|length > 2 %}
+        {% if all_events|length > 1 %}
         <div class="col-md-4 col-sm-6">
           <div class="card cardmulti bg-light">
-            <img class="card-img-top cardimgtopmulti" src="{{ images_url }}{{ events[2].image_filename }}">
+            <img class="card-img-top cardimgtopmulti" src="{{ images_url }}{{ all_events[1].image_filename }}">
             <div class="card-body">
-              <h4 class="card-title" id="blue_txt">{{ events[2].event_type }}</h4>
-              <p class="card-text cardtextmulti">{{ events[2].event_dates[0].event_datetime }}</p>
-              <p class="card-text cardtextmulti dark_grey_txt">{{ events[2].title }}</p>
+              <h4 class="card-title" id="blue_txt">{{ all_events[1].event_type }}</h4>
+              <p class="card-text cardtextmulti">{{ all_events[1].event_dates[0].event_datetime }}</p>
+              <p class="card-text cardtextmulti dark_grey_txt">{{ all_events[1].title }}</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% if all_events|length > 2 %}
+        <div class="col-md-4 col-sm-6">
+          <div class="card cardmulti bg-light">
+            <img class="card-img-top cardimgtopmulti" src="{{ images_url }}{{ all_events[2].image_filename }}">
+            <div class="card-body">
+              <h4 class="card-title" id="blue_txt">{{ all_events[2].event_type }}</h4>
+              <p class="card-text cardtextmulti">{{ all_events[2].event_dates[0].event_datetime }}</p>
+              <p class="card-text cardtextmulti dark_grey_txt">{{ all_events[2].title }}</p>
             </div>
           </div>
         </div>
         {% endif %}
       </div>
     </div>
-    {% endif %}
   </div>
 
   <div class="cream_backgroundcolour">

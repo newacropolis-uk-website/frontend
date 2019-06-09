@@ -16,12 +16,15 @@ def index(**kwargs):
     articles = api_client.get_articles_summary()
     index = randint(0, len(articles) - 1)
 
+    past_events = api_client.get_events_past_year()
+    all_events = events + past_events
+
     return render_template(
         'views/home.html',
         images_url=current_app.config['IMAGES_URL'],
         main_article=articles[index],
         articles=articles,
-        events=events,
+        all_events=all_events,
         current_page='',
         **kwargs
     )
