@@ -66,6 +66,32 @@
 
 {% if user_has_permissions('event') %}
 <div class="container pb-3 text-right">
+    <div class="modal fade" id="speakerModal" tabindex="-1" role="dialog" aria-labelledby="speakerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="speakerModalLabel" style='white-space:pre;'>Add new speaker</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                <div class="form-group">
+                    <div class='row pl-2'>
+                        <div class='col-2'>Name</div><div class='col-3'><input id='speakerName' type='text' size=40></div>
+                    </div>
+                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="add_speaker" type="submit" class="btn btn-outline-danger">Add speaker</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
     <form class="form" id="events_form" method="post" enctype="multipart/form-data">{{ form.csrf_token }}
         <div class='text-left'>
             <div class="row justify-content-center">
@@ -111,33 +137,6 @@
             </div>
 
             <div id='speaker_section'></div>
-
-            <div class="modal fade" id="speakerModal" tabindex="-1" role="dialog" aria-labelledby="speakerModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="speakerModalLabel" style='white-space:pre;'>Add new speaker</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                        <div class="form-group">
-                            <div class='row pl-2'>
-                                <div class='col-2'>Name</div><div class='col-3'><input id='speakerName' type='text' size=40></div>
-                            </div>
-                        </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="add_speaker" type="submit" class="btn btn-outline-danger">Add speaker</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
 
             {{ admin_row(form.event_type, size=1) }}
             {{ form.default_event_type }}
