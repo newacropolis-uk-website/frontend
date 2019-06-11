@@ -9,7 +9,7 @@
 <body>
   <div id="homepage_carousel" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
-      {% for event in events %}
+      {% for event in future_events %}
         {% if event.image_filename %}
           <div class="carousel-item {% if loop.index == 1 %} active{% endif %}">
             <img class="d-block w-100" src="{{ images_url }}{{ event.image_filename }}">
@@ -97,66 +97,55 @@
         </div>
       </div>
     </div>
+    
     <div class="container-fluid padding text-center">
       <div class="row padding">
-       {% if all_events|length > 0 %}
-        <div class="col-md-4 col-sm-6">
-          <div class="card cardmulti bg-light">
-            <img class="card-img-top cardimgtopmulti" src="{{ images_url }}{{ all_events[0].image_filename }}">
-            <div class="card-body">
-              <h4 class="card-title" id="blue_txt">{{ all_events[0].event_type }}</h4>
-              <p class="card-text cardtextmulti">{{ all_events[0].event_dates[0].event_datetime }}</p>
-              <p class="card-text cardtextmulti dark_grey_txt">{{ all_events[0].title }}</p>
-            </div>
-          </div>
-        </div>
-        {% endif %}
-        {% if all_events|length > 1 %}
-        <div class="col-md-4 col-sm-6">
-          <div class="card cardmulti bg-light">
-            <img class="card-img-top cardimgtopmulti" src="{{ images_url }}{{ all_events[1].image_filename }}">
-            <div class="card-body">
-              <h4 class="card-title" id="blue_txt">{{ all_events[1].event_type }}</h4>
-              <p class="card-text cardtextmulti">{{ all_events[1].event_dates[0].event_datetime }}</p>
-              <p class="card-text cardtextmulti dark_grey_txt">{{ all_events[1].title }}</p>
-            </div>
-          </div>
-        </div>
-        {% endif %}
-        {% if all_events|length > 2 %}
-        <div class="col-md-4 col-sm-6">
-          <div class="card cardmulti bg-light">
-            <img class="card-img-top cardimgtopmulti" src="{{ images_url }}{{ all_events[2].image_filename }}">
-            <div class="card-body">
-              <h4 class="card-title" id="blue_txt">{{ all_events[2].event_type }}</h4>
-              <p class="card-text cardtextmulti">{{ all_events[2].event_dates[0].event_datetime }}</p>
-              <p class="card-text cardtextmulti dark_grey_txt">{{ all_events[2].title }}</p>
-            </div>
-          </div>
-        </div>
-        {% endif %}
-      </div>
-    </div>
-  </div>
 
-  <div class="cream_backgroundcolour">
-    <div class="container-fluid padding">
-      <div class="row welcome text-center">
-        <div class="col-12">
-          <h1 class="display-4"> FEATURED ARTICLES </h1>
-        </div>
+
+        {% for event in all_events %}
+          {{ count }}{% set count = loop.index0 %}
+          <div class="col-md-4 col-sm-6">
+            <div class="card cardmulti bg-light">
+              <img class="card-img-top cardimgtopmulti" src="{{ images_url }}{{ all_events[count].image_filename }}">
+              {% if event.get('past') %}
+                <div class="card-body past_card_padding cream_backgroundcolour">
+                <div class="past_corner"><span>Past Event</span></div>
+                <div class="past_card_text_padding">
+              {% else %}
+                <div class="card-body">
+              {% endif %}
+                  <h4 class="card-title" id="blue_txt">{{ all_events[count].event_type }}</h4>
+                  <p class="card-text cardtextmulti">{{ all_events[count].event_dates[0].event_datetime }}</p>
+                  <p class="card-text cardtextmulti dark_grey_txt">{{ all_events[count].title }}</p>
+              {% if event.get('past') %}
+                </div>
+              {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
       </div>
     </div>
-    <div class="container-fluid padding">
-      <div class="card mb-3">
-        <div class="row no-gutters">
-          <div class="col-lg-4 col-md-5 col-sml-12 featured_remove_padding_img">
-            <img src="/static/images/featuredblock.png" class="card-img overflow_img">
+
+    <div class="cream_backgroundcolour">
+      <div class="container-fluid padding">
+        <div class="row welcome text-center">
+          <div class="col-12">
+            <h1 class="display-4"> FEATURED ARTICLES </h1>
           </div>
-          <div class="col-lg-8 col-md-7 col-sm-12">
-            <div class="card-body" id="main_article">
-              <h2 class="dark_grey_txt">{{ main_article.title }}</h2>
-              <p class="light_text">{{ main_article.short_content }} <a href='/article/{{ main_article.id }}'>READ MORE</a></p>
+        </div>
+      </div>
+      <div class="container-fluid padding">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-md-4">
+              <img src="/static/images/featuredblock.png" class="card-img">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body" id="main_article">
+                <h2 class="dark_grey_txt">{{ main_article.title }}</h2>
+                <p class="light_text">{{ main_article.short_content }} <a href='/article/{{ main_article.id }}'>READ MORE</a></p>
+              </div>
             </div>
           </div>
         </div>
@@ -262,6 +251,7 @@
       </div>
     </div>
   </div>
+</div>
 
   <div class="container-fluid padding">
     <div class="row welcome text-center">
