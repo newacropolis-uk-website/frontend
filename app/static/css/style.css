@@ -194,7 +194,6 @@ footer{
   background: no-repeat center center scroll;
   background-size: cover;
 }
-
 .carousel-item img {
   object-fit: cover;
   height: 450px;
@@ -240,7 +239,6 @@ footer{
 .blue_background {
   background-color: rgb(63,96,144);
   height: auto;
-  font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
   width: 100%;
   color: white;
   padding: 3%;
@@ -315,7 +313,17 @@ footer{
   height: 98px;
   width: 98px;
 }
-
+.card-img{
+  object-fit: cover;
+}
+.overflow_img{
+  overflow: hidden;
+  height: 100%;
+  width: 350px;
+}
+.featured_remove_padding_img{
+  padding: 0;
+}
 /* Contact */
 .card-img-top_contact {
   object-fit: cover;
@@ -391,6 +399,9 @@ footer{
   color: rgba(105, 105, 105, 0.5);
   padding: 2% 5% 2% 5%;
 }
+.about_blue_box_txt{
+  font-family: 'AvenirNext-DemiBold',Helvetica,Arial,serif;
+}
 .pyramid {
   max-width: 450px;
   max-height: 450px;
@@ -426,4 +437,24 @@ footer{
 .privacy_policy_iframe {
   width: 800;
   height: 800;
+}
+
+/* WHAT WE OFFER */
+.course_card_imgs{
+  overflow: hidden;
+  height: 200px;
+  width: 200px;
+}
+.courses_footer_img{
+  width: 100%
+}
+.courses_boxes {
+  width: 100%;
+  height: 200px;
+  padding: 10px;
+  border: 3px solid white;
+}
+.courses_big_box{
+  background-color: white;
+  padding: 3%;
 }
