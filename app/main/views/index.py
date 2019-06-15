@@ -1,12 +1,13 @@
-from flask import current_app, render_template, redirect, url_for
+from flask import current_app, render_template
 from random import randint
-from app.main.forms import SubscriptionForm
 from app.main import main
 from app import api_client
+from app.main.decorators import setup_subscription_form
 
 
 @main.route('/', methods=['GET', 'POST'])
-def index():
+@setup_subscription_form
+def index(**kwargs):
     events = api_client.get_events_in_future(approved_only=True)
     for event in events:
         if event['event_type'] == 'Introductory Course':
@@ -14,10 +15,6 @@ def index():
 
     articles = api_client.get_articles_summary()
     index = randint(0, len(articles) - 1)
-    subscription_form = SubscriptionForm()
-
-    if subscription_form.validate_on_submit():
-        return redirect(url_for('main.subscription', email=subscription_form.email.data))
 
     return render_template(
         'views/home.html',
@@ -26,12 +23,12 @@ def index():
         articles=articles,
         events=events,
         current_page='',
-        subscription_form=subscription_form,
-        email=subscription_form.email.data
+        **kwargs
     )
 
 @main.route('/about')
-def about():
+@setup_subscription_form
+def about(**kwargs):
     events = api_client.get_events_in_future(approved_only=True)
     for event in events:
         if event['event_type'] == 'Introductory Course':
@@ -45,44 +42,45 @@ def about():
         main_article=articles[index],
         articles=articles,
         events=events,
-        current_page='about'
+        current_page='about',
+        **kwargs
     )
 
 @main.route('/resources')
-def resources():
-    subscription_form = SubscriptionForm()
+@setup_subscription_form
+def resources(**kwargs):
     return render_template(
         'views/resources.html',
         current_page='resources',
-        subscription_form=subscription_form
+        **kwargs
     )
 
 
 @main.route('/whats-on')
-def whats_on():
-    subscription_form = SubscriptionForm()
+@setup_subscription_form
+def whats_on(**kwargs):
     return render_template(
         'views/whats_on.html',
         current_page='whats-on',
-        subscription_form=subscription_form
+        **kwargs
     )
 
 
 @main.route('/what-we-offer')
-def what_we_offer():
-    subscription_form = SubscriptionForm()
+@setup_subscription_form
+def what_we_offer(**kwargs):
     return render_template(
         'views/what_we_offer.html',
         current_page='what-we-offer',
-        subscription_form=subscription_form
+        **kwargs
     )
 
 
 @main.route('/e-shop')
-def e_shop():
-    subscription_form = SubscriptionForm()
+@setup_subscription_form
+def e_shop(**kwargs):
     return render_template(
         'views/e-shop.html',
         current_page='e-shop',
-        subscription_form=subscription_form
+        **kwargs
     )

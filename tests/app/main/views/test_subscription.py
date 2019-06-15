@@ -18,7 +18,7 @@ class WhenSubmittingSubscriptionForm(object):
             def validate_on_submit(self):
                 return True
 
-        mocker.patch('app.main.views.index.SubscriptionForm', MockSubForm)
+        mocker.patch('app.main.decorators.SubscriptionForm', MockSubForm)
 
         response = client.post(url_for(
             'main.index',
