@@ -31,7 +31,6 @@ def index(**kwargs):
         main_article=articles[index],
         articles=articles,
         all_events=all_events,
-        future_events=future_events,
         current_page='',
         **kwargs
     )

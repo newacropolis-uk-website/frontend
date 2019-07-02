@@ -9,8 +9,8 @@
 <body>
   <div id="homepage_carousel" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
-      {% for event in future_events %}
-        {% if event.image_filename %}
+      {% for event in all_events %}
+        {% if not event.get('past') %}
           <div class="carousel-item {% if loop.index == 1 %} active{% endif %}">
             <img class="d-block w-100" src="{{ images_url }}{{ event.image_filename }}">
             <div class="carousel_caption_block">
