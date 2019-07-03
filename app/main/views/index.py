@@ -35,6 +35,7 @@ def index(**kwargs):
         **kwargs
     )
 
+
 @main.route('/about')
 @setup_subscription_form
 def about(**kwargs):
@@ -54,6 +55,7 @@ def about(**kwargs):
         current_page='about',
         **kwargs
     )
+
 
 @main.route('/resources')
 @setup_subscription_form

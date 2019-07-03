@@ -142,6 +142,66 @@ def sample_future_events(mocker):
     )
     return events
 
+@pytest.fixture
+def sample_past_events_for_cards():
+    events = [
+        {
+            "title": "Test title 5",
+            "event_type": "Talk",
+            "image_filename": "event.png",
+            "event_dates": [{
+                "event_datetime": "2018-12-30 19:00"
+            }],
+            "event_state": "approved"
+        },
+        {
+            "title": "Test title 6",
+            "event_type": "Talk",
+            "image_filename": "event.png",
+            "event_dates": [{
+                "event_datetime": "2018-12-31 19:00"
+            }],
+            "event_state": "approved"
+        },
+        {
+            "title": "Test title 7",
+            "event_type": "Introductory Course",
+            "image_filename": "event.png",
+            "event_dates": [{
+                "event_datetime": "2019-01-01 19:00"
+            }],
+            "event_monthyear": "January 2019",
+            "event_state": "approved"
+        },
+        {
+            "title": "Test title 8",
+            "event_type": "Workshop",
+            "image_filename": "",
+            "event_dates": [{
+                "event_datetime": "2019-01-02 19:00"
+            }],
+            "event_state": "approved"
+        },
+    ]
+
+    return events
+
+@pytest.fixture
+def sample_future_event_for_cards():
+    events = [
+        {
+            "title": "Test title 1",
+            "event_type": "Talk",
+            "image_filename": "event.png",
+            "event_dates": [{
+                "event_datetime": "2018-12-30 19:00"
+            }],
+            "event_state": "approved"
+        },
+    ]
+
+    return events
+
 
 @pytest.fixture
 def sample_articles_summary(mocker):

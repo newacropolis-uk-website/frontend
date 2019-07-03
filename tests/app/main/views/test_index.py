@@ -43,6 +43,19 @@ class WhenAccessingHomePage(object):
 
         assert content == intro_course['title']
 
+    def it_should_show_past_and_future_events_in_cards(
+        self, mocker, client, sample_articles_summary, sample_future_event_for_cards, sample_past_events_for_cards
+    ):
+        mocker.patch('app.main.views.index.api_client.get_events_in_future', return_value=sample_future_event_for_cards)
+        mocker.patch('app.main.views.index.api_client.get_events_past_year', return_value=sample_past_events_for_cards)
+        response = client.get(url_for(
+            'main.index'
+        ))
+        page = BeautifulSoup(response.data.decode('utf-8'), 'html.parser')
+
+        content = page.findAll("div", {"class": "past_corner"})
+        assert len(content) == 2
+
     def it_should_display_text_for_main_article(self, mocker, client, sample_future_events, sample_articles_summary):
         mocker.patch('app.main.views.index.randint', return_value=0)
         response = client.get(url_for(
