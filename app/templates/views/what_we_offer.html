@@ -1,8 +1,370 @@
 {% extends "base.html" %}
 {% block title %}What we offer{% endblock %}
-
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+{% endblock %}
 {% block content %}
 
-<h1> What we offer <h1>
+  <div class="container-fluid padding">
+    <div class="row text-center">
+      <img src="/static/images/courses_banner.png" class="courses_header_img">
+    </div>
+  </div>
 
+  <div class="container-fluid padding yellow_background">
+    <div class="row text-center padding">
+      <div class="col-lg-12">
+        <ul class="list-horizontal">
+          Timeless & Universal Philosophy<li></li>
+          <li>India</li>
+          <li>Tibit</li>
+          <li>Buddhism</li>
+          <li>China</li>
+          <li>Egypt</li>
+          <li>Greece</li>
+          <li>Rome</li>
+          <li>The Neoplatonic Course</li>
+          <li>Philosophy of History</li>
+          <li>The Human Being & the Universe</li>
+          <li>The Hermetic Tradition</li>
+        </ul>    
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid padding cream_backgroundcolour">
+    <div class="row padding">
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/timeless-universal.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">Timeless & Universal Philosophy</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/india.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">India</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/tibet.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">Tibet</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/buddhism.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">Buddhism</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/china.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">China</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/egypt.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">Egypt</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/greece.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">Greece</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/rome.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">Rome</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/neoplatonic.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">The Neoplatonic School</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/philosophy-history.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">Philosophy of History</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/human-being-universe.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">The Human Being and the Universe</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-lg-4 col-md-5 col-sm-5 col-5 featured_remove_padding_img">
+              <img src="/static/images/hermetic.png" class="card-img course_card_imgs">
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-7 col-7">
+              <div class="card-body">
+                <h2 class="dark_grey_txt">The Hermetic Tradition</h2>
+                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid padding">
+    <div class="row welcome text-center">
+      <div class="col-12">
+        <h1 class="display-4"> FURHTER INFORMATION </h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid padding blue_background">
+    <div class="row padding courses_fee_section_padding">
+      <div class="col-lg-12">
+        <h5 id="yellow_txt">The 16-week course will introduce you to the mayor systems of thought of Eat and West and the principles of Philosophical 
+          practice as understood in the Classical Schools of Antiquity. The Theoretical Programme is an introduction to the comparative 
+          study of traditions from East & West which are arranged under three subject headings: Ethics, Socipolitics and Philosophy. 
+          The Practical Programme looks at fundamental philosophical questions under the headings: Know Thyself, Harmony with Others, 
+          Transformation, Overcoming Crises and Being Happy.</h5><br>
+      </div>
+      <div class="col-lg-4 col-md-4">
+        <div class="courses_boxes">
+          <h5>ETHICS</h5>
+          <p id="yellow_txt">- Understanding others</p>
+          <p>Introduction to ethics and the major concepts of the philosophies of India, Tibet, Ancient Egypt and Neoplatonism.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4">
+        <div class="courses_boxes">
+          <h5>SOCIPOLITICS</h5>
+          <p id="yellow_txt">- Living in harmony with others</p>
+          <p>Introduction to Socipolitics and the major concepts of the Confucius, Plato and the Stoics.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4">
+        <div class="courses_boxes">
+          <h5>PHILOSOPHY OF HISTORY</h5>
+          <p id="yellow_txt">- Being part of something greater</p>
+          <p>Introduction to Philosophy of history, the Microcosm and Macrocosom and the Cosmovision of Traditional Societies.</p>
+        </div><br>
+      </div>
+      <div class="col-lg-12">
+        <div class="courses_big_box">
+          <h4 id="blue_txt">Fee for the 16-week course are £190,(£130 concessions) inclusive of all hand-outs and printed material.</h4><br>
+          <h4 id="blue_txt">the first evening is free without any obligation or charge, you are welcome to reserve your place and join us
+                           on the evening one before making a commitment to the full programme.</h4><br>
+          <h4 id="blue_txt">Evening starts at 7pm and run until between 9:30 - 10pm.</h4><br>
+          <h4 id="blue_txt">There is a break for refereshments around 8:15pm where a healthy home-cooked vegetarian meal is available for a suggested donation of £3 - £4.</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid padding">
+    <div class="row welcome text-center">
+      <div class="col-12">
+        <h1 class="display-4"> NEXT COURSES START DATES </h1>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col-1"></div>
+      <div class="col-6">
+        <div class="courses_start_date_box">
+          <p>SEPTEMEBER 5th 2018 - 16-week introduction philosophies of East & West</p>
+        </div><br>
+        <div class="courses_start_date_box">
+          <p>SEPTEMEBER 5th 2018 - 16-week introduction philosophies of East & West</p>
+        </div><br>
+        <div class="courses_start_date_box">
+          <p>SEPTEMEBER 5th 2018 - 16-week introduction philosophies of East & West</p>
+        </div><br>
+      </div>
+      <div class="col-4">
+        <div class="courses_reserve_box">
+          <h3>RESERVE MY PLACE</h3>
+        </div><br>
+        <div class="courses_reserve_box">
+          <h3>RESERVE MY PLACE</h3>
+        </div><br>
+        <div class="courses_reserve_box">
+          <h3>RESERVE MY PLACE</h3>
+        </div><br>
+      </div>
+      <div class="col-1"></div>
+    </div>
+  </div>
+
+  <div class="row no-gutters">
+    <div class="col-3">
+      <img src="/static/images/courses_multi_img.png" class="foundation_courses_img cream_backgroundcolour">
+    </div>
+    <div class="col-9">
+      <div class="foundation_courses_banner">
+        <h5>Following the 16-week foundation course there are advanced courses available for those who wish to conitnue</h5>
+      </div>
+      <div id="blue_txt" class="courses_foundation_advanced_padding">
+        <p><b>PSYSCHOLOGY</b>. A synthesis of the knowledge about psychology held bt the ancient and classical civilizations, 
+          gathered from the broad spectrum of philosophy. As love of knowledge, philosophyhas always been concerned with the 
+          knowledge of the human being.
+        </p>
+        <p><b>EASTERN AND WESTERN WISDOM</b> (two levels). Compendium of subjects revolving around the universe, life and the human 
+          being, approached fromt he trditions of wisdom in East and West, and their implications for the postulates of current 
+          science.
+        </p>
+        <p><b>SYMBOLOGY OF CIVILIZATIONS</b>. Comparative study and analysis of the myths and symbols of religions and civilizations.
+        </p>
+        <p><b>APPLIED PHILOSOPHY AND ETHICS</b>. An overview of the major schools of moral philosophy of East and West.
+        </p>
+        <p><b>SOCIPOLITICS</b>. A philosophical approach to improving our society.
+        </p>
+        <p><b>ORATORY</b> (two levels). Our aim is to recover the art of public speaking - effective communication through oral expression.
+        </p>
+        <p><b>HISTORY OF PHILOSOPHY</b> (four levels). An in-depth study of philosophical theories throughout history, analysing their 
+          context and influence.
+        </p>
+        <p><b>HISTORY OF RELIGIONS</b>. A comparative study of the theological messages of the religions which, in all ages, have reaised 
+          the consciousness of humanity.
+        </p>
+        <p><b>ANTHROPOGENESIS</b></p>
+        <p><b>COSMOSGENESIS</b></p>
+        <p><b>ASTROLOGY</b></p>
+        <p><b> OF SCIENCE</b></p>
+        <p><b>METAPHYSICAL AESTHETICS</b></p>
+        <p>OTHER SUBJECTS</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid padding yellow_background">
+    <div class="row padding">
+      <div class="col-lg-12">
+        <p class="dark_grey_txt"><br>At the heart of the activities of <b>New Acropolis</b> is its <b>School of Philosophy</b>, which we Understanding
+          as a way of life, that is, as a means of access of spiritual knowledge and to indivudal and collective realization.
+        </p>
+        <p class="dark_grey_txt">This School of Philosophy has <b>Program of Studies</b> which is common to all countries and is taught in
+          successive levels. It provides an uodated version of the <b>traditional knowledge of East and West</b>, which,
+          in accordance with classical humanism, combines the study of sciences, arts, religions and philosophies in a 
+          comparative way.
+        </p>
+        <p class="dark_grey_txt">The first course is the <b>16-week introduction</b> which gives an excellent overview of Philosophical Tradtions
+          and <b>require no prior knowledge before joining</b>.<br>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid padding">
+    <div class="row welcome text-center">
+      <img src="/static/images/courses_footer_img.png" class="courses_footer_img">
+    </div>
+  </div>
+  
 {% endblock %}
