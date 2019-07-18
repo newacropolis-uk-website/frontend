@@ -4,67 +4,15 @@ import json
 import urlparse
 # from werkzeug import secure_filename
 
-from requests_oauthlib import OAuth2Session
-
 from app import api_client
 from app.clients.errors import HTTPError
 from app.main import main
-from app.main.forms import UserListForm, EventForm
-from app.main.views import requires_google_auth
+from app.main.forms import EventForm
 
 
 def is_admin_user():
     user = session['user']
     return 'admin' in user.get('access_area') or user.get('access_area') == 'admin'
-
-
-@main.route('/admin')
-def admin():
-    return render_template(
-        'views/admin/admin.html',
-        name=session['user_profile']['name']
-    )
-
-
-@main.route('/admin/users', methods=['GET', 'POST'])
-def admin_users():
-    users = [u for u in api_client.get_users() if u.get('access_area') != 'admin']
-    form = UserListForm()
-    update_count = 0
-
-    if form.validate_on_submit():
-        for i, user in enumerate(form.users):
-            access_area = ''
-            if user.admin.data:
-                access_area += 'admin,'
-            if user.event.data:
-                access_area += 'event,'
-            if user.email.data:
-                access_area += 'email,'
-            if user.magazine.data:
-                access_area += 'magazine,'
-            if user.report.data:
-                access_area += 'report,'
-            if user.shop.data:
-                access_area += 'shop,'
-            if user.announcement.data:
-                access_area += 'announcement,'
-            if user.article.data:
-                access_area += 'article,'
-
-            if users[i]['access_area'] != access_area:
-                update_count += 1
-                api_client.update_user_access_area(users[i]['id'], access_area)
-
-    form.populate_user_form(users)
-
-    return render_template(
-        'views/admin/users.html',
-        users=users,
-        update_count=update_count,
-        access_areas=current_app.config['ACCESS_AREAS'],
-        form=form
-    )
 
 
 @main.route('/admin/events', methods=['GET', 'POST'])
@@ -157,7 +105,6 @@ def admin_events(selected_event_id=None, api_message=None):
         images_url=current_app.config['IMAGES_URL'],
         selected_event_id=selected_event_id,
         message=api_message,
-        is_admin_user=is_admin_user(),
         temp_event=temp_event,
         errors=errors
     )
@@ -208,13 +155,3 @@ def preview_event():
         api_base_url=api_client.base_url,
         paypal_account=current_app.config['PAYPAL_ACCOUNT']
     )
-
-
-@main.route("/profile", methods=["GET"])
-@requires_google_auth
-def profile():
-    """Fetching a protected resource using an OAuth 2 token.
-    """
-
-    google = OAuth2Session(current_app.config['GOOGLE_OAUTH2_CLIENT_ID'], token=session['oauth_token'])
-    return jsonify(google.get('https://www.googleapis.com/oauth2/v1/userinfo').json())

@@ -7,7 +7,7 @@ from flask_wtf.csrf import CSRFError
 class WhenAccessingPageWithError:
     def it_returns_400_for_csrf_error(self, mocker, client, mock_admin_logged_in):
         csrf_err = CSRFError('400 Bad Request: The CSRF tokens do not match.')
-        mocker.patch('app.main.views.admin.render_template', side_effect=csrf_err)
+        mocker.patch('app.main.views.admin.admin.render_template', side_effect=csrf_err)
 
         users = [
             {

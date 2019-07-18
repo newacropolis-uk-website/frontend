@@ -105,7 +105,7 @@ class MockAPIClient:
 
 class WhenShowingEvents:
     def it_populates_all_fields_in_admin_events(self, client, mocker, mock_admin_logged_in):
-        mocker.patch('app.main.views.admin.api_client', MockAPIClient())
+        mocker.patch('app.main.views.admin.events.api_client', MockAPIClient())
 
         response = client.get(url_for(
             'main.admin_events'
@@ -145,7 +145,7 @@ class WhenShowingEvents:
 
 class WhenCallingAjaxDeleteEvent:
     def it_makes_delete_api_call(self, client, mocker):
-        mock_delete_event = mocker.patch('app.main.views.admin.api_client.delete_event')
+        mock_delete_event = mocker.patch('app.main.views.admin.events.api_client.delete_event')
 
         response = client.get(url_for('main._delete_event', event_id='9ad571e1-4b5e-49af-a814-0958b23888c5'))
 
@@ -158,7 +158,7 @@ class WhenCallingAjaxDeleteEvent:
 class WhenCallingAjaxGetEvent:
     def it_makes_get_api_call(self, client, mocker):
         mocker.patch(
-            'app.main.views.admin.session',
+            'app.main.views.admin.events.session',
             {
                 'events': [
                     {'id': 'test', 'description': '&pound;test description'}
@@ -186,7 +186,7 @@ def mock_event_form(mocker):
     mock_form.event_dates.data = '[{"event_date": "2019-03-23 19:00", "end_time": "21:00"}]'
     mock_form.reject_reasons_json.data = '[]'
 
-    mocker.patch('app.main.views.admin.EventForm', return_value=mock_form)
+    mocker.patch('app.main.views.admin.events.EventForm', return_value=mock_form)
     return mock_form
 
 
@@ -202,13 +202,13 @@ class WhenSubmittingEventsForm:
         mock_api_client = MockAPIClient()
         mock_api_client.add_event = Mock()
         mock_api_client.add_event.return_value = {'id': 'test_id'}
-        mocker.patch('app.main.views.admin.api_client', mock_api_client)
+        mocker.patch('app.main.views.admin.events.api_client', mock_api_client)
 
         mock_request = Mock()
         mock_request.files.get.return_value = Mock()
         mock_request.files.get.return_value.read.return_value = 'test data'
 
-        mocker.patch('app.main.views.admin.request', mock_request)
+        mocker.patch('app.main.views.admin.events.request', mock_request)
 
         response = client.post(
             url_for('main.admin_events'),
@@ -227,12 +227,12 @@ class WhenSubmittingEventsForm:
         mock_api_client = MockAPIClient()
         mock_api_client.add_event = Mock()
         mock_api_client.add_event.return_value = {'id': 'test_id'}
-        mocker.patch('app.main.views.admin.api_client', mock_api_client)
+        mocker.patch('app.main.views.admin.events.api_client', mock_api_client)
 
         mock_request = Mock()
         mock_request.files.get.return_value = None
 
-        mocker.patch('app.main.views.admin.request', mock_request)
+        mocker.patch('app.main.views.admin.events.request', mock_request)
 
         response = client.post(
             url_for('main.admin_events'),
@@ -253,14 +253,14 @@ class WhenSubmittingEventsForm:
         mock_api_client = MockAPIClient()
         mock_api_client.update_event = Mock()
         mock_api_client.update_event.return_value = {'id': 'test_id'}
-        mocker.patch('app.main.views.admin.api_client', mock_api_client)
+        mocker.patch('app.main.views.admin.events.api_client', mock_api_client)
 
         mock_event_form_with_image.events.data = 'test_id'
 
         mock_request = Mock()
         mock_request.files.get.return_value = None
 
-        mocker.patch('app.main.views.admin.request', mock_request)
+        mocker.patch('app.main.views.admin.events.request', mock_request)
 
         response = client.post(
             url_for('main.admin_events'),

@@ -177,9 +177,9 @@ def sample_articles_summary(mocker):
 
 def mock_sessions(mocker, session_dict={}):
     mocker.patch('app.session', session_dict)
-    # mocker.patch('app.main.forms.session', session_dict)
     mocker.patch('app.main.views.session', session_dict)
-    mocker.patch('app.main.views.admin.session', session_dict)
+    mocker.patch('app.main.views.admin.admin.session', session_dict)
+    mocker.patch('app.main.views.admin.events.session', session_dict)
     mocker.patch('app.main.views.os.environ', session_dict)
 
 
