@@ -1,9 +1,11 @@
-from flask import current_app, render_template, redirect, url_for
+from flask import current_app, render_template, redirect, url_for, request, jsonify
 from random import randint
 from app.main import main
 from app import api_client
 from app.main.decorators import setup_subscription_form
 from app.main.forms import ContactForm
+from app.clients.errors import HTTPError
+
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -18,23 +20,6 @@ def index(**kwargs):
     index = randint(0, len(articles) - 1)
 
     contact_form = ContactForm()
-    if contact_form.validate_on_submit():
-        try:
-            api_client.add_contact_info(contact_form.name.data)
-            return redirect(url_for('.index'))
-        except Exception as e:
-            print(e)
-            return render_template(
-                'views/home.html',
-                images_url=current_app.config['IMAGES_URL'],
-                main_article=articles[index],
-                articles=articles,
-                events=events,
-                current_page='',
-                contact_form=contact_form,
-                error=e,
-                **kwargs
-            )
 
     return render_template(
         'views/home.html',
@@ -115,3 +100,14 @@ def e_shop(**kwargs):
         contact_form=contact_form,
         **kwargs
     )
+
+
+@main.route('/_add_contact_details')
+def _add_contact_details():
+    name = request.args.get('name')
+    if name:
+        try:
+            contact_details = api_client.add_contact_details(name)
+            return jsonify(contact_details)
+        except HTTPError as e:
+            return jsonify({'error': e.message})
