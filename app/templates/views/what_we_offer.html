@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 {% block title %}What we offer{% endblock %}
-{% block extra_head %}
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
-{% endblock %}
 {% block content %}
 
   <div class="container-fluid padding">
@@ -44,7 +40,7 @@
             <div class="col-lg-8 col-md-7 col-sm-7 col-7">
               <div class="card-body">
                 <h2 class="dark_grey_txt">Timeless & Universal Philosophy</h2>
-                <p class="light_text">Lorum ipsum<a href=''>READ MORE</a></p>
+                <p class="light_text">Lorum ipsum<a href="{{ url_for('main.course_details', topic_details='timeless_universal.html') }}">READ MORE</a></p>
               </div>
             </div>
           </div>
