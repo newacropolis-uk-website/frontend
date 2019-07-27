@@ -1,4 +1,4 @@
-from flask import current_app, render_template
+from flask import current_app, render_template, request
 from random import randint
 from app.main import main
 from app import api_client
@@ -82,5 +82,15 @@ def e_shop(**kwargs):
     return render_template(
         'views/e-shop.html',
         current_page='e-shop',
+        **kwargs
+    )
+
+@main.route('/course_details')
+@setup_subscription_form
+def course_details(**kwargs):
+    topic_details = request.args.get('topic_details')
+    return render_template(
+        'views/course_details.html',
+        topic_details=topic_details,
         **kwargs
     )
