@@ -133,6 +133,7 @@ class EmailForm(FlaskForm):
     send_starts_at = HiddenField()
     email_state = HiddenField()
     expires = HiddenField()
+    events_emailed = HiddenField()
     reject_reason = TextAreaField('Reject reason')
 
     def set_emails_form(self, emails, email_types, events):
@@ -149,6 +150,8 @@ class EmailForm(FlaskForm):
                 )
             )
 
+        self.events_emailed.data = ','.join(email_events)
+
         self.email_types.choices = []
         for email_type in email_types:
             self.email_types.choices.append(
@@ -160,8 +163,6 @@ class EmailForm(FlaskForm):
 
         self.events.choices = []
         for event in events:
-            if event['id'] in email_events:
-                continue
             self.events.choices.append(
                 (
                     event['id'],
