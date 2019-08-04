@@ -137,7 +137,7 @@ class EmailForm(FlaskForm):
     reject_reason = TextAreaField('Reject reason')
 
     def set_emails_form(self, emails, email_types, events):
-        self.emails.choices = [('', 'Create new email')]
+        self.emails.choices = [('', 'New email')]
         email_events = []
         for email in emails:
             if email['email_type'] == 'event':
