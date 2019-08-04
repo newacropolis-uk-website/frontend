@@ -8,23 +8,33 @@ from app.main.decorators import setup_subscription_form
 @main.route('/', methods=['GET', 'POST'])
 @setup_subscription_form
 def index(**kwargs):
-    events = api_client.get_events_in_future(approved_only=True)
-    for event in events:
+    future_events = api_client.get_events_in_future(approved_only=True)
+    for event in future_events:
         if event['event_type'] == 'Introductory Course':
             event['carousel_text'] = 'Courses starting {}'.format(event['event_monthyear'])
 
     articles = api_client.get_articles_summary()
     index = randint(0, len(articles) - 1)
 
+    all_events = future_events
+    if len(all_events) < 3:
+        past_events = api_client.get_events_past_year()
+
+        while len(all_events) < 3:
+            event = past_events.pop(-1)
+            event['past'] = True
+            all_events.append(event)
+
     return render_template(
         'views/home.html',
         images_url=current_app.config['IMAGES_URL'],
         main_article=articles[index],
         articles=articles,
-        events=events,
+        all_events=all_events,
         current_page='',
         **kwargs
     )
+
 
 @main.route('/about')
 @setup_subscription_form
@@ -45,6 +55,7 @@ def about(**kwargs):
         current_page='about',
         **kwargs
     )
+
 
 @main.route('/resources')
 @setup_subscription_form

@@ -161,9 +161,9 @@ footer{
   color: rgba(175,154,89);
 }
 .dark_grey_txt {
-  font-family: 'AvenirNext-Medium',Helvetica,Arial,serif;
-  color: rgb(74,74,74);
-  font-size: 25px;
+  font-family: 'AvenirNext-Bold',Helvetica,Arial,serif;
+  color: rgb(74,74,74) !important;
+  font-size: 23px;
 }
 .footer_magazine{
   height: 215px;
@@ -318,17 +318,34 @@ footer{
   height: 98px;
   width: 98px;
 }
-.card-img{
-  object-fit: cover;
+.past_corner {
+  width: 0;
+  height: 0;
+  border-top: 110px solid rgb(105,152,219);
+  border-bottom: 110px solid transparent;
+  border-left: 110px solid transparent;
+  position:absolute;
+  right:0;
 }
-.overflow_img{
-  overflow: hidden;
-  height: 100%;
-  width: 350px;
+.past_corner span {
+  position:absolute;
+  top: -100px;
+  width: 70px;
+  left: -70px;
+  text-align: center;
+  font-size: 17px;
+  transform: rotate(45deg);
+  display:block;
+  font-family: 'AvenirNext-Bold',Helvetica,Arial,serif;
+  color: white;
 }
-.featured_remove_padding_img{
-  padding: 0;
+.past_card_padding{
+  padding: 0 !important;
 }
+.past_card_text_padding {
+  padding: 2rem;
+}
+
 /* Contact */
 .card-img-top_contact {
   object-fit: cover;
