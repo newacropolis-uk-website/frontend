@@ -13,13 +13,13 @@ from app.main.forms import EmailForm
 @main.route('/admin/events/<uuid:selected_event_id>/<api_message>', methods=['GET', 'POST'])
 def admin_emails(selected_email_id=None, api_message=None):
     future_emails = api_client.get_future_emails()
-
     email_types = api_client.get_email_types()
-
     future_events = api_client.get_events_in_future()
 
     session['emails'] = future_emails
     session['future_events'] = future_events
+
+    errors = []
     form = EmailForm()
 
     form.set_emails_form(future_emails, email_types, future_events)
