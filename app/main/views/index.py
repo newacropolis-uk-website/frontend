@@ -3,6 +3,7 @@ from random import randint
 from app.main import main
 from app import api_client
 from app.main.decorators import setup_subscription_form
+import os
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -85,12 +86,18 @@ def e_shop(**kwargs):
         **kwargs
     )
 
+
 @main.route('/course_details')
 @setup_subscription_form
 def course_details(**kwargs):
     topic_details = request.args.get('topic_details')
+    with open("app/templates/course_details/" + topic_details + ".txt", "r") as f:
+        topic_details_header = f.readline()
+        topic_details_text = f.readline()
     return render_template(
         'views/course_details.html',
         topic_details=topic_details,
+        topic_details_header=topic_details_header,
+        topic_details_text=topic_details_text,
         **kwargs
     )

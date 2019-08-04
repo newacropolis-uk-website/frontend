@@ -519,6 +519,9 @@ footer{
   border: solid 2px rgba(121, 121, 121, 0.5);
   height: 100%;
   width: 100%;
+  padding: 5%; 
+  font-family: 'AvenirNext-Medium',Helvetica,Arial,serif;
+  color: rgb(74,74,74);
 }
 .course_details_img{
   height: 100%;
@@ -532,4 +535,7 @@ footer{
   background-color: rgb(214,221,232);
   height: auto;
   width: 100%
+}
+.topic_details_section {
+  padding: 4%;
 }

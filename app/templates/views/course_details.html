@@ -2,8 +2,20 @@
 {% block title %}Coure details{% endblock %}
 {% block content %}
 
-  {% include "course_details/timeless_universal.html" %}
-  
+  <div class="container-fluid padding cream_backgroundcolour">
+    <div class="row topic_details_section">
+      <div class="col-xs-12 col-sm-12 col-md-6 ">
+        <div class="course_details_text">
+          <h2>{{ topic_details_header }}</h2>
+          <p>{{ topic_details_text }}</p>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 ">
+        <img src="/static/images/{{ topic_details }}.png" class="img-fluid course_details_img">
+      </div>
+    </div>
+  </div>
+
   <div class="container-fluid padding">
     <div class="row text-center">
       <img src="/static/images/course_details_quote.png" class="courses_header_img">
