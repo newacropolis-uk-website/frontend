@@ -33,3 +33,24 @@
   .glyphicon-th:before {
     content: "\e011";
   }
+
+  .bg-default
+  {
+      background-color: #2F3E48;
+      color: white;
+  }
+
+  .btn-default
+  {
+      border-color: #2F3E48;
+  }
+
+  .btn-default:hover
+  {
+      background-color: #2F3E48;
+      color: white;
+  }
+
+  .modal-footer{
+      height: 60px;
+  }

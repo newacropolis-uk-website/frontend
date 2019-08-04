@@ -120,3 +120,53 @@ class EventForm(FlaskForm):
                         event['event_dates'][0]['event_datetime'], event['event_type'], event['title'])
                 )
             )
+
+
+class EmailForm(FlaskForm):
+
+    emails = SelectField('Emails')
+    email_types = SelectField('Email Types')
+    events = SelectField('Events')
+    details = TextAreaField('Details')
+    extra_txt = TextAreaField('Extra text')
+    submit_type = HiddenField()
+    send_starts_at = HiddenField()
+    email_state = HiddenField()
+    expires = HiddenField()
+    events_emailed = HiddenField()
+    reject_reason = TextAreaField('Reject reason')
+
+    def set_emails_form(self, emails, email_types, events):
+        self.emails.choices = [('', 'New email')]
+        email_events = []
+        for email in emails:
+            if email['email_type'] == 'event':
+                email_events.append(email['event_id'])
+
+            self.emails.choices.append(
+                (
+                    email['id'],
+                    email['subject']
+                )
+            )
+
+        self.events_emailed.data = ','.join(email_events)
+
+        self.email_types.choices = []
+        for email_type in email_types:
+            self.email_types.choices.append(
+                (
+                    email_type['type'],
+                    email_type['type']
+                )
+            )
+
+        self.events.choices = []
+        for event in events:
+            self.events.choices.append(
+                (
+                    event['id'],
+                    u'{} - {} - {}'.format(
+                        event['event_dates'][0]['event_datetime'], event['event_type'], event['title'])
+                )
+            )

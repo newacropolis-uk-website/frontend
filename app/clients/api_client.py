@@ -56,6 +56,21 @@ class ApiClient(BaseAPIClient):
     def get_events_past_year(self):
         return self.get(url='events/past_year')
 
+    def add_email(self, email):
+        return self.post(url='email', data=email)
+
+    def update_email(self, email_id, email):
+        return self.post(url='email/{}'.format(email_id), data=email)
+
+    def get_email_types(self):
+        return self.get(url='email/types')
+
+    def post_email_preview(self, data):
+        return self.post(url='email/preview', data=data)
+
+    def get_future_emails(self):
+        return self.get(url='emails/future')
+
     def get_articles_summary(self):
         return self.get(url='articles/summary')
 
