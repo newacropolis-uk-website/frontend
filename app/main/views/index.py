@@ -3,7 +3,6 @@ from random import randint
 from app.main import main
 from app import api_client
 from app.main.decorators import setup_subscription_form
-import os
 
 
 @main.route('/', methods=['GET', 'POST'])
