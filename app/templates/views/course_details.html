@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Coure details{% endblock %}
 {% block content %}
-
   <div class="container-fluid padding cream_backgroundcolour">
     <div class="row topic_details_section">
       <div class="col-xs-12 col-sm-12 col-md-6 ">
         <div class="course_details_text">
-          <h2>{{ topic_details_header }}</h2>
-          <p>{{ topic_details_text }}</p>
+          {% set topic_details = request.args.get('topic_details') %}
+          {% set details = get_course_details(topic_details) %}
+          {{details['html']|safe}}
         </div>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-6 ">

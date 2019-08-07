@@ -22,6 +22,7 @@ class Config(object):
     OAUTHLIB_INSECURE_TRANSPORT = False
     PAYPAL_ACCOUNT = get_setting('PAYPAL_ACCOUNT')
     ACCESS_AREAS = ['admin', 'event', 'email', 'magazine', 'report', 'shop', 'announcement', 'article']
+    SUMMARY_LIMIT = 300
 
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TIME_LIMIT = None
