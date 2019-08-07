@@ -95,3 +95,12 @@ def e_shop(**kwargs):
         current_page='e-shop',
         **kwargs
     )
+
+
+@main.route('/course_details')
+@setup_subscription_form
+def course_details(**kwargs):
+    return render_template(
+        'views/course_details.html',
+        **kwargs
+    )
