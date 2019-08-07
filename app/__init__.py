@@ -1,7 +1,9 @@
 import os
+import re
 
-from flask import Flask, jsonify, make_response, render_template, request, session
+from flask import Flask, current_app, jsonify, make_response, render_template, request, session
 from flask_wtf.csrf import CSRFProtect, CSRFError
+import textile
 
 from app.clients.api_client import ApiClient
 import requests_toolbelt.adapters.appengine
@@ -63,12 +65,44 @@ def _is_admin_user():
     return 'admin' in user.get('access_area') or user.get('access_area') == 'admin'
 
 
+def _get_course_details(topic):
+    details = {}
+    with open("app/templates/course_details/" + topic + ".txt", "rb") as f:
+        details['text'] = f.read()
+    details['html'] = textile.textile(details['text'])
+    return details
+
+
+def _get_summary_course_details(topic):
+    buffer_for_header = 100
+    with open("app/templates/course_details/" + topic + ".txt", "rb") as f:
+        details = f.read(current_app.config['SUMMARY_LIMIT'] + buffer_for_header)
+
+    header_length = len(details.split('\n')[1])
+
+    # ignore the first line as its the header
+    details = ' '.join(details.split('\n')[1:])
+
+    # adjust details for header ength
+    details = details[header_length:current_app.config['SUMMARY_LIMIT'] + header_length]
+
+    # ignore the last word in case it was split
+    details = ' '.join(details.split(' ')[:-1])
+
+    html_tag_pattern = r'<.*?>'
+    clean_details = re.sub(html_tag_pattern, '', textile.textile(details))
+
+    return clean_details
+
+
 def init_app(app):
     app.jinja_env.globals['API_BASE_URL'] = app.config['API_BASE_URL']
     app.jinja_env.globals['get_email'] = _get_email
     app.jinja_env.globals['get_users_need_access'] = _get_users_need_access
     app.jinja_env.globals['is_admin_user'] = _is_admin_user
     app.jinja_env.globals['user_has_permissions'] = _user_has_permissions
+    app.jinja_env.globals['get_course_details'] = _get_course_details
+    app.jinja_env.globals['get_summary_course_details'] = _get_summary_course_details
 
     @app.before_request
     def check_auth_required():

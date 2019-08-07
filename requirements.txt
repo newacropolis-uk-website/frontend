@@ -19,5 +19,6 @@ PyJWT==1.5.3
 requests>=2.0.0
 requests_oauthlib==1.2.0
 requests_toolbelt==0.8.0
+textile==3.0.4
 virtualenv==16.0.0
 WTForms==2.2.1
