@@ -66,11 +66,20 @@ def _is_admin_user():
 
 
 def _get_course_details(topic):
-    details = {}
     with open("app/templates/course_details/" + topic + ".txt", "rb") as f:
-        details['text'] = f.read()
-    details['html'] = textile.textile(details['text'])
-    return details
+        details = f.read()
+    return textile.textile(details)
+
+
+def _get_course_extra(topic):
+    extra = {}
+    with open("app/templates/course_details/" + topic + "_extra.txt", "rb") as f:
+        extra_text = f.read()
+    extra_arr = extra_text.split('==')
+    extra['events'] = textile.textile(extra_arr[0])
+    extra['person'] = textile.textile(extra_arr[1])
+    extra['ideas'] = textile.textile(extra_arr[2])
+    return extra
 
 
 def _get_summary_course_details(topic):
@@ -103,6 +112,7 @@ def init_app(app):
     app.jinja_env.globals['user_has_permissions'] = _user_has_permissions
     app.jinja_env.globals['get_course_details'] = _get_course_details
     app.jinja_env.globals['get_summary_course_details'] = _get_summary_course_details
+    app.jinja_env.globals['get_course_extra'] = _get_course_extra
 
     @app.before_request
     def check_auth_required():

@@ -5,13 +5,13 @@
     <div class="row topic_details_section">
       <div class="col-xs-12 col-sm-12 col-md-6 ">
         <div class="course_details_text">
-          {% set topic_details = request.args.get('topic_details') %}
-          {% set details = get_course_details(topic_details) %}
-          {{details['html']|safe}}
+          {% set topic = request.args.get('topic') %}
+          {% set details = get_course_details(topic) %}
+          {{details|safe}}
         </div>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-6 ">
-        <img src="/static/images/{{ topic_details }}.png" class="img-fluid course_details_img">
+        <img src="/static/images/{{ topic }}.png" class="img-fluid course_details_img">
       </div>
     </div>
   </div>
@@ -22,6 +22,7 @@
     </div>
   </div>
 
+  {% set extra = get_course_extra(topic) %}
   <div class="course_details_key_padding">
     <div class="course_details_key_box">
       <div class="course_details_key_padding">
@@ -37,8 +38,7 @@
           </div>
           <div class="col-6">
             <div class="course_details_text">
-              <h3>History Past & Future</h3>
-              <p>lorem ipsum</p>
+              {{extra['events']|safe}}
             </div>
           </div>
           <div class="col-3">
@@ -46,8 +46,7 @@
           </div>
           <div class="col-6">
             <div class="course_details_text">
-              <h3>History Past & Future</h3>
-              <p>lorem ipsum</p>
+              {{extra['person']|safe}}
             </div>
           </div>
           <div class="col-3">
@@ -55,8 +54,7 @@
           </div>
           <div class="col-6">
             <div class="course_details_text">
-              <h3>History Past & Future</h3>
-              <p>lorem ipsum</p>
+              {{extra['ideas']|safe}}
             </div>
           </div>
           <div class="col-6">
