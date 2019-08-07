@@ -3,7 +3,7 @@ import re
 
 from flask import Flask, current_app, jsonify, make_response, render_template, request, session
 from flask_wtf.csrf import CSRFProtect, CSRFError
-import textile
+import markdown
 
 from app.clients.api_client import ApiClient
 import requests_toolbelt.adapters.appengine
@@ -69,7 +69,7 @@ def _get_course_details(topic):
     details = {}
     with open("app/templates/course_details/" + topic + ".txt", "rb") as f:
         details['text'] = f.read()
-    details['html'] = textile.textile(details['text'])
+    details['html'] = markdown.markdown(details['text'])
     return details
 
 
@@ -84,7 +84,7 @@ def _get_summary_course_details(topic):
     details = ' '.join(details.split(' ')[:-1])
 
     html_tag_pattern = r'<.*?>'
-    clean_details = re.sub(html_tag_pattern, '', textile.textile(details))
+    clean_details = re.sub(html_tag_pattern, '', markdown.markdown(details))
 
     return clean_details
 
