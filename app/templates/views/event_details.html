@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Event details{% endblock %}
+{% block content %}
+  <div class="container-fluid padding cream_backgroundcolour">
+    <div class="row topic_details_section">
+      <div class="col-xs-12 col-sm-12 col-md-6 ">
+        <div class="course_details_text">
+          <h2 class="event_type_date_blue">{{ displayed_event.event_type }} : {{ displayed_event.event_dates[0].event_datetime }}</h2>
+          <h2 class="event_title">{{ displayed_event.title }}</h2><br>
+          <p>{{ displayed_event.description }}</p>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 ">
+        <img src="{{ images_url }}{{ displayed_event.image_filename }}" class="img-fluid event_details_img">
+      </div>
+    </div>
+  </div>
+  <p class="important">
+    {% for item in events %}
+        <p>
+          {{ item.title }}<br>{{ item.sub_title if item.sub_title else '' }}
+          {% for date in item.event_dates %}
+              <div>
+                  {{ date.event_datetime }}
+              </div>
+          {% endfor %}
+          <div>
+              {{ item.description | safe }}
+          </div>
+          <div>
+              {{ item.venue.address }}
+          </div>
+
+          {% if item.image_filename %}
+          <div>
+              <img src="{{ images_url }}{{ item.image_filename }}" width=100>
+          </div>
+          {% endif %}
+
+          {% if paypal_account %}
+          <div class="pt-3">
+          <form id="paypalForm{{ item.id }}" target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+              <input type="hidden" name="cmd" value="_s-xclick">
+              <input type="hidden" name="fee" value="{{ item.fee }}">
+              <input type="hidden" name="concfee" value="{{ item.conc_fee }}">
+              <input type="hidden" name="m_fee" value="{{ item.multi_day_fee }}">
+              <input type="hidden" name="m_concfee" value="{{ item.multi_day_conc_fee }}">
+              <input type="hidden" name="hosted_button_id" value="{{ item.booking_code }}">
+              <table>
+              <tr><td>{{ item.event_dates[0].event_datetime }}</td></tr><input type="hidden" name="on0" value="Type">
+              
+              <tr><td>
+              <select id='PayType{{ item.id }}' name="os0" onchange='getDetails(312)'>
+                  <option value="Full">Full &pound;{{ item.fee }} GBP</option>
+                  <option value="Concession">Concession &pound;{{ item.conc_fee }} GBP</option>
+              </select> 
+              </td></tr>
+                  
+              </table>
+              <input type="hidden" name="currency_code" value="GBP">
+              <input 
+                  type="image"
+                  src="https://www.sandbox.paypal.com/en_GB/i/btn/btn_cart_SM.gif"
+                  border="0"
+                  name="submit"
+                  alt="PayPal � The safer, easier way to pay online."
+                  {% if not item.booking_code %}
+                      onclick="return false;"
+                  {% endif %}
+              >
+              <img alt="" border="0" src="https://www.sandbox.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+              </form>
+              
+              <form target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" style='margin-top:5px;'>
+                  <input type="hidden" name="cmd" value="_cart">
+                  <input type="hidden" name="business" value="{{ paypal_account }}">
+                  <input type="hidden" name="display" value="1">
+                  <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_viewcart_SM.gif" border="0" name="submit" alt="PayPal � The safer, easier way to pay online.">
+                  <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+              </form>
+          </div>
+      {% endif %}
+    </p>
+    {% endfor %}
+  </p>
+{% endblock %}
