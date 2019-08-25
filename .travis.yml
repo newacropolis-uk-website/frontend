@@ -20,5 +20,4 @@ deploy:
     keyfile: fe-client-secret-live.json
     project: $PROJECT_live
     on:
-      branch: master
       tags: true
